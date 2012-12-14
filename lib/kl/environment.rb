@@ -5,6 +5,12 @@ module Kl
   class Environment
     include ::Kl::Primitives::Arithmetic
 
+    # Associate proc p with the specified name in the function namespace
+    def __defun(name, p)
+      eigenklass = class << self; self; end
+      eigenklass.send(:define_method, name, p)
+    end
+
     def __function(obj)
       p = case obj
           when Proc

@@ -88,4 +88,17 @@ describe Kl::Environment do
                       (+ X Y))))').should == 10
     end
   end
+
+  describe 'evaluation of defun special form' do
+    it 'adds a new function to the environment' do
+      eval_str('(defun my-add (A B) (+ A B))').should == "my-add".to_sym
+      eval_str('(my-add 17 20)').should == 37
+      eval_str('((my-add 17) 20)').should == 37
+    end
+
+    it 'exposes the function for use in Ruby' do
+      eval_str('(defun add7 (X) (+ X 7))')
+      @env.add7(30).should == 37
+    end
+  end
 end

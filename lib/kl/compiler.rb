@@ -26,6 +26,8 @@ module Kl
     private
       def compile_form(form, lexical_vars)
         case form.hd
+        when :defun
+          compile_defun(form, lexical_vars)
         when :lambda
           compile_lambda(form, lexical_vars)
         when :let
@@ -33,6 +35,22 @@ module Kl
         else
           compile_application(form, lexical_vars)
         end
+      end
+
+      def compile_defun(form, lexical_vars)
+        name = form.tl.hd
+        arglist = form.tl.tl.hd
+        body = form.tl.tl.tl.hd
+        
+        extended_vars = lexical_vars.dup
+        arglist.each { |var| extended_vars[var] = var }
+        fn_name = compile(name, {})
+
+        '__defun(' + fn_name + ', ' +
+          '(::Kernel.lambda { |' + 
+          arglist.map { |var| mangle_var(var) }.join(', ') + '| ' + 
+          compile(body, extended_vars) + 
+          '})) ; ' + fn_name
       end
 
       def compile_lambda(form, lexical_vars)
