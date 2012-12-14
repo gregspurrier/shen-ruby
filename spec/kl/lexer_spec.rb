@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'stringio'
 
 describe Kl::Lexer do
   def lexer(str)
@@ -21,10 +20,10 @@ describe Kl::Lexer do
       lexer('"Fred"').next.should == "Fred"
     end
 
-    it 'throws Kl::Lexer::Error on unterminated strings' do
+    it 'throws Kl::Error on unterminated strings' do
       expect {
         lexer('"Fred').next
-      }.to raise_error(Kl::Lexer::Error, "unterminated string")
+      }.to raise_error(Kl::Error, "unterminated string")
     end
   end
 

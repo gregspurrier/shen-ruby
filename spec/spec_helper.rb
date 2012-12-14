@@ -1,1 +1,2 @@
 require 'kl'
+require 'stringio'

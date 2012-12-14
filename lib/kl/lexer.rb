@@ -1,10 +1,8 @@
 require 'singleton'
+require 'kl/error'
 
 module Kl
   class Lexer
-    class Error < StandardError
-    end
-
     SYMBOL_CHARS = /[-=*\/+_?$!\@~><&%'#`;:{}a-zA-Z0-9.]/
 
     # Syntax tokens
