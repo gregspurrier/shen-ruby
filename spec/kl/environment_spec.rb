@@ -163,6 +163,27 @@ describe Kl::Environment do
         eval_str('(or (fa) (fa))').should == false
       end
     end
+
+    describe "cond" do
+      before(:each) do
+        eval_str('(defun tr () true)')
+        eval_str('(defun fa () false)')
+      end
+
+      it 'returns the value of the expression associate with the first true' do
+        @env.should_not_receive(:tr)
+        eval_str('(cond (false (tr))
+                        ((fa) 37)
+                        (true 42)
+                        (true (tr)))').should == 42
+      end
+
+      it 'raises an error upon falling off the end' do
+        expect {
+          eval_str('(cond (false 37) ((fa) 42))')
+        }.to raise_error(Kl::Error, 'no matching case for cond')
+      end
+    end
   end
 
   describe "error handling" do

@@ -38,6 +38,8 @@ module Kl
           compile_and(form, lexical_vars)
         when :or
           compile_or(form, lexical_vars)
+        when :cond
+          compile_cond(form, lexical_vars)
         when :"trap-error"
           compile_trap_error(form, lexical_vars)
         else
@@ -106,6 +108,20 @@ module Kl
         second_expr = form.tl.tl.hd
         compile(first_expr) + ' || ' + compile(second_expr)
       end
+
+      def compile_cond(form, lexical_vars)
+        clauses = form.tl
+        if clauses.kind_of? Kl::EmptyList
+          'raise(::Kl::Error, "no matching case for cond")'
+        else
+          clause = clauses.hd
+          rest = clauses.tl
+          compile_if(Kl::Cons.list([:if, clause.hd, clause.tl.hd,
+                                    Kl::Cons.new(:cond, rest)]),
+                     lexical_vars)
+        end
+      end
+
 
       def compile_trap_error(form, lexical_vars)
         try_expr = form.tl.hd
