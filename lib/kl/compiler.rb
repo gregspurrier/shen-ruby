@@ -1,15 +1,19 @@
 module Kl
   module Compiler
     class << self
-      def compile(form)
+      def compile(form, lexical_vars = {})
         case form
         when Symbol
-          ':"' + form.to_s + '"'
+          if lexical_vars.has_key?(form)
+            mangle_var(form)
+          else
+            ':"' + form.to_s + '"'
+          end
         when String
           # Emit non-interpolating strings
           "'" + escape_string(form) + "'"
         when Kl::Cons
-          compile_form(form)
+          compile_form(form, lexical_vars)
         when Numeric
           form.to_s
         when true
@@ -20,13 +24,38 @@ module Kl
       end
 
     private
-      def compile_form(form)
-        f = form.hd
-        args = form.tl
-        '__function(' + compile(f) + ')' + 
-          '.call(' + args.map { |a| compile(a) }.join(',') + ')'
+      def compile_form(form, lexical_vars)
+        case form.hd
+        when :lambda
+          compile_lambda(form, lexical_vars)
+        else
+          compile_application(form, lexical_vars)
+        end
       end
 
+      def compile_lambda(form, lexical_vars)
+        var = form.tl.hd
+        unless var.kind_of? Symbol
+          raise 'first argument to lambda must be a symbol'
+        end
+        # Extend the set of lexical vars
+        extended_vars = lexical_vars.dup
+        extended_vars[var] = var
+
+        body = form.tl.tl.hd
+        '(::Kernel.lambda { |' + mangle_var(var) + '| ' + 
+          compile(body, extended_vars) + 
+          '})'
+      end
+
+      # Normal function application
+      def compile_application(form, lexical_vars)
+        f = form.hd
+        args = form.tl
+        '__function(' + compile(f, lexical_vars) + ')' + 
+          '.call(' + args.map { |a| compile(a, lexical_vars) }.join(',') + ')'
+      end
+      
       # Escape single quotes and backslashes
       def escape_string(str)
         new_str = ""
@@ -42,6 +71,11 @@ module Kl
           end
         end
         new_str
+      end
+
+      # Ruby variables cannot start with capital letters. Mangle them.
+      def mangle_var(sym)
+        '___kl_var_' + sym.to_s
       end
     end
   end

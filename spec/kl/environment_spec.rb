@@ -47,4 +47,29 @@ describe Kl::Environment do
       eval_str('(((+) 1) 2)').should == 3
     end
   end
+
+  describe 'evaluation of lambda expressions' do
+    it 'evaluates them to proc objects' do
+      eval_str('(lambda X X)').should be_kind_of Proc
+    end
+
+    it 'allows them to be applied' do
+      eval_str('((lambda X X) 37)').should == 37
+      eval_str('((lambda X 42) ignore-me)').should == 42
+    end
+
+    it 'maintains lexical scoping' do
+      # (let X 1
+      #   (let Y 3
+      #     (let X 7
+      #       (+ X Y)
+      eval_str('((lambda X 
+                   ((lambda Y 
+                      ((lambda X (+ X Y)) 
+                        7))
+                     3)) 
+                   1)').should == 10
+    end
+  end
+
 end
