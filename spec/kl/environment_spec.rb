@@ -101,4 +101,67 @@ describe Kl::Environment do
       @env.add7(30).should == 37
     end
   end
+
+  describe 'evaluation of boolean special forms' do
+    describe "if" do
+      before(:each) do
+        eval_str('(defun one () 1)')
+        eval_str('(defun two () 2)')
+      end
+
+      it 'evaluates and returns the true clause when given true' do
+        @env.should_receive(:one).and_return(1)
+        @env.should_not_receive(:two)
+        eval_str('(if true (one) (two))').should == 1
+      end
+
+      it 'evaluates and returns the false clause when given false' do
+        @env.should_not_receive(:one)
+        @env.should_receive(:two).and_return(2)
+        eval_str('(if false (one) (two))').should == 2
+      end
+    end
+
+    describe "and" do
+      before(:each) do
+        eval_str('(defun tr () true)')
+        eval_str('(defun fa () false)')
+      end
+
+      it 'returns false and does not evaluate second form if first is false' do
+        @env.should_not_receive(:tr)
+        eval_str('(and (fa) (tr))').should == false
+      end
+
+      it 'returns false when first is true and second is false' do
+        eval_str('(and (tr) (fa))').should == false
+      end
+
+      it 'returns true when both expressions evaluate to true' do
+        @env.should_receive(:tr).twice.and_return(true)
+        eval_str('(and (tr) (tr))').should == true
+      end
+    end
+
+    describe "or" do
+      before(:each) do
+        eval_str('(defun tr () true)')
+        eval_str('(defun fa () false)')
+      end
+
+      it 'returns true and does not evaluate second form if first is true' do
+        @env.should_not_receive(:fa)
+        eval_str('(or (tr) (fa))').should == true
+      end
+
+      it 'returns true when first is false and second is true' do
+        eval_str('(or (fa) (tr))').should == true
+      end
+
+      it 'returns false when both expressions evaluate to false' do
+        @env.should_receive(:fa).twice.and_return(false)
+        eval_str('(or (fa) (fa))').should == false
+      end
+    end
+  end
 end
