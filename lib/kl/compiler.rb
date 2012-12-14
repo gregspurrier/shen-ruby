@@ -38,6 +38,8 @@ module Kl
           compile_and(form, lexical_vars)
         when :or
           compile_or(form, lexical_vars)
+        when :"trap-error"
+          compile_trap_error(form, lexical_vars)
         else
           compile_application(form, lexical_vars)
         end
@@ -103,6 +105,20 @@ module Kl
         first_expr = form.tl.hd
         second_expr = form.tl.tl.hd
         compile(first_expr) + ' || ' + compile(second_expr)
+      end
+
+      def compile_trap_error(form, lexical_vars)
+        try_expr = form.tl.hd
+        handler_expr = form.tl.tl.hd
+        extended_vars = lexical_vars.dup
+        err_sym = :___kl_err
+        extended_vars[err_sym] = [err_sym]
+        '(begin; ' +
+          compile_form(try_expr, lexical_vars) + 
+          '; rescue ::Kl::Error => ' + mangle_var(err_sym)+ '; ' +
+          compile_application(Kl::Cons.list([handler_expr, err_sym]),
+                              extended_vars) +
+          '; end)'
       end
 
       # Normal function application

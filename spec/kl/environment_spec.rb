@@ -164,4 +164,18 @@ describe Kl::Environment do
       end
     end
   end
+
+  describe "error handling" do
+    it 'raises uncaught errors' do
+      expect {
+        eval_str('(simple-error "boom!")')
+      }.to raise_error(Kl::Error, 'boom!')
+    end
+
+    it 'moves past caught errors' do
+      eval_str('(trap-error 
+                  (simple-error "boom!")
+                  (lambda E 37))').should == 37          
+    end
+  end
 end

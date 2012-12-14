@@ -1,8 +1,10 @@
 require 'kl/compiler'
+require 'kl/primitives/error_handling'
 require 'kl/primitives/arithmetic'
 
 module Kl
   class Environment
+    include ::Kl::Primitives::ErrorHandling
     include ::Kl::Primitives::Arithmetic
 
     # Associate proc p with the specified name in the function namespace
