@@ -48,7 +48,7 @@ describe Kl::Environment do
     end
   end
 
-  describe 'evaluation of lambda expressions' do
+  describe 'evaluation of lambda special form' do
     it 'evaluates them to proc objects' do
       eval_str('(lambda X X)').should be_kind_of Proc
     end
@@ -62,7 +62,7 @@ describe Kl::Environment do
       # (let X 1
       #   (let Y 3
       #     (let X 7
-      #       (+ X Y)
+      #       (+ X Y))))
       eval_str('((lambda X 
                    ((lambda Y 
                       ((lambda X (+ X Y)) 
@@ -70,6 +70,22 @@ describe Kl::Environment do
                      3)) 
                    1)').should == 10
     end
+
+    it 'creates closures' do
+      eval_str('((let X 37 (lambda IGNORE X)) ignore-me)').should == 37
+    end
   end
 
+  describe 'evaluation of let special form' do
+    it 'binds its var' do
+      eval_str('(let X 37 X)').should == 37
+    end
+
+    it 'maintains lexical scoping' do
+      eval_str('(let X 1
+                  (let Y 3
+                    (let X 7
+                      (+ X Y))))').should == 10
+    end
+  end
 end

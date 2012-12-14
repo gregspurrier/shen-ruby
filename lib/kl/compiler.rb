@@ -28,6 +28,8 @@ module Kl
         case form.hd
         when :lambda
           compile_lambda(form, lexical_vars)
+        when :let
+          compile_let(form, lexical_vars)
         else
           compile_application(form, lexical_vars)
         end
@@ -46,6 +48,15 @@ module Kl
         '(::Kernel.lambda { |' + mangle_var(var) + '| ' + 
           compile(body, extended_vars) + 
           '})'
+      end
+
+      # (let X Y Z) --> ((lambda X Z) Y)
+      def compile_let(form, lexical_vars)
+        x = form.tl.hd
+        y = form.tl.tl.hd
+        z = form.tl.tl.tl.hd
+        compile(Kl::Cons.list([(Kl::Cons.list([:lambda, x, z])), y]),
+                lexical_vars)
       end
 
       # Normal function application
