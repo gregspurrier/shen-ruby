@@ -199,4 +199,15 @@ describe Kl::Environment do
                   (lambda E 37))').should == 37          
     end
   end
+
+  describe "setting values" do
+    it 'returns the value set' do
+      eval_str('(set foo 37)').should == 37
+    end
+
+    it 'previously set values are retrievable' do
+      eval_str('(set foo 37)')
+      eval_str('(value foo)').should == 37
+    end
+  end
 end

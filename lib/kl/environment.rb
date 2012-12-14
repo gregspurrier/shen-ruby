@@ -1,11 +1,22 @@
 require 'kl/compiler'
+require 'kl/primitives/symbols'
+require 'kl/primitives/strings'
+require 'kl/primitives/assignments'
 require 'kl/primitives/error_handling'
 require 'kl/primitives/arithmetic'
 
 module Kl
   class Environment
+    include ::Kl::Primitives::Symbols
+    include ::Kl::Primitives::Strings
+    include ::Kl::Primitives::Assignments
     include ::Kl::Primitives::ErrorHandling
     include ::Kl::Primitives::Arithmetic
+
+    def initialize
+      # The variable namespace
+      @variables = {}
+    end
 
     # Associate proc p with the specified name in the function namespace
     def __defun(name, p)
