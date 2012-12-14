@@ -23,4 +23,14 @@ describe Kl::Reader do
                                                    Kl::EmptyList.instance])])
     end
   end
+
+  describe 'Reading booleans' do
+    it 'reads true as true' do
+      reader('true').next.should == true
+    end
+
+    it 'reads false as false' do
+      reader('false').next.should == false
+    end
+  end
 end
