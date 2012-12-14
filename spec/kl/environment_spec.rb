@@ -32,4 +32,19 @@ describe Kl::Environment do
       eval_str('false').should == false
     end
   end
+
+  describe 'evaluation of non-special forms' do
+    it 'evaluates simple function application' do
+      eval_str('(+ 1 2)').should == 3
+    end
+
+    it 'evaluates function arguments before application' do
+      eval_str('(* (+ 1 2) (- 6 1))').should == 15
+    end
+
+    it 'supports currying' do
+      eval_str('((+ 1) 2)').should == 3
+      eval_str('(((+) 1) 2)').should == 3
+    end
+  end
 end

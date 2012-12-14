@@ -8,6 +8,8 @@ module Kl
         when String
           # Emit non-interpolating strings
           "'" + escape_string(form) + "'"
+        when Kl::Cons
+          compile_form(form)
         when Numeric
           form.to_s
         when true
@@ -18,6 +20,12 @@ module Kl
       end
 
     private
+      def compile_form(form)
+        f = form.hd
+        args = form.tl
+        '__function(' + compile(f) + ')' + 
+          '.call(' + args.map { |a| compile(a) }.join(',') + ')'
+      end
 
       # Escape single quotes and backslashes
       def escape_string(str)

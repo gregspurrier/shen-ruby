@@ -2,6 +2,8 @@ require 'kl/empty_list'
 
 module Kl
   class Cons
+    include Enumerable
+
     attr_reader :hd, :tl
 
     def initialize(hd, tl)
@@ -11,6 +13,14 @@ module Kl
 
     def ==(other)
       hd == other.hd && tl == other.tl
+    end
+
+    def each
+      cell = self
+      while !cell.kind_of? Kl::EmptyList
+        yield cell.hd
+        cell = cell.tl
+      end
     end
 
     class << self
