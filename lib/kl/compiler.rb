@@ -93,8 +93,8 @@ module Kl
         on_false_expr = form.tl.tl.tl.hd
 
         compile(test_expr, lexical_vars) + ' ? ' +
-          compile(on_true_expr) + " : " +
-          compile(on_false_expr)
+          compile(on_true_expr, lexical_vars) + " : " +
+          compile(on_false_expr, lexical_vars)
       end
 
       def compile_and(form, lexical_vars)
