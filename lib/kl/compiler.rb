@@ -1,7 +1,9 @@
+require 'kl/trampoline'
+
 module Kl
   module Compiler
     class << self
-      def compile(form, lexical_vars = {})
+      def compile(form, lexical_vars, in_tail_pos)
         case form
         when Symbol
           if lexical_vars.has_key?(form)
@@ -13,7 +15,7 @@ module Kl
           # Emit non-interpolating strings
           "'" + escape_string(form) + "'"
         when Kl::Cons
-          compile_form(form, lexical_vars)
+          compile_form(form, lexical_vars, in_tail_pos)
         when Numeric
           form.to_s
         when true
@@ -24,46 +26,46 @@ module Kl
       end
 
     private
-      def compile_form(form, lexical_vars)
+      def compile_form(form, lexical_vars, in_tail_pos)
         case form.hd
         when :defun
-          compile_defun(form, lexical_vars)
+          compile_defun(form, lexical_vars, in_tail_pos)
         when :lambda
-          compile_lambda(form, lexical_vars)
+          compile_lambda(form, lexical_vars, in_tail_pos)
         when :let
-          compile_let(form, lexical_vars)
+          compile_let(form, lexical_vars, in_tail_pos)
         when :if
-          compile_if(form, lexical_vars)
+          compile_if(form, lexical_vars, in_tail_pos)
         when :and
-          compile_and(form, lexical_vars)
+          compile_and(form, lexical_vars, in_tail_pos)
         when :or
-          compile_or(form, lexical_vars)
+          compile_or(form, lexical_vars, in_tail_pos)
         when :cond
-          compile_cond(form, lexical_vars)
+          compile_cond(form, lexical_vars, in_tail_pos)
         when :"trap-error"
-          compile_trap_error(form, lexical_vars)
+          compile_trap_error(form, lexical_vars, in_tail_pos)
         else
-          compile_application(form, lexical_vars)
+          compile_application(form, lexical_vars, in_tail_pos)
         end
       end
 
-      def compile_defun(form, lexical_vars)
+      def compile_defun(form, lexical_vars, in_tail_pos)
         name = form.tl.hd
         arglist = form.tl.tl.hd
         body = form.tl.tl.tl.hd
         
         extended_vars = lexical_vars.dup
         arglist.each { |var| extended_vars[var] = var }
-        fn_name = compile(name, {})
+        fn_name = compile(name, {}, false)
 
         '__defun(' + fn_name + ', ' +
           '(::Kernel.lambda { |' + 
           arglist.map { |var| mangle_var(var) }.join(', ') + '| ' + 
-          compile(body, extended_vars) + 
+          compile(body, extended_vars, true) + 
           '})) ; ' + fn_name
       end
 
-      def compile_lambda(form, lexical_vars)
+      def compile_lambda(form, lexical_vars, in_tail_pos)
         var = form.tl.hd
         unless var.kind_of? Symbol
           raise 'first argument to lambda must be a symbol'
@@ -74,42 +76,44 @@ module Kl
 
         body = form.tl.tl.hd
         '(::Kernel.lambda { |' + mangle_var(var) + '| ' + 
-          compile(body, extended_vars) + 
+          compile(body, extended_vars, true) + 
           '})'
       end
 
       # (let X Y Z) --> ((lambda X Z) Y)
-      def compile_let(form, lexical_vars)
+      def compile_let(form, lexical_vars, in_tail_pos)
         x = form.tl.hd
         y = form.tl.tl.hd
         z = form.tl.tl.tl.hd
         compile(Kl::Cons.list([(Kl::Cons.list([:lambda, x, z])), y]),
-                lexical_vars)
+                lexical_vars, in_tail_pos)
       end
 
-      def compile_if(form, lexical_vars)
+      def compile_if(form, lexical_vars, in_tail_pos)
         test_expr = form.tl.hd
         on_true_expr = form.tl.tl.hd
         on_false_expr = form.tl.tl.tl.hd
 
-        compile(test_expr, lexical_vars) + ' ? ' +
-          compile(on_true_expr, lexical_vars) + " : " +
-          compile(on_false_expr, lexical_vars)
+        compile(test_expr, lexical_vars, false) + ' ? ' +
+          compile(on_true_expr, lexical_vars, in_tail_pos) + " : " +
+          compile(on_false_expr, lexical_vars, in_tail_pos)
       end
 
-      def compile_and(form, lexical_vars)
+      def compile_and(form, lexical_vars, in_tail_pos)
         first_expr = form.tl.hd
         second_expr = form.tl.tl.hd
-        compile(first_expr) + ' && ' + compile(second_expr)
+        compile(first_expr, lexical_vars, false) + ' && ' + 
+          compile(second_expr, lexical_vars, in_tail_pos)
       end
 
-      def compile_or(form, lexical_vars)
+      def compile_or(form, lexical_vars, in_tail_pos)
         first_expr = form.tl.hd
         second_expr = form.tl.tl.hd
-        compile(first_expr) + ' || ' + compile(second_expr)
+        compile(first_expr, lexical_vars, false) + ' || ' + 
+          compile(second_expr, lexical_vars, in_tail_pos)
       end
 
-      def compile_cond(form, lexical_vars)
+      def compile_cond(form, lexical_vars, in_tail_pos)
         clauses = form.tl
         if clauses.kind_of? Kl::EmptyList
           'raise(::Kl::Error, "no matching case for cond")'
@@ -118,31 +122,40 @@ module Kl
           rest = clauses.tl
           compile_if(Kl::Cons.list([:if, clause.hd, clause.tl.hd,
                                     Kl::Cons.new(:cond, rest)]),
-                     lexical_vars)
+                     lexical_vars, in_tail_pos)
         end
       end
 
 
-      def compile_trap_error(form, lexical_vars)
+      def compile_trap_error(form, lexical_vars, in_tail_pos)
         try_expr = form.tl.hd
         handler_expr = form.tl.tl.hd
         extended_vars = lexical_vars.dup
         err_sym = :___kl_err
         extended_vars[err_sym] = [err_sym]
+        # FIXME: the expression within the begin block should propagate
+        # in_tail_pos.
         '(begin; ' +
-          compile_form(try_expr, lexical_vars) + 
+          compile_form(try_expr, lexical_vars, false) + 
           '; rescue ::Kl::Error => ' + mangle_var(err_sym)+ '; ' +
           compile_application(Kl::Cons.list([handler_expr, err_sym]),
-                              extended_vars) +
+                              extended_vars, in_tail_pos) +
           '; end)'
       end
 
       # Normal function application
-      def compile_application(form, lexical_vars)
+      def compile_application(form, lexical_vars, in_tail_pos)
         f = form.hd
         args = form.tl
-        '__function(' + compile(f, lexical_vars) + ')' + 
-          '.call(' + args.map { |a| compile(a, lexical_vars) }.join(',') + ')'
+        
+        rator = '__function(' + compile(f, lexical_vars, false) + ')'
+        rands = args.map { |a| compile(a, lexical_vars, false) }.join(',')
+
+        if in_tail_pos
+          '::Kl::Trampoline.new(' + rator + ', [' + rands + '])'
+        else
+          '__apply(' + rator + ', [' + rands + '])'
+        end
       end
       
       # Escape single quotes and backslashes

@@ -38,9 +38,24 @@ module Kl
       p.curry
     end
 
+    # Trampoline-aware function application
+    def __apply(fn, args)
+      result = fn.call(*args)
+      while result.kind_of? ::Kl::Trampoline
+        result = result.fn.call(*result.args)
+      end
+      result
+    end
+
     def __eval(form)
-      code = ::Kl::Compiler.compile(form)
-      instance_eval(code)
+      code = ::Kl::Compiler.compile(form, {}, true)
+      result = instance_eval(code)
+      # Handle top-level trampolines
+      if result.kind_of? ::Kl::Trampoline
+        __apply(result.fn, result.args)
+      else
+        result
+      end
     end
   end
 end

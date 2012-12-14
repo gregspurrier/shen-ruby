@@ -97,6 +97,7 @@ describe Kl::Environment do
     end
 
     it 'exposes the function for use in Ruby' do
+      pending "a clean way to handle trampolines when calling from outside"
       eval_str('(defun add7 (X) (+ X 7))')
       @env.add7(30).should == 37
     end
@@ -208,6 +209,16 @@ describe Kl::Environment do
     it 'previously set values are retrievable' do
       eval_str('(set foo 37)')
       eval_str('(value foo)').should == 37
+    end
+  end
+
+  describe "tail recursion" do
+    it 'does not blow the stack' do
+      eval_str('(defun count-down (X) 
+                  (if (= X 0) 
+                    success 
+                    (count-down (- X 1))))')
+      eval_str('(count-down 100000)').should == :success
     end
   end
 end
