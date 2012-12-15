@@ -191,9 +191,30 @@ module Kl
         new_str
       end
 
-      # Ruby variables cannot start with capital letters. Mangle them.
+      # Ruby variables cannot start with capital letters or include
+      # some symbols allowed in K Lambda identifiers. Mangle them.
       def mangle_var(sym)
-        '___kl_var_' + sym.to_s
+        '___kl_var_' + sym.to_s.
+          gsub(/-/, '_dash_').
+          gsub(/=/, '_eql_').
+          gsub(/\//, '_slash_').
+          gsub(/\$/, '_dollar_').
+          gsub(/!/, '_bang_').
+          gsub(/\@/, '_at_').
+          gsub(/~/, '_tilde_').
+          gsub(/&/, '_amp_').
+          gsub(/%/, '_pct_').
+          gsub(/'/, '_quot_').
+          gsub(/`/, '_backquot_').
+          gsub(/;/, '_semicolon_').
+          gsub(/:/, '_colon_').
+          gsub(/\{/, '_lcurly_').
+          gsub(/\}/, '_rcurly_').
+          gsub(/\?/, '_qm_').
+          gsub(/\</, '_lt_').
+          gsub(/\>/, '_gt_').
+          gsub(/\+/, '_plus_').
+          gsub(/\*/, '_splat_')
       end
     end
   end
