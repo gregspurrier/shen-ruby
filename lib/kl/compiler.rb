@@ -34,6 +34,10 @@ module Kl
           compile_lambda(form, lexical_vars, in_tail_pos)
         when :let
           compile_let(form, lexical_vars, in_tail_pos)
+        when :freeze
+          compile_freeze(form, lexical_vars, in_tail_pos)
+        when :type
+          compile_type(form, lexical_vars, in_tail_pos)
         when :if
           compile_if(form, lexical_vars, in_tail_pos)
         when :and
@@ -87,6 +91,16 @@ module Kl
         z = form.tl.tl.tl.hd
         compile(Kl::Cons.list([(Kl::Cons.list([:lambda, x, z])), y]),
                 lexical_vars, in_tail_pos)
+      end
+
+      def compile_freeze(form, lexical_vars, in_tail_pos)
+        form = form.tl.hd
+        '::Kernel.lambda {' + compile(form, lexical_vars, true) + '}'
+      end
+
+      def compile_type(form, lexical_vars, in_tail_pos)
+        # Just ignore the type information for now
+        compile(form.tl.hd, lexical_vars, in_tail_pos)
       end
 
       def compile_if(form, lexical_vars, in_tail_pos)

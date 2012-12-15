@@ -212,6 +212,31 @@ describe Kl::Environment do
     end
   end
 
+  describe "evaluation of freeze" do
+    it 'delays computation' do
+      eval_str('(defun one () 1)')
+      @env.should_not_receive(:one)
+      eval_str('(freeze (one))').should be_kind_of Proc
+    end
+
+    it 'is thawable later' do
+      eval_str('(defun one () 1)')
+      eval_str('((freeze (one)))').should == 1
+    end
+  end
+
+  describe 'evaulation of type' do
+    it 'evaluates the expression and ignores the type information' do
+      eval_str('(type (+ 1 2) number)').should == 3
+    end
+  end
+
+  describe 'evaluation of eval-kl' do
+    it 'evals as expected' do
+      eval_str('(eval-kl (+ 1 2))').should == 3
+    end
+  end
+
   describe "tail recursion" do
     it 'does not blow the stack' do
       eval_str('(defun count-down (X) 

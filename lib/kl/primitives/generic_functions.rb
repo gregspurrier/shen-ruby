@@ -12,6 +12,10 @@ module Kl
       define_method "=" do |a, b|
         a == b
       end
+
+      define_method "eval-kl" do |exp|
+        __eval(exp)
+      end
     end
   end
 end

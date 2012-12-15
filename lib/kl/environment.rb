@@ -3,6 +3,7 @@ require 'kl/primitives/symbols'
 require 'kl/primitives/strings'
 require 'kl/primitives/assignments'
 require 'kl/primitives/error_handling'
+require 'kl/primitives/lists'
 require 'kl/primitives/generic_functions'
 require 'kl/primitives/arithmetic'
 
@@ -12,6 +13,7 @@ module Kl
     include ::Kl::Primitives::Strings
     include ::Kl::Primitives::Assignments
     include ::Kl::Primitives::ErrorHandling
+    include ::Kl::Primitives::Lists
     include ::Kl::Primitives::GenericFunctions
     include ::Kl::Primitives::Arithmetic
 
