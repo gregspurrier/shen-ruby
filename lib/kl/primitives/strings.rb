@@ -36,7 +36,7 @@ module Kl
       end
       
       def string?(x)
-        s.kind_of?(String)
+        x.kind_of?(String)
       end
 
       define_method "n->string" do |n|
