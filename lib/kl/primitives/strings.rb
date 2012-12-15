@@ -8,7 +8,7 @@ module Kl
         s.byteslice(n)
       end
       
-      def tlstr(s, n)
+      def tlstr(s)
         s.byteslice(1, s.bytesize - 1)
       end
       
