@@ -9,7 +9,11 @@ module Kl
       end
       
       def tlstr(s)
-        s.byteslice(1, s.bytesize - 1)
+        if s.empty?
+          :"shen-eos"
+        else
+          s.byteslice(1, s.bytesize - 1)
+        end
       end
       
       def cn(s1, s2)
@@ -20,7 +24,7 @@ module Kl
         case x
         when String
           '"' + x + '"'
-        when Symbol,
+        when Symbol
           x.to_s
         when Numeric
           x.to_s
