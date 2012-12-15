@@ -12,7 +12,7 @@ module Kl
     end
 
     def ==(other)
-      hd == other.hd && tl == other.tl
+      other.kind_of?(Kl::Cons) && hd == other.hd && tl == other.tl
     end
 
     def each
