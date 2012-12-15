@@ -1,20 +1,21 @@
 module Kl
   module Primitives
     module Vectors
-      def absvector
+      def absvector(n)
         Kl::Absvector.new
       end
 
-      define_method "address->" do |vector, n, value|
-        vector[n] = value
+      define_method "address->" do |v, n, value|
+        v[n] = value
+        v
       end
 
-      define_method "<-address->" do |vector, n|
-        vector[n]
+      define_method "<-address" do |v, n|
+        v[n]
       end
 
-      def absvector?(vector)
-        vector.kind_of? Kl::Absvector
+      def absvector?(v)
+        v.kind_of? Kl::Absvector
       end
     end
   end
