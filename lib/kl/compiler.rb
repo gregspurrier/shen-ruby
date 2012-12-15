@@ -16,6 +16,8 @@ module Kl
           "'" + escape_string(form) + "'"
         when Kl::Cons
           compile_form(form, lexical_vars, in_tail_pos)
+        when Kl::EmptyList
+          "::Kl::EmptyList.instance"
         when Numeric
           form.to_s
         when true

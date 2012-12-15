@@ -31,6 +31,10 @@ describe Kl::Environment do
       eval_str('true').should == true
       eval_str('false').should == false
     end
+    
+    it 'evaluations empty strings to themselves' do
+      eval_str('()').should == Kl::EmptyList.instance
+    end
   end
 
   describe 'evaluation of non-special forms' do
