@@ -5,6 +5,9 @@ require 'kl/primitives/assignments'
 require 'kl/primitives/error_handling'
 require 'kl/primitives/lists'
 require 'kl/primitives/generic_functions'
+require 'kl/primitives/vectors'
+require 'kl/primitives/streams'
+require 'kl/primitives/time'
 require 'kl/primitives/arithmetic'
 
 module Kl
@@ -15,6 +18,9 @@ module Kl
     include ::Kl::Primitives::ErrorHandling
     include ::Kl::Primitives::Lists
     include ::Kl::Primitives::GenericFunctions
+    include ::Kl::Primitives::Vectors
+    include ::Kl::Primitives::Streams
+    include ::Kl::Primitives::Time
     include ::Kl::Primitives::Arithmetic
 
     def initialize
