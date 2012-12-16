@@ -186,7 +186,7 @@ describe Kl::Environment do
       it 'raises an error upon falling off the end' do
         expect {
           eval_str('(cond (false 37) ((fa) 42))')
-        }.to raise_error(Kl::Error, 'no matching case for cond')
+        }.to raise_error(Kl::Error, 'condition failure')
       end
     end
   end
