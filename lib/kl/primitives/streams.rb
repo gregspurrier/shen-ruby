@@ -23,6 +23,7 @@ module Kl
       
       def close(stream)
         stream.close
+        :NIL
       end
     end
   end
