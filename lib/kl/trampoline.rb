@@ -3,11 +3,12 @@ module Kl
   # arguments. They are used to keep the strack from growing on
   # tail calls.
   class Trampoline
-    attr_reader :fn, :args
+    attr_reader :fn, :args, :f
     
-    def initialize(fn, args)
+    def initialize(fn, args, f)
       @fn = fn
       @args = args
+      @f = f
     end
   end
 end

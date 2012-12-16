@@ -132,7 +132,7 @@ module Kl
       def compile_cond(form, lexical_vars, in_tail_pos)
         clauses = form.tl
         if clauses.kind_of? Kl::EmptyList
-          'raise(::Kl::Error, "no matching case for cond")'
+          'raise(::Kl::Error, "condition failure")'
         else
           clause = clauses.hd
           rest = clauses.tl
@@ -168,9 +168,9 @@ module Kl
         rands = args.map { |a| compile(a, lexical_vars, false) }.join(',')
 
         if in_tail_pos
-          '::Kl::Trampoline.new(' + rator + ', [' + rands + '])'
+          '::Kl::Trampoline.new(' + rator + ', [' + rands + '], ' + compile(f.to_s, lexical_vars, false) + ')'
         else
-          '__apply(' + rator + ', [' + rands + '])'
+          '__apply(' + rator + ', [' + rands + '], ' + compile(f.to_s, lexical_vars, false) + ')'
         end
       end
       
