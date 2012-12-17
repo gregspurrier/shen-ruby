@@ -27,32 +27,37 @@ module Kl
       # The variable namespace
       @tramp_fn = @tramp_args = @tramp_form = nil
       @variables = {}
+      @function_cache = {}
       set("*stinput*".to_sym, STDIN)
       set("*stoutput*".to_sym, STDOUT)
     end
 
     # Associate proc p with the specified name in the function namespace
     def __defun(name, p)
-      puts "  defun #{name}" if @trace
       eigenklass = class << self; self; end
       eigenklass.send(:define_method, name, p)
+      # Invalidate cache
+      @function_cache[name] = nil
     end
 
     def __function(obj)
-      p = case obj
-          when Proc
-            obj
-          when Symbol
-            method(obj).to_proc
-          else
-            raise "function applied to #{obj.class}"
-          end
-      p.curry
+      case obj
+      when Symbol
+        cached = @function_cache[obj]
+        unless cached
+          cached = @function_cache[obj] = method(obj).to_proc.curry
+        end
+        cached
+      when Proc
+        obj.curry
+      else
+        raise "function applied to #{obj.class}"
+      end
     end
 
     # Trampoline-aware function application
     def __apply(fn, args, f)
-      puts "--> #{f} #{args}" if @trace
+#      puts "--> #{f} #{args}" if @trace
       result = fn.call(*args)
       while @tramp_fn
         fn = @tramp_fn
@@ -61,10 +66,10 @@ module Kl
         @tramp_fn = nil
         @tramp_args = nil
         @tramp_form = nil
-        puts "tail --> #{f} #{args}" if @trace
+#        puts "tail --> #{f} #{args}" if @trace
         result = fn.call(*args)
       end
-      raise "boom: [#{f}]" if result.nil?
+#      raise "boom: [#{f}]" if result.nil?
       result
     end
 

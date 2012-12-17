@@ -105,6 +105,13 @@ describe Kl::Environment do
       eval_str('(defun add7 (X) (+ X 7))')
       @env.add7(30).should == 37
     end
+
+    it 'redefines existing functions' do
+      eval_str('(defun my-fun () first-version)')
+      eval_str('(my-fun)').should == :"first-version"
+      eval_str('(defun my-fun () second-version)')
+      eval_str('(my-fun)').should == :"second-version"
+    end
   end
 
   describe 'evaluation of boolean special forms' do
