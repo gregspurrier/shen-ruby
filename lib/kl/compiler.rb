@@ -7,7 +7,7 @@ module Kl
         case form
         when Symbol
           if lexical_vars.has_key?(form)
-            mangle_var(form)
+            lexical_vars[form]
           else
             ':"' + form.to_s + '"'
           end
@@ -61,12 +61,12 @@ module Kl
         body = form.tl.tl.tl.hd
         
         extended_vars = lexical_vars.dup
-        arglist.each { |var| extended_vars[var] = var }
+        arglist.each { |var| extended_vars[var] = gen_sym }
         fn_name = compile(name, {}, false)
 
         '__defun(' + fn_name + ', ' +
           '(::Kernel.lambda { |' + 
-          arglist.map { |var| mangle_var(var) }.join(', ') + '| ' + 
+          arglist.map { |var| extended_vars[var] }.join(', ') + '| ' + 
           compile(body, extended_vars, true) + 
           '})) ; ' + fn_name
       end
@@ -78,21 +78,24 @@ module Kl
         end
         # Extend the set of lexical vars
         extended_vars = lexical_vars.dup
-        extended_vars[var] = var
+        extended_vars[var] = gen_sym
 
         body = form.tl.tl.hd
-        '(::Kernel.lambda { |' + mangle_var(var) + '| ' + 
+        '(::Kernel.lambda { |' + extended_vars[var] + '| ' + 
           compile(body, extended_vars, true) + 
           '})'
       end
 
-      # (let X Y Z) --> ((lambda X Z) Y)
+      # (let X Y Z)
       def compile_let(form, lexical_vars, in_tail_pos)
         x = form.tl.hd
         y = form.tl.tl.hd
         z = form.tl.tl.tl.hd
-        compile(Kl::Cons.list([(Kl::Cons.list([:lambda, x, z])), y]),
-                lexical_vars, in_tail_pos)
+        extended_vars = lexical_vars.dup
+        extended_vars[x] = gen_sym
+        
+        '(' + extended_vars[x] + ' = ' + compile(y, extended_vars, false) + '; '+
+          compile(z, extended_vars, in_tail_pos) + ')'
       end
 
       def compile_freeze(form, lexical_vars, in_tail_pos)
@@ -147,13 +150,13 @@ module Kl
         try_expr = form.tl.hd
         handler_expr = form.tl.tl.hd
         extended_vars = lexical_vars.dup
-        err_sym = :___kl_err
-        extended_vars[err_sym] = [err_sym]
+        err_sym = :err
+        extended_vars[err_sym] = gen_sym
         # FIXME: the expression within the begin block should propagate
         # in_tail_pos.
         '(begin; ' +
           compile_form(try_expr, lexical_vars, false) + 
-          '; rescue ::Kl::Error => ' + mangle_var(err_sym)+ '; ' +
+          '; rescue ::Kl::Error => ' + extended_vars[err_sym] + '; ' +
           compile_application(Kl::Cons.list([handler_expr, err_sym]),
                               extended_vars, in_tail_pos) +
           '; end)'
@@ -191,30 +194,10 @@ module Kl
         new_str
       end
 
-      # Ruby variables cannot start with capital letters or include
-      # some symbols allowed in K Lambda identifiers. Mangle them.
-      def mangle_var(sym)
-        '___kl_var_' + sym.to_s.
-          gsub(/-/, '_dash_').
-          gsub(/=/, '_eql_').
-          gsub(/\//, '_slash_').
-          gsub(/\$/, '_dollar_').
-          gsub(/!/, '_bang_').
-          gsub(/\@/, '_at_').
-          gsub(/~/, '_tilde_').
-          gsub(/&/, '_amp_').
-          gsub(/%/, '_pct_').
-          gsub(/'/, '_quot_').
-          gsub(/`/, '_backquot_').
-          gsub(/;/, '_semicolon_').
-          gsub(/:/, '_colon_').
-          gsub(/\{/, '_lcurly_').
-          gsub(/\}/, '_rcurly_').
-          gsub(/\?/, '_qm_').
-          gsub(/\</, '_lt_').
-          gsub(/\>/, '_gt_').
-          gsub(/\+/, '_plus_').
-          gsub(/\*/, '_splat_')
+      def gen_sym
+        @sym_count ||= 0
+        @sym_count += 1
+        "__kl_VAR_#{@sym_count}"
       end
     end
   end
