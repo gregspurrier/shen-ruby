@@ -112,6 +112,12 @@ describe Kl::Environment do
       eval_str('(defun my-fun () second-version)')
       eval_str('(my-fun)').should == :"second-version"
     end
+
+    it 'adds a top-level function even when not executed at the top-level' do
+      eval_str('((lambda X
+                  (defun return-X () X)) 7)').should == :"return-X"
+      eval_str('(return-X)').should == 7
+    end
   end
 
   describe 'evaluation of boolean special forms' do
