@@ -1,5 +1,3 @@
-require 'kl/trampoline'
-
 module Kl
   module Compiler
     class << self
@@ -170,8 +168,17 @@ module Kl
         rator = '__function(' + compile(f, lexical_vars, false) + ')'
         rands = args.map { |a| compile(a, lexical_vars, false) }.join(',')
 
+        tfn = gen_sym
+        targs = gen_sym
+
         if in_tail_pos
-          '::Kl::Trampoline.new(' + rator + ', [' + rands + '], ' + compile(f.to_s, lexical_vars, false) + ')'
+          "(
+             #{tfn} = #{rator};
+             #{targs} = [#{rands}];
+             @tramp_fn = #{tfn};
+             @tramp_args = #{targs};
+             @tramp_form = #{compile(f.to_s, lexical_vars, false)};
+            )"
         else
           '__apply(' + rator + ', [' + rands + '], ' + compile(f.to_s, lexical_vars, false) + ')'
         end

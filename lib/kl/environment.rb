@@ -25,11 +25,15 @@ module Kl
 
     def initialize
       # The variable namespace
+      @tramp_fn = @tramp_args = @tramp_form = nil
       @variables = {}
+      set("*stinput*".to_sym, STDIN)
+      set("*stoutput*".to_sym, STDOUT)
     end
 
     # Associate proc p with the specified name in the function namespace
     def __defun(name, p)
+      puts "  defun #{name}" if @trace
       eigenklass = class << self; self; end
       eigenklass.send(:define_method, name, p)
     end
@@ -47,11 +51,20 @@ module Kl
     end
 
     # Trampoline-aware function application
-    def __apply(fn, args)
+    def __apply(fn, args, f)
+      puts "--> #{f} #{args}" if @trace
       result = fn.call(*args)
-      while result.kind_of? ::Kl::Trampoline
-        result = result.fn.call(*result.args)
+      while @tramp_fn
+        fn = @tramp_fn
+        args = @tramp_args
+        f = @tramp_form
+        @tramp_fn = nil
+        @tramp_args = nil
+        @tramp_form = nil
+        puts "tail --> #{f} #{args}" if @trace
+        result = fn.call(*args)
       end
+      raise "boom: [#{f}]" if result.nil?
       result
     end
 
@@ -59,10 +72,27 @@ module Kl
       code = ::Kl::Compiler.compile(form, {}, true)
       result = instance_eval(code)
       # Handle top-level trampolines
-      if result.kind_of? ::Kl::Trampoline
-        __apply(result.fn, result.args)
+      if @tramp_fn
+        fn = @tramp_fn
+        args = @tramp_args
+        f = @tramp_form
+        @tramp_fn = nil
+        @tramp_args = nil
+        @tramp_form = nil
+        __apply(fn, args, f)
       else
         result
+      end
+    end
+
+    class << self
+      def load_file(env, path)
+        File.open(path, 'r') do |file|
+          reader = Kl::Reader.new(file)
+          while form = reader.next
+            env.__eval(form)
+          end
+        end
       end
     end
   end
