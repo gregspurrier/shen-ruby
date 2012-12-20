@@ -7,7 +7,11 @@ module Kl
       end
 
       def value(sym)
-        @variables[sym]
+        if @variables.has_key?(sym)
+          @variables[sym]
+        else
+          raise Kl::Error, "variable #{sym} has no value"
+        end
       end
     end
   end
