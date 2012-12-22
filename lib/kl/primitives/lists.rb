@@ -2,6 +2,8 @@ module Kl
   module Primitives
     module Lists
       def cons(a, b)
+        raise Kl::InternalError, "hd is nil" if a.nil?
+        raise Kl::InternalError, "hd is nil" if b.nil?
         Kl::Cons.new(a, b)
       end
 

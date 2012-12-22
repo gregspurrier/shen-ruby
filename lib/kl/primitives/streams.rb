@@ -18,7 +18,8 @@ module Kl
         unless stream_type == :file
           raise Kl::Error, "unsupported stream type: #{stream_type}"
         end
-        File.open(name, direction == :out ? 'w' : 'r')
+        File.open(File.expand_path(name, value(:'*home-directory*')), 
+                  direction == :out ? 'w' : 'r')
       end
       
       def close(stream)

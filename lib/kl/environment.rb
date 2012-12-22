@@ -25,6 +25,7 @@ module Kl
 
     def initialize
       # The variable namespace
+      @depth = 0
       @tramp_fn = @tramp_args = @tramp_form = nil
       @variables = {}
       @function_cache = {}
@@ -57,24 +58,40 @@ module Kl
 
     # Trampoline-aware function application
     def __apply(fn, args, f)
-#      puts "--> #{f} #{args}" if @trace
+      if args.any?(&:nil?)
+        raise Kl::InternalError, "nil argument to #{f}(#{args})"
+      end
+      @depth += 1
+      puts "--> [#{@depth}] #{f} #{args}" if @trace
       result = fn.call(*args)
       while @tramp_fn
         fn = @tramp_fn
         args = @tramp_args
         f = @tramp_form
+        if args.any?(&:nil?)
+          raise Kl::InternalError, "nil argument to #{f}(#{args})"
+        end
         @tramp_fn = nil
         @tramp_args = nil
         @tramp_form = nil
-#        puts "tail --> #{f} #{args}" if @trace
+        puts "tail --> #{f} #{args}" if @trace
         result = fn.call(*args)
       end
-#      raise "boom: [#{f}]" if result.nil?
+      raise Kl::InternalError, "nil result from #{f}(#{args})" if result.nil?
+      @depth -= 1
       result
     end
 
     def __eval(form)
+      if @dump_code
+        puts "Compiling...."
+      end
       code = ::Kl::Compiler.compile(form, {}, true)
+      if @dump_code
+        puts "=" * 70
+        puts code
+        puts "=" * 70
+      end
       result = instance_eval(code)
       # Handle top-level trampolines
       if @tramp_fn
