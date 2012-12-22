@@ -26,6 +26,8 @@ module Kl
     def initialize
       # The variable namespace
       @depth = 0
+      @trace = false
+      @dump_code = false
       @tramp_fn = @tramp_args = @tramp_form = nil
       @variables = {}
       @function_cache = {}

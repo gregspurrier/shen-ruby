@@ -138,7 +138,7 @@ module Kl
         chars << c
       end
       if @stream.eof?
-        chars.reverse.each {|c| @stream.ungetc c}
+        chars.reverse.each {|x| @stream.ungetc x}
         return consume_symbol
       end
 
@@ -146,22 +146,22 @@ module Kl
       chars << c
       if c == '.'
         if @stream.eof?
-          chars.reverse.each {|c| @stream.ungetc c}
+          chars.reverse.each {|x| @stream.ungetc x}
           return consume_symbol
         end
         c = @stream.getc
         chars << c
-        chars.reverse.each {|c| @stream.ungetc c}
+        chars.reverse.each {|x| @stream.ungetc x}
         if c =~ /\d/
           return consume_number
         else
           return consume_symbol
         end          
       elsif c =~ /\d/
-        chars.reverse.each {|c| @stream.ungetc c}
+        chars.reverse.each {|x| @stream.ungetc x}
         return consume_number
       else
-        chars.reverse.each {|c| @stream.ungetc c}
+        chars.reverse.each {|x| @stream.ungetc x}
         return consume_symbol
       end
     end
