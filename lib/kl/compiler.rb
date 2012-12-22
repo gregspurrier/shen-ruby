@@ -153,7 +153,7 @@ module Kl
         # FIXME: the expression within the begin block should propagate
         # in_tail_pos.
         '(begin; ' +
-          compile_form(try_expr, lexical_vars, false) + 
+          compile(try_expr, lexical_vars, false) + 
           '; rescue ::Kl::Error => ' + extended_vars[err_sym] + '; ' +
           compile_application(Kl::Cons.list([handler_expr, err_sym]),
                               extended_vars, in_tail_pos) +
