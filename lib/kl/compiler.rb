@@ -22,6 +22,8 @@ module Kl
           'true'
         when false
           'false'
+        else
+          raise Kl::InternalError, "unexpected form: #{form}"
         end
       end
 
@@ -53,13 +55,14 @@ module Kl
         end
       end
 
+      # (defun NAME ARGS BODY)
       def compile_defun(form, lexical_vars, in_tail_pos)
-        name = form.tl.hd
-        arglist = form.tl.tl.hd
-        body = form.tl.tl.tl.hd
-        
-        extended_vars = lexical_vars.dup
-        arglist.each { |var| extended_vars[var] = gen_sym }
+        name, arglist, body = destructure_form(form, 3)
+        unless name.kind_of? Symbol
+          raise Kl::Error, 'first argument to lambda must be a symbol'
+        end
+
+        extended_vars = add_vars(lexical_vars, arglist.to_a)
         fn_name = compile(name, {}, false)
 
         '__defun(' + fn_name + ', ' +
@@ -69,65 +72,66 @@ module Kl
           '})) ; ' + fn_name
       end
 
+      # (lambda VAR BODY)
       def compile_lambda(form, lexical_vars, in_tail_pos)
-        var = form.tl.hd
+        var, body = destructure_form(form, 2)
         unless var.kind_of? Symbol
-          raise 'first argument to lambda must be a symbol'
+          raise Kl::Error, 'first argument to lambda must be a symbol'
         end
-        # Extend the set of lexical vars
-        extended_vars = lexical_vars.dup
-        extended_vars[var] = gen_sym
 
-        body = form.tl.tl.hd
-        '(::Kernel.lambda { |' + extended_vars[var] + '| ' + 
+        extended_vars = add_var(lexical_vars, var)
+
+        '(::Kernel.lambda { |' + extended_vars[var] + '| ' +
           compile(body, extended_vars, true) + 
           '})'
       end
 
-      # (let X Y Z)
+      # (let VAR EXPR BODY)
       def compile_let(form, lexical_vars, in_tail_pos)
-        x = form.tl.hd
-        y = form.tl.tl.hd
-        z = form.tl.tl.tl.hd
-        extended_vars = lexical_vars.dup
-        extended_vars[x] = gen_sym
-        
-        '(' + extended_vars[x] + ' = ' + compile(y, extended_vars, false) + '; '+
-          compile(z, extended_vars, in_tail_pos) + ')'
+        var, expr, body = destructure_form(form, 3)
+        unless var.kind_of? Symbol
+          raise Kl::Error, 'first argument to lambda must be a symbol'
+        end
+
+        extended_vars = add_var(lexical_vars, var)
+
+        '(' + extended_vars[var] + ' = ' + compile(expr, extended_vars, false) + '; '+
+          compile(body, extended_vars, in_tail_pos) + ')'
       end
 
+      # (freeze EXPR)
       def compile_freeze(form, lexical_vars, in_tail_pos)
-        form = form.tl.hd
-        '::Kernel.lambda {' + compile(form, lexical_vars, true) + '}'
+        expr = destructure_form(form, 1).first
+        '::Kernel.lambda {' + compile(expr, lexical_vars, true) + '}'
       end
 
+      # (type EXPR T)
       def compile_type(form, lexical_vars, in_tail_pos)
         # Just ignore the type information for now
-        compile(form.tl.hd, lexical_vars, in_tail_pos)
+        expr, _ = destructure_form(form, 2)
+        compile(expr, lexical_vars, in_tail_pos)
       end
 
+      # (if TEST_EXPR TRUE_EXPR FALSE_EXPR)
       def compile_if(form, lexical_vars, in_tail_pos)
-        test_expr = form.tl.hd
-        on_true_expr = form.tl.tl.hd
-        on_false_expr = form.tl.tl.tl.hd
-
+        test_expr, on_true_expr, on_false_expr = destructure_form(form, 3)
         compile(test_expr, lexical_vars, false) + ' ? ' +
           compile(on_true_expr, lexical_vars, in_tail_pos) + " : " +
           compile(on_false_expr, lexical_vars, in_tail_pos)
       end
 
+      # (and EXPR1 EXPR2)
       def compile_and(form, lexical_vars, in_tail_pos)
-        first_expr = form.tl.hd
-        second_expr = form.tl.tl.hd
-        compile(first_expr, lexical_vars, false) + ' && ' + 
-          compile(second_expr, lexical_vars, in_tail_pos)
+        expr1, expr2 = destructure_form(form, 2)
+        compile(expr1, lexical_vars, false) + ' && ' +
+          compile(expr2, lexical_vars, in_tail_pos)
       end
 
+      # (or EXPR1 EXPR2)
       def compile_or(form, lexical_vars, in_tail_pos)
-        first_expr = form.tl.hd
-        second_expr = form.tl.tl.hd
-        compile(first_expr, lexical_vars, false) + ' || ' + 
-          compile(second_expr, lexical_vars, in_tail_pos)
+        expr1, expr2 = destructure_form(form, 2)
+        compile(expr1, lexical_vars, false) + ' || ' +
+          compile(expr2, lexical_vars, in_tail_pos)
       end
 
       def compile_cond(form, lexical_vars, in_tail_pos)
@@ -143,19 +147,19 @@ module Kl
         end
       end
 
-
+      # (trap-error EXPR ERR_HANDLER)
       def compile_trap_error(form, lexical_vars, in_tail_pos)
-        try_expr = form.tl.hd
-        handler_expr = form.tl.tl.hd
-        extended_vars = lexical_vars.dup
+        expr, err_handler = destructure_form(form, 2)
+
         err_sym = :err
-        extended_vars[err_sym] = gen_sym
+        extended_vars = add_var(lexical_vars, err_sym)
+
         # FIXME: the expression within the begin block should propagate
         # in_tail_pos.
         '(begin; ' +
-          compile(try_expr, lexical_vars, false) + 
+          compile(expr, lexical_vars, false) +
           '; rescue ::Kl::Error => ' + extended_vars[err_sym] + '; ' +
-          compile_application(Kl::Cons.list([handler_expr, err_sym]),
+          compile_application(Kl::Cons.list([err_handler, err_sym]),
                               extended_vars, in_tail_pos) +
           '; end)'
       end
@@ -199,6 +203,27 @@ module Kl
           end
         end
         new_str
+      end
+
+      def destructure_form(form, expected_arg_count)
+        array = form.to_a
+        unless array.length == expected_arg_count + 1
+          raise Kl::Error, "#{form.first} expects #{expected_arg_count} " +
+            "arguments but was given #{array.length - 1}"
+        end
+        array[1..-1]
+      end
+
+      def add_var(scope, var)
+        add_vars(scope, [var])
+      end
+
+      def add_vars(scope, vars)
+        scope.dup.tap do |new_scope|
+          vars.each do |var|
+            new_scope[var] = gen_sym
+          end
+        end
       end
 
       def gen_sym
