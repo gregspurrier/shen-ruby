@@ -41,6 +41,7 @@ module Kl
       eigenklass.send(:define_method, name, p)
       # Invalidate cache
       @function_cache[name] = nil
+      name
     end
 
     def __function(obj)

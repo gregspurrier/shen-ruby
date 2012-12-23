@@ -7,7 +7,7 @@ module Kl
           if lexical_vars.has_key?(form)
             lexical_vars[form]
           else
-            ':"' + form.to_s + '"'
+            escape_symbol(form)
           end
         when String
           # Emit non-interpolating strings
@@ -31,13 +31,13 @@ module Kl
       def compile_form(form, lexical_vars, in_tail_pos)
         case form.hd
         when :defun
-          compile_defun(form, lexical_vars, in_tail_pos)
+          compile_defun(form, lexical_vars)
         when :lambda
-          compile_lambda(form, lexical_vars, in_tail_pos)
+          compile_lambda(form, lexical_vars)
         when :let
           compile_let(form, lexical_vars, in_tail_pos)
         when :freeze
-          compile_freeze(form, lexical_vars, in_tail_pos)
+          compile_freeze(form, lexical_vars)
         when :type
           compile_type(form, lexical_vars, in_tail_pos)
         when :if
@@ -56,34 +56,36 @@ module Kl
       end
 
       # (defun NAME ARGS BODY)
-      def compile_defun(form, lexical_vars, in_tail_pos)
+      def compile_defun(form, lexical_vars)
         name, arglist, body = destructure_form(form, 3)
         unless name.kind_of? Symbol
-          raise Kl::Error, 'first argument to lambda must be a symbol'
+          raise Kl::Error, 'first argument to defun must be a symbol'
+        end
+        unless arglist.all? {|a| a.kind_of? Symbol}
+          raise Kl::Error, 'function argument list may only contain symbols'
         end
 
         extended_vars = add_vars(lexical_vars, arglist.to_a)
-        fn_name = compile(name, {}, false)
 
-        '__defun(' + fn_name + ', ' +
-          '(::Kernel.lambda { |' + 
-          arglist.map { |var| extended_vars[var] }.join(', ') + '| ' + 
-          compile(body, extended_vars, true) + 
-          '})) ; ' + fn_name
+        fn_name = escape_symbol(name)
+        fn_args = arglist.map { |arg| extended_vars[arg] }.join(",")
+        fn_body = compile(body, extended_vars, true)
+
+        "__defun(#{fn_name}, ::Kernel.lambda { |#{fn_args}| #{fn_body}})"
       end
 
       # (lambda VAR BODY)
-      def compile_lambda(form, lexical_vars, in_tail_pos)
+      def compile_lambda(form, lexical_vars)
         var, body = destructure_form(form, 2)
         unless var.kind_of? Symbol
           raise Kl::Error, 'first argument to lambda must be a symbol'
         end
 
         extended_vars = add_var(lexical_vars, var)
+        fn_arg = extended_vars[var]
+        fn_body = compile(body, extended_vars, true)
 
-        '(::Kernel.lambda { |' + extended_vars[var] + '| ' +
-          compile(body, extended_vars, true) + 
-          '})'
+        "::Kernel.lambda { |#{fn_arg}| #{fn_body}}"
       end
 
       # (let VAR EXPR BODY)
@@ -94,15 +96,21 @@ module Kl
         end
 
         extended_vars = add_var(lexical_vars, var)
+        bound_var = extended_vars[var]
+        # The bound expression is evaluated in the original lexical scope
+        bound_expr = compile(expr, lexical_vars, false)
+        let_body = compile(body, extended_vars, in_tail_pos)
 
-        '(' + extended_vars[var] + ' = ' + compile(expr, extended_vars, false) + '; '+
-          compile(body, extended_vars, in_tail_pos) + ')'
+        "(#{bound_var} = #{bound_expr}; #{let_body})"
       end
 
       # (freeze EXPR)
-      def compile_freeze(form, lexical_vars, in_tail_pos)
+      def compile_freeze(form, lexical_vars)
         expr = destructure_form(form, 1).first
-        '::Kernel.lambda {' + compile(expr, lexical_vars, true) + '}'
+
+        body = compile(expr, lexical_vars, true)
+
+        "::Kernel.lambda { #{body} }"
       end
 
       # (type EXPR T)
@@ -115,23 +123,26 @@ module Kl
       # (if TEST_EXPR TRUE_EXPR FALSE_EXPR)
       def compile_if(form, lexical_vars, in_tail_pos)
         test_expr, on_true_expr, on_false_expr = destructure_form(form, 3)
-        compile(test_expr, lexical_vars, false) + ' ? ' +
-          compile(on_true_expr, lexical_vars, in_tail_pos) + " : " +
-          compile(on_false_expr, lexical_vars, in_tail_pos)
+
+        test_clause = compile(test_expr, lexical_vars, false)
+        true_clause = compile(on_true_expr, lexical_vars, in_tail_pos)
+        false_clause = compile(on_false_expr, lexical_vars, in_tail_pos)
+
+        "(#{test_clause} ? #{true_clause} : #{false_clause})"
       end
 
       # (and EXPR1 EXPR2)
       def compile_and(form, lexical_vars, in_tail_pos)
         expr1, expr2 = destructure_form(form, 2)
-        compile(expr1, lexical_vars, false) + ' && ' +
-          compile(expr2, lexical_vars, in_tail_pos)
+        compile_if(Kl::Cons.list([:if, expr1, expr2, false]),
+                   lexical_vars, in_tail_pos)
       end
 
       # (or EXPR1 EXPR2)
       def compile_or(form, lexical_vars, in_tail_pos)
         expr1, expr2 = destructure_form(form, 2)
-        compile(expr1, lexical_vars, false) + ' || ' +
-          compile(expr2, lexical_vars, in_tail_pos)
+        compile_if(Kl::Cons.list([:if, expr1, true, expr2]),
+                   lexical_vars, in_tail_pos)
       end
 
       def compile_cond(form, lexical_vars, in_tail_pos)
@@ -140,10 +151,12 @@ module Kl
           'raise(::Kl::Error, "condition failure")'
         else
           clause = clauses.hd
-          rest = clauses.tl
-          compile_if(Kl::Cons.list([:if, clause.hd, clause.tl.hd,
-                                    Kl::Cons.new(:cond, rest)]),
-                     lexical_vars, in_tail_pos)
+          test_expr = clause.hd
+          true_expr = clause.tl.hd
+          false_expr = Kl::Cons.new(:cond, clauses.tl)
+          compile_if(Kl::Cons.list([:if, test_expr, true_expr, false_expr]),
+                     lexical_vars,
+                     in_tail_pos)
         end
       end
 
@@ -151,17 +164,17 @@ module Kl
       def compile_trap_error(form, lexical_vars, in_tail_pos)
         expr, err_handler = destructure_form(form, 2)
 
-        err_sym = :err
-        extended_vars = add_var(lexical_vars, err_sym)
+        # TODO: TCO for try and catch clauses
+        try_clause = compile(expr, lexical_vars, false)
+        extended_vars = add_var(lexical_vars, :err)
+        err_var = extended_vars[:err]
+        catch_clause = compile_application(
+          Kl::Cons.list([err_handler, err_var]),
+          extended_vars,
+          false)
 
-        # FIXME: the expression within the begin block should propagate
-        # in_tail_pos.
-        '(begin; ' +
-          compile(expr, lexical_vars, false) +
-          '; rescue ::Kl::Error => ' + extended_vars[err_sym] + '; ' +
-          compile_application(Kl::Cons.list([err_handler, err_sym]),
-                              extended_vars, in_tail_pos) +
-          '; end)'
+        "(begin; #{try_clause}; rescue ::Kl::Error => #{err_var}; " +
+          "#{catch_clause}; end)"
       end
 
       # Normal function application
@@ -170,7 +183,8 @@ module Kl
         args = form.tl
         
         rator = '__function(' + compile(f, lexical_vars, false) + ')'
-        rands = args.map { |a| compile(a, lexical_vars, false) }.join(',')
+        rands = args.map { |arg| compile(arg, lexical_vars, false) }.join(',')
+        rator_as_string = compile(f.to_s, lexical_vars, false)
 
         tfn = gen_sym
         targs = gen_sym
@@ -181,10 +195,10 @@ module Kl
              #{targs} = [#{rands}];
              @tramp_fn = #{tfn};
              @tramp_args = #{targs};
-             @tramp_form = #{compile(f.to_s, lexical_vars, false)};
+             @tramp_form = #{rator_as_string}
             )"
         else
-          '__apply(' + rator + ', [' + rands + '], ' + compile(f.to_s, lexical_vars, false) + ')'
+          "__apply(#{rator}, [#{rands}], #{rator_as_string})"
         end
       end
       
@@ -203,6 +217,10 @@ module Kl
           end
         end
         new_str
+      end
+
+      def escape_symbol(sym)
+        ":'#{sym}'"
       end
 
       def destructure_form(form, expected_arg_count)
