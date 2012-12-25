@@ -28,7 +28,14 @@ module Kl
         if array.empty?
           Kl::EmptyList.instance
         else
-          new(array[0], list(array[1..-1]))
+          index = array.size - 1
+          head = new(array[index], Kl::EmptyList.instance)
+          index = index - 1
+          while index >= 0
+            head = new(array[index], head)
+            index = index - 1
+          end
+          head
         end
       end
     end
