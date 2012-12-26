@@ -14,9 +14,10 @@ module ShenRuby
       # Load the K Lambda files
       kl_root = File.expand_path('../../../shen_src/k_lambda', __FILE__)
       %w(toplevel core sys).each do |kl_filename|
-#        puts "Loading #{kl_filename} ..."
+        puts "Loading #{kl_filename} ..."
+        start = Time.now.to_f
         Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
-#        puts "Done"
+        puts "Done. (%0.2f seconds)" % (Time.now.to_f - start)
       end
 
       # Overrides
@@ -38,33 +39,13 @@ module ShenRuby
 
       %w(sequent yacc
          reader prolog track load writer
-         macros declarations t-star
+         macros declarations t-star types
         ).each do |kl_filename|
         puts "Loading #{kl_filename} ..."
+        start = Time.now.to_f
         Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
-        puts "Done"
+        puts "Done. (%0.2f seconds)" % (Time.now.to_f - start)
       end
-
-#      @dump_code = true
-#      RubyProf.start
-#      __eval(Kl::Cons.list([:cd, "/Users/gspurrie/Downloads/Shen 7.1/Test Programs"]))
-#      __eval(Kl::Cons.list([:load, "README.shen"]))
-             
-                           
-#      __eval(Kl::Cons.list([:load, "/Users/gspurrie/Downloads/Shen 7.1/Test Programs/README.shen"]))
-#      @trace = true
-#      __eval(Kl::Cons.list([:load, "/Users/gspurrie/Downloads/Shen 7.1/Test Programs/tests.shen"]))
-#      result = RubyProf.stop
-#      printer = RubyProf::FlatPrinter.new(result)
-#      printer.print(STDOUT)
-
-#      @trace = true
-
-      #%w(types).each do |kl_filename|
-      #  puts "Loading #{kl_filename} ..."
-      #  Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
-      #  puts "Done"
-      #end
     end
   end
 end
