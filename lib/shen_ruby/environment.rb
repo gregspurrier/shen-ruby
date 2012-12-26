@@ -38,6 +38,23 @@ module ShenRuby
         define_method "shen-explode-string" do |str|
           Kl::Cons.list(str.split(//))
         end
+
+        # shen-aritycheck-action is only called for its side effects
+        # (which come via shen-ahh). The version from core.kl is implemented
+        # recursively and sometimes blows out the stack. We replace it here with
+        # the following BFS-based implementation that does not bother to return
+        # any results.
+        define_method 'shen-aritycheck-action' do |form|
+          queue = [form]
+          until queue.empty?
+            f = queue.shift
+            if cons?(f)
+              send(:"shen-aah", hd(f), tl(f))
+              f.each { |x| queue.push(x)}
+            end
+          end
+          :"shen-skip"
+        end
       end
 
       %w(sequent yacc
