@@ -6,10 +6,7 @@ module Kl
       end
 
       define_method "error-to-string" do |err|
-        "Error: #{err.message}\n" +
-          "Stack:\n  " +
-          (err.backtrace || []).join("\n  ") +
-          "\n"
+        err.message
       end
     end
   end
