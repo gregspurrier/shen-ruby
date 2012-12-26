@@ -216,6 +216,12 @@ describe Kl::Environment do
                   (simple-error "boom!")
                   (lambda E 37))').should == 37          
     end
+
+    it 'treats undefined functions as simple errors' do
+      expect {
+        eval_str('(foo)')
+      }.to raise_error(Kl::Error, 'The function foo is undefined')
+    end
   end
 
   describe "setting values" do

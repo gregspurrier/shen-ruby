@@ -49,7 +49,11 @@ module Kl
       when Symbol
         cached = @function_cache[obj]
         unless cached
-          cached = @function_cache[obj] = method(obj).to_proc.curry
+          begin
+            cached = @function_cache[obj] = method(obj).to_proc.curry
+          rescue NameError
+            raise ::Kl::Error, "The function #{obj} is undefined"
+          end
         end
         cached
       when Proc
