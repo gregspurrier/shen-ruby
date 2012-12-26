@@ -169,7 +169,7 @@ module Kl
         extended_vars = add_var(lexical_vars, :err)
         err_var = extended_vars[:err]
         catch_clause = compile_application(
-          Kl::Cons.list([err_handler, err_var]),
+          Kl::Cons.list([err_handler, :err]),
           extended_vars,
           false)
 
@@ -220,7 +220,7 @@ module Kl
       end
 
       def escape_symbol(sym)
-        ":'#{sym}'"
+        ':"' + sym.to_s + '"'
       end
 
       def destructure_form(form, expected_arg_count)
