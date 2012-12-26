@@ -71,7 +71,7 @@ module Kl
         fn_args = arglist.map { |arg| extended_vars[arg] }.join(",")
         fn_body = compile(body, extended_vars, true)
 
-        "__defun(#{fn_name}, ::Kernel.lambda { |#{fn_args}| #{fn_body}})"
+        "(@eigenklass.send(:define_method, #{fn_name}, ::Kernel.lambda { |#{fn_args}| #{fn_body}}.curry); #{fn_name})"
       end
 
       # (lambda VAR BODY)
@@ -85,14 +85,14 @@ module Kl
         fn_arg = extended_vars[var]
         fn_body = compile(body, extended_vars, true)
 
-        "::Kernel.lambda { |#{fn_arg}| #{fn_body}}"
+        "::Kernel.lambda { |#{fn_arg}| #{fn_body}}.curry"
       end
 
       # (let VAR EXPR BODY)
       def compile_let(form, lexical_vars, in_tail_pos)
         var, expr, body = destructure_form(form, 3)
         unless var.kind_of? Symbol
-          raise Kl::Error, 'first argument to lambda must be a symbol'
+          raise Kl::Error, 'first argument to let must be a symbol'
         end
 
         extended_vars = add_var(lexical_vars, var)
@@ -182,7 +182,7 @@ module Kl
         f = form.hd
         args = form.tl
         
-        rator = '__function(' + compile(f, lexical_vars, false) + ')'
+        rator = compile(f, lexical_vars, false)
         rands = args.map { |arg| compile(arg, lexical_vars, false) }.join(',')
         rator_as_string = compile(f.to_s, lexical_vars, false)
 

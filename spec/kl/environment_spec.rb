@@ -46,9 +46,15 @@ describe Kl::Environment do
       eval_str('(* (+ 1 2) (- 6 1))').should == 15
     end
 
-    it 'supports currying' do
+    it 'supports currying of primitives' do
       eval_str('((+ 1) 2)').should == 3
       eval_str('(((+) 1) 2)').should == 3
+    end
+
+    it 'supports currying of user-defined functions' do
+      eval_str('(defun adder (X Y) (+ X Y))')
+      eval_str('((adder 1) 2)').should == 3
+      eval_str('(((adder) 1) 2)').should == 3
     end
   end
 

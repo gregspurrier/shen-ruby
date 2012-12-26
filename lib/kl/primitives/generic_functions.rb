@@ -9,11 +9,12 @@ module Kl
     #  - freeze
     #  - type
     module GenericFunctions
-      define_method "=" do |a, b|
+      define_method '=', lambda { |a, b|
         a == b
-      end
+      }.curry
 
-      define_method "eval-kl" do |exp|
+      # Curried after inclusion
+      define_method 'eval-kl' do |exp|
         __eval(exp)
       end
     end

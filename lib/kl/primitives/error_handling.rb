@@ -1,13 +1,13 @@
 module Kl
   module Primitives
     module ErrorHandling
-      define_method "simple-error" do |err_msg|
+      define_method "simple-error", lambda { |err_msg|
         raise Kl::Error, err_msg
-      end
+      }.curry
 
-      define_method "error-to-string" do |err|
+      define_method "error-to-string", lambda { |err|
         err.message
-      end
+      }.curry
     end
   end
 end

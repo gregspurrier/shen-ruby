@@ -1,23 +1,21 @@
 module Kl
   module Primitives
     module Lists
-      def cons(a, b)
-        raise Kl::InternalError, "hd is nil" if a.nil?
-        raise Kl::InternalError, "hd is nil" if b.nil?
+      define_method 'cons', lambda { |a, b|
         Kl::Cons.new(a, b)
-      end
+      }.curry
 
-      def hd(a)
+      define_method 'hd', lambda { |a|
         a.hd
-      end
+      }.curry
 
-      def tl(a)
+      define_method 'tl', lambda { |a|
         a.tl
-      end
+      }.curry
 
-      def cons?(a)
+      define_method 'cons?', lambda { |a|
         a.kind_of? Kl::Cons
-      end
+      }.curry
     end
   end
 end

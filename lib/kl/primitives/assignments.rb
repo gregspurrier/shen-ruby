@@ -1,15 +1,14 @@
 module Kl
   module Primitives
     module Assignments
+      # Curried after inclusion
       def set(sym, value)
-        raise Kl::InternalError, "sym is nil" if sym.nil?
-        raise Kl::InternalError, "value is nil" if value.nil?
         @variables[sym] = value
         value
       end
 
+      # Curried after inclusion
       def value(sym)
-        raise Kl::InternalError, "sym is nil" if sym.nil?
         if @variables.has_key?(sym)
           @variables[sym]
         else

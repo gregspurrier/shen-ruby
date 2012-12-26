@@ -4,23 +4,23 @@ module Kl
     # characters. Once the Shen environment is up and running and passing
     # its test suite, strings will be extended to support UTF-8.
     module Strings
-      def pos(s, n)
+      define_method 'pos', lambda { |s, n|
         s.byteslice(n)
-      end
+      }.curry
       
-      def tlstr(s)
+      define_method 'tlstr', lambda { |s|
         if s.empty?
           :"shen-eos"
         else
           s.byteslice(1, s.bytesize - 1)
         end
-      end
+      }.curry
       
-      def cn(s1, s2)
+      define_method 'cn', lambda { |s1, s2|
         s1 + s2
-      end
+      }.curry
       
-      def str(x)
+      define_method 'str', lambda { |x|
         case x
         when String
           '"' + x + '"'
@@ -37,19 +37,19 @@ module Kl
         else
           raise Kl::Error, "str applied to non-atomic type: #{x.class}"
         end
-      end
+      }.curry
       
-      def string?(x)
-        x.kind_of?(String)
-      end
+      define_method 'string?', lambda { |x|
+        x.kind_of? String
+      }.curry
 
-      define_method "n->string" do |n|
+      define_method 'n->string', lambda { |n|
         "" << n
-      end
+      }.curry
 
-      define_method "string->n" do |s|
+      define_method 'string->n', lambda { |s|
         s.bytes.to_a.first
-      end
+      }.curry
     end
   end
 end

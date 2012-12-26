@@ -1,31 +1,32 @@
 module Kl
   module Primitives
     module Streams
-      def pr(s, stream)
+      define_method 'pr', lambda { |s, stream|
         stream.write(s)
         s
-      end
+      }.curry
       
-      define_method "read-byte" do |stream|
+      define_method 'read-byte', lambda { |stream|
         if stream.eof?
           -1
         else
           stream.readbyte
         end
-      end
-      
+      }.curry
+
+      # Curried after inclusion
       def open(stream_type, name, direction)
         unless stream_type == :file
           raise Kl::Error, "unsupported stream type: #{stream_type}"
         end
-        File.open(File.expand_path(name, value(:'*home-directory*')), 
+        File.open(File.expand_path(name, value(:'*home-directory*')),
                   direction == :out ? 'w' : 'r')
       end
       
-      def close(stream)
+      define_method 'close', lambda { |stream|
         stream.close
         :NIL
-      end
+      }.curry
     end
   end
 end

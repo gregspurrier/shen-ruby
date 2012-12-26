@@ -1,44 +1,44 @@
 module Kl
   module Primitives
     module Arithmetic
-      def +(a, b)
+      define_method '+', lambda { |a, b|
         a + b
-      end
+      }.curry
       
-      def -(a, b)
+      define_method '-', lambda { |a, b|
         a - b
-      end
+      }.curry
       
-      def *(a, b)
+      define_method '*', lambda { |a, b|
         a * b
-      end
+      }.curry
       
-      def /(a, b)
+      define_method '/', lambda { |a, b|
         if a.kind_of?(Fixnum) && b.kind_of?(Fixnum) && a % b != 0
           a = a.to_f
         end
         a / b
-      end
+      }
       
-      def >(a,b)
+      define_method '>', lambda { |a, b|
         a > b
-      end
+      }.curry
 
-      def <(a,b)
+      define_method '<', lambda { |a, b|
         a < b
-      end
+      }.curry
       
-      def >=(a,b)
+      define_method '>=', lambda { |a, b|
         a >= b
-      end
+      }.curry
       
-      def <=(a,b)
+      define_method '<=', lambda { |a, b|
         a <= b
-      end
+      }.curry
       
-      def number?(a)
+      define_method 'number?', lambda { |a|
         a.kind_of?(Numeric)
-      end
+      }.curry
     end
   end
 end

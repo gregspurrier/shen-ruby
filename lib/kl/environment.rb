@@ -30,61 +30,48 @@ module Kl
       @dump_code = false
       @tramp_fn = @tramp_args = @tramp_form = nil
       @variables = {}
-      @function_cache = {}
-      set("*stinput*".to_sym, STDIN)
-      set("*stoutput*".to_sym, STDOUT)
-    end
+      @eigenklass = class << self; self; end
 
-    # Associate proc p with the specified name in the function namespace
-    def __defun(name, p)
-      eigenklass = class << self; self; end
-      eigenklass.send(:define_method, name, p)
-      # Invalidate cache
-      @function_cache[name] = nil
-      name
-    end
-
-    def __function(obj)
-      case obj
-      when Symbol
-        cached = @function_cache[obj]
-        unless cached
-          begin
-            cached = @function_cache[obj] = method(obj).to_proc.curry
-          rescue NameError
-            raise ::Kl::Error, "The function #{obj} is undefined"
-          end
-        end
-        cached
-      when Proc
-        obj.curry
-      else
-        raise "function applied to #{obj.class}"
+      # Methods that refer to instance methods or variables cannot be
+      # defined in curried form. Redefine them in curried form on
+      # the eigenclass now.
+      %w(eval-kl open set value).each do |name|
+        @eigenklass.send(:define_method, name, method(name).to_proc.curry)
       end
     end
 
     # Trampoline-aware function application
     def __apply(fn, args, f)
-      if args.any?(&:nil?)
-        raise Kl::InternalError, "nil argument to #{f}(#{args})"
-      end
       @depth += 1
       puts "--> [#{@depth}] #{f} #{args}" if @trace
-      result = fn.call(*args)
+      if fn.kind_of? Symbol
+        begin
+          result = send(fn, *args)
+        rescue NameError
+          raise Kl::Error,  "The function #{f} is undefined"
+        end
+      else
+        result = fn.call(*args)
+      end
+
       while @tramp_fn
         fn = @tramp_fn
         args = @tramp_args
         f = @tramp_form
-        if args.any?(&:nil?)
-          raise Kl::InternalError, "nil argument to #{f}(#{args})"
-        end
         @tramp_fn = nil
         @tramp_args = nil
         @tramp_form = nil
         puts "tail --> #{f} #{args}" if @trace
-        result = fn.call(*args)
+        if fn.kind_of? Symbol
+          begin
+            result = send(fn, *args)
+          rescue NameError
+            raise Kl::Error,  "The function #{f} is undefined"
+          end
+        else
+          result = fn.call(*args)
+        end
       end
-      raise Kl::InternalError, "nil result from #{f}(#{args})" if result.nil?
       @depth -= 1
       result
     end
