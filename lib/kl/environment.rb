@@ -1,4 +1,5 @@
 require 'kl/compiler'
+require 'kl/primitives/booleans'
 require 'kl/primitives/symbols'
 require 'kl/primitives/strings'
 require 'kl/primitives/assignments'
@@ -12,6 +13,7 @@ require 'kl/primitives/arithmetic'
 
 module Kl
   class Environment
+    include ::Kl::Primitives::Booleans
     include ::Kl::Primitives::Symbols
     include ::Kl::Primitives::Strings
     include ::Kl::Primitives::Assignments

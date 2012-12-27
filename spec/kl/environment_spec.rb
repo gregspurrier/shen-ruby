@@ -165,6 +165,10 @@ describe Kl::Environment do
         @env.should_receive(:tr).twice.and_return(true)
         eval_str('(and (tr) (tr))').should == true
       end
+
+      it 'may be passed as an argument to higher order functions' do
+        eval_str('((lambda Op (Op true true)) and)').should == true
+      end
     end
 
     describe "or" do
@@ -186,6 +190,11 @@ describe Kl::Environment do
         @env.should_receive(:fa).twice.and_return(false)
         eval_str('(or (fa) (fa))').should == false
       end
+
+      it 'may be passed as an argument to higher order functions' do
+        eval_str('((lambda Op (Op false false)) or)').should == false
+      end
+
     end
 
     describe "cond" do
