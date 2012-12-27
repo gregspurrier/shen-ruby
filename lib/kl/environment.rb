@@ -47,10 +47,10 @@ module Kl
       @depth += 1
       puts "--> [#{@depth}] #{f} #{args}" if @trace
       if fn.kind_of? Symbol
-        begin
+        if respond_to? fn
           result = send(fn, *args)
-        rescue NameError
-          raise Kl::Error,  "The function #{f} is undefined"
+        else
+          raise Kl::Error,  "The function #{fn} is undefined"
         end
       else
         result = fn.call(*args)
@@ -65,10 +65,10 @@ module Kl
         @tramp_form = nil
         puts "tail --> #{f} #{args}" if @trace
         if fn.kind_of? Symbol
-          begin
+          if respond_to? fn
             result = send(fn, *args)
-          rescue NameError
-            raise Kl::Error,  "The function #{f} is undefined"
+          else
+            raise Kl::Error,  "The function #{fn} is undefined"
           end
         else
           result = fn.call(*args)
@@ -80,11 +80,13 @@ module Kl
 
     def __eval(form)
       if @dump_code
-        puts "Compiling...."
+        puts "=" * 70
+        puts "Compiling:"
+        puts Kl::Cons.list_to_string(form)
+        puts '-----'
       end
       code = ::Kl::Compiler.compile(form, {}, true)
       if @dump_code
-        puts "=" * 70
         puts code
         puts "=" * 70
       end
