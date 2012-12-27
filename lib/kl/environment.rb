@@ -26,11 +26,8 @@ module Kl
     include ::Kl::Primitives::Arithmetic
 
     def initialize
-      # The variable namespace
-      @depth = 0
-      @trace = false
       @dump_code = false
-      @tramp_fn = @tramp_args = @tramp_form = nil
+      @tramp_fn = @tramp_args  = nil
       @variables = {}
       @eigenklass = class << self; self; end
 
@@ -43,27 +40,9 @@ module Kl
     end
 
     # Trampoline-aware function application
-    def __apply(fn, args, f)
-      @depth += 1
-      puts "--> [#{@depth}] #{f} #{args}" if @trace
-      if fn.kind_of? Symbol
-        if respond_to? fn
-          result = send(fn, *args)
-        else
-          raise Kl::Error,  "The function #{fn} is undefined"
-        end
-      else
-        result = fn.call(*args)
-      end
-
-      while @tramp_fn
-        fn = @tramp_fn
-        args = @tramp_args
-        f = @tramp_form
+    def __apply(fn, args)
+      while fn
         @tramp_fn = nil
-        @tramp_args = nil
-        @tramp_form = nil
-        puts "tail --> #{f} #{args}" if @trace
         if fn.kind_of? Symbol
           if respond_to? fn
             result = send(fn, *args)
@@ -73,8 +52,13 @@ module Kl
         else
           result = fn.call(*args)
         end
+
+        if fn = @tramp_fn
+          # Bounce on the trampoline
+          args = @tramp_args
+          @tramp_args = nil
+        end
       end
-      @depth -= 1
       result
     end
 
@@ -90,16 +74,15 @@ module Kl
         puts code
         puts "=" * 70
       end
+      @tramp_fn = nil
       result = instance_eval(code)
       # Handle top-level trampolines
       if @tramp_fn
         fn = @tramp_fn
         args = @tramp_args
-        f = @tramp_form
         @tramp_fn = nil
         @tramp_args = nil
-        @tramp_form = nil
-        __apply(fn, args, f)
+        __apply(fn, args)
       else
         result
       end

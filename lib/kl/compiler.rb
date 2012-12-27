@@ -184,7 +184,6 @@ module Kl
         
         rator = compile(f, lexical_vars, false)
         rands = args.map { |arg| compile(arg, lexical_vars, false) }.join(',')
-        rator_as_string = compile(f.to_s, lexical_vars, false)
 
         tfn = gen_sym
         targs = gen_sym
@@ -194,11 +193,10 @@ module Kl
              #{tfn} = #{rator};
              #{targs} = [#{rands}];
              @tramp_fn = #{tfn};
-             @tramp_args = #{targs};
-             @tramp_form = #{rator_as_string}
+             @tramp_args = #{targs}
             )"
         else
-          "__apply(#{rator}, [#{rands}], #{rator_as_string})"
+          "__apply(#{rator}, [#{rands}])"
         end
       end
       
