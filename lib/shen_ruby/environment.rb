@@ -55,6 +55,14 @@ module ShenRuby
           end
           :"shen-skip"
         end
+
+        define_method 'quit' do
+          ::Kernel.exit(0)
+        end
+
+        define_method 'set-dump-code' do |val|
+          @dump_code = val
+        end
       end
 
       %w(sequent yacc
