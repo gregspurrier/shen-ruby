@@ -38,6 +38,14 @@ module Kl
           head
         end
       end
+
+      def list_to_string(f)
+        if f.kind_of? Kl::Cons
+          '(' + f.map {|x| list_to_string(x)}.join(' ') + ')'
+        else
+          f.to_s
+        end
+      end
     end
   end
 end
