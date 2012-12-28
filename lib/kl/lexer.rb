@@ -15,12 +15,29 @@ module Kl
 
     def initialize(stream)
       @stream = stream
+      @buffer = []
     end
 
+    def eof?
+      @buffer.empty? && @stream.eof?
+    end
+
+    def getc
+      if @buffer.empty?
+        @stream.getc
+      else
+        @buffer.pop
+      end
+    end
+    
+    def ungetc(c)
+      @buffer.push(c)
+    end
+    
     def next
       drain_whitespace
-      unless @stream.eof?
-        c = @stream.getc
+      unless eof?
+        c = getc
         case c
         when '('
           OpenParen.instance
@@ -29,7 +46,7 @@ module Kl
         when '"'
           consume_string
         when SYMBOL_CHARS
-          @stream.ungetc(c)
+          ungetc(c)
           consume_number_or_symbol
         else
           raise Error, "illegal character: #{c}"
@@ -39,10 +56,10 @@ module Kl
 
   private
     def drain_whitespace
-      until @stream.eof?
-        c = @stream.getc
+      until eof?
+        c = getc
         if c =~ /\S/
-          @stream.ungetc(c)
+          ungetc(c)
           break
         end
       end
@@ -51,8 +68,8 @@ module Kl
     def consume_string
       chars = []
       loop do
-        raise Error, "unterminated string" if @stream.eof?
-        c = @stream.getc
+        raise Error, "unterminated string" if eof?
+        c = getc
         break if c == '"'
         chars << c
       end
@@ -70,8 +87,8 @@ module Kl
       past_sign = false
       chars = []
       loop do
-        break if @stream.eof?
-        c = @stream.getc
+        break if eof?
+        c = getc
         if c =~ /\d/
           past_sign = true
           chars << c
@@ -84,7 +101,7 @@ module Kl
         elsif c == '-' && !past_sign
           negative = !negative
         else
-          @stream.ungetc c
+          ungetc c
           break
         end
       end
@@ -92,7 +109,7 @@ module Kl
       if chars.last == '.'
         # A trailing decimal point is treated as part of the next
         # token. Forget we saw it.
-        @stream.ungetc(chars.pop)
+        ungetc(chars.pop)
         decimal_seen = false
       end
       str = chars.join
@@ -102,10 +119,10 @@ module Kl
     def consume_symbol
       chars = []
       loop do
-        break if @stream.eof?
-        c = @stream.getc
+        break if eof?
+        c = getc
         unless c =~ SYMBOL_CHARS
-          @stream.ungetc c
+          ungetc c
           break
         end
         chars << c
@@ -129,39 +146,39 @@ module Kl
       # is a number. Otherwise it is a symbol.
       chars = []
       loop do
-        break if @stream.eof?
-        c = @stream.getc
+        break if eof?
+        c = getc
         unless c =~ /[-+]/
-          @stream.ungetc c
+          ungetc c
           break
         end
         chars << c
       end
-      if @stream.eof?
-        chars.reverse.each {|x| @stream.ungetc x}
+      if eof?
+        chars.reverse.each {|x| ungetc x}
         return consume_symbol
       end
 
-      c = @stream.getc
+      c = getc
       chars << c
       if c == '.'
-        if @stream.eof?
-          chars.reverse.each {|x| @stream.ungetc x}
+        if eof?
+          chars.reverse.each {|x| ungetc x}
           return consume_symbol
         end
-        c = @stream.getc
+        c = getc
         chars << c
-        chars.reverse.each {|x| @stream.ungetc x}
+        chars.reverse.each {|x| ungetc x}
         if c =~ /\d/
           return consume_number
         else
           return consume_symbol
         end          
       elsif c =~ /\d/
-        chars.reverse.each {|x| @stream.ungetc x}
+        chars.reverse.each {|x| ungetc x}
         return consume_number
       else
-        chars.reverse.each {|x| @stream.ungetc x}
+        chars.reverse.each {|x| ungetc x}
         return consume_symbol
       end
     end
