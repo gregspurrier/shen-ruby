@@ -86,6 +86,8 @@ module Kl
       else
         result
       end
+    rescue SystemStackError
+      raise ::Kl::Error, 'maximum stack depth exceeded'
     end
 
     class << self

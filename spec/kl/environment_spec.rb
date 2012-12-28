@@ -275,13 +275,22 @@ describe Kl::Environment do
     end
   end
 
-  describe "tail recursion" do
+  describe 'tail recursion' do
     it 'does not blow the stack' do
       eval_str('(defun count-down (X) 
                   (if (= X 0) 
                     success 
                     (count-down (- X 1))))')
       eval_str('(count-down 100000)').should == :success
+    end
+  end
+
+  describe 'stack overflow' do
+    it 'is translated into a Shen simple-error' do
+      eval_str('(defun boom () (+ 1 (boom)))')
+      expect {
+        eval_str('(boom)')
+      }.to raise_error(Kl::Error, 'maximum stack depth exceeded')
     end
   end
 end
