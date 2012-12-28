@@ -14,9 +14,10 @@ command = :"shen-shen"
 begin
   env.__eval(Kl::Cons.list([command]))
 rescue StandardError => e
-  # K Lambda simple error
+  # K Lambda simple errors are already handled by the Shen REPL. Therefore
+  # this must be another type of exception. Print it as such and reenter
+  # the REPL without re-display the initial credits.
   puts "Ruby exception: #{e.message}"
-  # Return to the Shen interpreter without re-printing the credits
   command = :"shen-loop"
   retry
 end
