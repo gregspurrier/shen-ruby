@@ -2,6 +2,13 @@ module Kl
   module Primitives
     module Streams
       define_method 'pr', lambda { |s, stream|
+        if stream == STDIN
+          # shen-prbytes in toplevel.kl calls pr on *stinput* rather than
+          # *stoutput*. As a temporary solution, use the same approach
+          # that Bruno Deferrari uses in his Scheme port. See
+          # https://groups.google.com/d/topic/qilang/2ixosqX4Too/discussion
+          stream = STDOUT if stream == STDIN
+        end
         stream.write(s)
         s
       }.curry
