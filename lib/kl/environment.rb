@@ -60,6 +60,8 @@ module Kl
         end
       end
       result
+    rescue SystemStackError
+      raise ::Kl::Error, 'maximum stack depth exceeded'
     end
 
     def __eval(form)
@@ -86,8 +88,6 @@ module Kl
       else
         result
       end
-    rescue SystemStackError
-      raise ::Kl::Error, 'maximum stack depth exceeded'
     end
 
     class << self
