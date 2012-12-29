@@ -5,13 +5,13 @@ module Kl
     # arguments to higher-order functions. They are used, e.g., in the
     # Quantifier Machine test case in the Shen Test Suite.
     module Booleans
-      define_method 'or', lambda { |a, b|
+      def or(a, b)
         a || b
-      }.curry
+      end
 
-      define_method 'and', lambda { |a, b|
+      def and(a, b)
         a && b
-      }.curry
+      end
     end
   end
 end

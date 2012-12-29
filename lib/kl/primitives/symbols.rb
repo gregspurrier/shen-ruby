@@ -1,7 +1,7 @@
 module Kl
   module Primitives
     module Symbols
-      define_method 'intern', lambda { |str|
+      def intern(str)
         # 'true' and 'false' are treated specially and return the
         # corresponding booleans
         if str == 'true'
@@ -11,7 +11,7 @@ module Kl
         else
           str.to_sym
         end
-      }.curry
+      end
     end
   end
 end

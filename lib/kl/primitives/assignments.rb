@@ -1,13 +1,11 @@
 module Kl
   module Primitives
     module Assignments
-      # Curried after inclusion
       def set(sym, value)
         @variables[sym] = value
         value
       end
 
-      # Curried after inclusion
       def value(sym)
         if @variables.has_key?(sym)
           @variables[sym]

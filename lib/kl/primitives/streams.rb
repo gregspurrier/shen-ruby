@@ -1,7 +1,7 @@
 module Kl
   module Primitives
     module Streams
-      define_method 'pr', lambda { |s, stream|
+      def pr(s, stream)
         if stream == STDIN
           # shen-prbytes in toplevel.kl calls pr on *stinput* rather than
           # *stoutput*. As a temporary solution, use the same approach
@@ -11,17 +11,16 @@ module Kl
         end
         stream.write(s)
         s
-      }.curry
+      end
       
-      define_method 'read-byte', lambda { |stream|
+      define_method 'read-byte' do |stream|
         if stream.eof?
           -1
         else
           stream.readbyte
         end
-      }.curry
+      end
 
-      # Curried after inclusion
       def open(stream_type, name, direction)
         unless stream_type == :file
           raise Kl::Error, "unsupported stream type: #{stream_type}"
@@ -30,10 +29,10 @@ module Kl
                   direction == :out ? 'w' : 'r')
       end
       
-      define_method 'close', lambda { |stream|
+      def close(stream)
         stream.close
         :NIL
-      }.curry
+      end
     end
   end
 end

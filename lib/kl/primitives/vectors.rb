@@ -1,30 +1,30 @@
 module Kl
   module Primitives
     module Vectors
-      define_method 'absvector', lambda { |n|
+      def absvector(n)
         Kl::Absvector.new(n)
-      }.curry
+      end
 
-      define_method 'address->', lambda { |v, n, value|
+      define_method 'address->' do |v, n, value|
         if n < 0 || n >= v.upper_limit
           raise Kl::Error, "out of bounds"
         end
 
         v[n] = value
         v
-      }.curry
+      end
 
-      define_method '<-address', lambda { |v, n|
+      define_method '<-address' do |v, n|
         if n < 0 || n >= v.upper_limit
           raise Kl::Error, "out of bounds"
         end
 
         v[n]
-      }.curry
+      end
 
-      define_method 'absvector?', lambda { |v|
+      def absvector?(v)
         v.kind_of? Kl::Absvector
-      }.curry
+      end
     end
   end
 end

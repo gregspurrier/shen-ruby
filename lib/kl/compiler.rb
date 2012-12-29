@@ -69,9 +69,10 @@ module Kl
 
         fn_name = escape_symbol(name)
         fn_args = arglist.map { |arg| extended_vars[arg] }.join(",")
+        fn_arity = arglist.count
         fn_body = compile(body, extended_vars, true)
 
-        "(@eigenklass.send(:define_method, #{fn_name}, ::Kernel.lambda { |#{fn_args}| #{fn_body}}.curry); #{fn_name})"
+        "(@eigenklass.send(:define_method, #{fn_name}, ::Kernel.lambda { |#{fn_args}| #{fn_body}}); @arity_cache[#{fn_name}] = #{fn_arity}; #{fn_name})"
       end
 
       # (lambda VAR BODY)
@@ -85,7 +86,7 @@ module Kl
         fn_arg = extended_vars[var]
         fn_body = compile(body, extended_vars, true)
 
-        "::Kernel.lambda { |#{fn_arg}| #{fn_body}}.curry"
+        "::Kernel.lambda { |#{fn_arg}| #{fn_body}}"
       end
 
       # (let VAR EXPR BODY)

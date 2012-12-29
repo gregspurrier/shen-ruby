@@ -1,21 +1,21 @@
 module Kl
   module Primitives
     module Lists
-      define_method 'cons', lambda { |a, b|
+      def cons(a, b)
         Kl::Cons.new(a, b)
-      }.curry
+      end
 
-      define_method 'hd', lambda { |a|
+      def hd(a)
         a.hd
-      }.curry
+      end
 
-      define_method 'tl', lambda { |a|
+      def tl(a)
         a.tl
-      }.curry
+      end
 
-      define_method 'cons?', lambda { |a|
+      def cons?(a)
         a.kind_of? Kl::Cons
-      }.curry
+      end
     end
   end
 end

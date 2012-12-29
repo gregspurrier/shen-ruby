@@ -45,17 +45,6 @@ describe Kl::Environment do
     it 'evaluates function arguments before application' do
       eval_str('(* (+ 1 2) (- 6 1))').should == 15
     end
-
-    it 'supports currying of primitives' do
-      eval_str('((+ 1) 2)').should == 3
-      eval_str('(((+) 1) 2)').should == 3
-    end
-
-    it 'supports currying of user-defined functions' do
-      eval_str('(defun adder (X Y) (+ X Y))')
-      eval_str('((adder 1) 2)').should == 3
-      eval_str('(((adder) 1) 2)').should == 3
-    end
   end
 
   describe 'evaluation of lambda special form' do
@@ -103,7 +92,6 @@ describe Kl::Environment do
     it 'adds a new function to the environment' do
       eval_str('(defun my-add (A B) (+ A B))').should == "my-add".to_sym
       eval_str('(my-add 17 20)').should == 37
-      eval_str('((my-add 17) 20)').should == 37
     end
 
     it 'exposes the function for use in Ruby' do
@@ -272,6 +260,28 @@ describe Kl::Environment do
   describe 'evaluation of eval-kl' do
     it 'evals as expected' do
       eval_str('(eval-kl (+ 1 2))').should == 3
+    end
+  end
+
+  describe 'currying' do
+    it 'supports partial application of primitives' do
+      eval_str('((+ 1) 2)').should == 3
+      eval_str('(((+) 1) 2)').should == 3
+    end
+
+    it 'supports partial application of user-defined functions' do
+      eval_str('(defun adder (X Y) (+ X Y))')
+      eval_str('((adder 1) 2)').should == 3
+      eval_str('(((adder) 1) 2)').should == 3
+    end
+
+    it 'supports uncurrying of nested lambdas' do
+      eval_str('((lambda X (lambda Y (* X Y))) 6 7)').should == 42
+    end
+
+    it 'supports uncurrying of higher-order functions' do
+      eval_str('(defun adder (X) (lambda Y (+ X Y)))')
+      eval_str('(adder 1 2)').should == 3
     end
   end
 

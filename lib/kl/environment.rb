@@ -30,13 +30,7 @@ module Kl
       @tramp_fn = @tramp_args  = nil
       @variables = {}
       @eigenklass = class << self; self; end
-
-      # Methods that refer to instance methods or variables cannot be
-      # defined in curried form. Redefine them in curried form on
-      # the eigenclass now.
-      %w(eval-kl open set value).each do |name|
-        @eigenklass.send(:define_method, name, method(name).to_proc.curry)
-      end
+      @arity_cache = Hash.new { |h, k| h[k] = method(k).arity }
     end
 
     # Trampoline-aware function application
@@ -45,12 +39,37 @@ module Kl
         @tramp_fn = nil
         if fn.kind_of? Symbol
           if respond_to? fn
-            result = send(fn, *args)
+            arity = @arity_cache[fn]
+            if arity == args.size || arity == -1
+              result = send(fn, *args)
+            elsif arity > args.size
+              # Partial application
+              result = method(fn).to_proc.curry.call(*args)
+            else
+              # Uncurrying. Apply fn to its expected number of arguments
+              # and hope that the result is a function that can be applied
+              # to the remainder.
+              fn = __apply(fn, args[0, arity])
+              args = args[arity..-1]
+              next
+            end
           else
             raise Kl::Error,  "The function #{fn} is undefined"
           end
         else
-          result = fn.call(*args)
+          arity = fn.arity
+          if arity == args.size || arity == -1
+            result = fn.call(*args)
+          elsif arity > args.size
+            result = fn.curry.call(*args)
+          else
+            # Uncurrying. Apply fn to its expected number of arguments
+            # and hope that the result is a function that can be applied
+            # to the remainder.
+            fn = __apply(fn, args[0, arity])
+            args = args[arity..-1]
+            next
+          end
         end
 
         if fn = @tramp_fn
