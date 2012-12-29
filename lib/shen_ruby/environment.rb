@@ -5,7 +5,7 @@ module ShenRuby
 
       # Set the global variables
       set("*language*".to_sym, "Ruby")
-      set("*implementation*".to_sym, RUBY_ENGINE.to_s)
+      set("*implementation*".to_sym, "#{RUBY_ENGINE} #{RUBY_VERSION}")
       set("*release*".to_sym, RUBY_VERSION)
       set("*port*".to_sym, "0.1.0-SNAPSHOT")
       set("*porters*".to_sym, "Greg Spurrier")
