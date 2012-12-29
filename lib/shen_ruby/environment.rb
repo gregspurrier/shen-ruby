@@ -7,7 +7,7 @@ module ShenRuby
       set("*language*".to_sym, "Ruby")
       set("*implementation*".to_sym, "#{RUBY_ENGINE} #{RUBY_VERSION}")
       set("*release*".to_sym, RUBY_VERSION)
-      set("*port*".to_sym, "0.1.0-SNAPSHOT")
+      set("*port*".to_sym, ShenRuby::VERSION)
       set("*porters*".to_sym, "Greg Spurrier")
       set("*home-directory*".to_sym, Dir.pwd)
       set("*stinput*".to_sym, STDIN)
