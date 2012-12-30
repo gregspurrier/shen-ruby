@@ -1,11 +1,13 @@
 # ShenRuby
-ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. It currently supports Shen version 7.1, which was released in December, 2012.
+ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
+
+ShenRuby supports Shen version 7.1, which was released in December, 2012.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
 
 Second, ShenRuby aims to enable hybrid applications implemented using a combination of Ruby and Shen. Ruby methods should be able to invoke functions written in Shen and vice versa. Performance is a secondary part of this goal. It should be good enough that, for most tasks, the choice between Ruby and Shen is based primarily on which language is best suited for solving the problem at hand.
 
-The release of ShenRuby 0.1.0 satisfed the first goal. The second goal is more ambitious and is the subject of ongoing work leading to the eventual 1.0.0 release.
+ShenRuby 0.1.0 begins to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work leading to the eventual 1.0.0 release.
 
 ## Installation
 NOTE: ShenRuby currently requires Ruby 1.9.3. It does not yet support JRuby, Rubinious, or other Ruby implementations.
@@ -16,16 +18,16 @@ ShenRuby 0.1.0 is the current release. To install it as gem, use the following c
 
 ## Getting started with the Shen REPL
 
-Once the gem has been installed, the Shen REPL can be launched via the `shen_repl` command. For example:
+Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
-    % shen_repl
-    Loading Shen. This takes a while....
-    Loaded in 19.66 seconds.
+
+    % srrepl
+    Loading Shen.... Completed in 18.61 seconds.
     
     Shen 2010, copyright (C) 2010 Mark Tarver
     www.shenlanguage.org, version 7.1
-    running under Ruby, implementation: ruby
-    port 0.1.0-SNAPSHOT ported by Greg Spurrier
+    running under Ruby, implementation: ruby 1.9.3
+    port 0.1.0 ported by Greg Spurrier
     
     
     (0-) 
@@ -54,7 +56,7 @@ Shen functions are defined in terms of pattern matching rules. Above we say that
 
 As can be seen with `(factorial 100)`, ShenRuby uses Ruby's underlying number system and supports arbitrarily large integers.
 
-For a quick tour of Shen via the REPL, please see the [Shen in 15 Minutes](http://www.shenlanguage.org/learn-shen/tutorials/shen_in_15mins.html) tutorial on the Shen Website. To learn more about using the Shen REPL itself, please see the [REPL](http://www.shenlanguage.org/learn-shen/repl.html) documentation on the Shen Website. Additional resources for learning about Shen are given in the Shen Resources section below.
+For a quick tour of Shen via the REPL, please see the [Shen in 15 Minutes](http://www.shenlanguage.org/learn-shen/tutorials/shen_in_15mins.html) tutorial on the Shen Website. To learn more about using the Shen REPL itself, please see the [REPL](http://www.shenlanguage.org/learn-shen/repl.html) documentation, also on the Shen Website. Additional resources for learning about Shen are listed in the Shen Resources section below.
 
 To exit the Shen REPL, execute the `quit` function:
 
@@ -73,6 +75,13 @@ The following resources may be helpful for those wanting to learn more about the
 - [Shen Google Group](https://groups.google.com/group/qilang?hl=en) -- This is the online forum for discussions related to Shen. Don't be confused by the group's name (Qilang). Qi was the predecessor of Shen and the group retains its name.
 
 ## Road Map to 1.0
+
+The following features and improvements are among those planned for ShenRuby as it approaches its 1.0 release:
+
+- Ability to call Shen functions directly from Ruby
+- Ability to call Ruby methods directly from Shen
+- Support for command-line Shen scripts that under ShenRuby
+- Improved performance
 
 ## Known Limitations
 
