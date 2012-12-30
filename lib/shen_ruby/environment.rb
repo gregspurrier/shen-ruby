@@ -15,7 +15,7 @@ module ShenRuby
 
 
       # Load the K Lambda files
-      kl_root = File.expand_path('../../../shen_language/k_lambda', __FILE__)
+      kl_root = File.expand_path('../../../shen/k_lambda', __FILE__)
       %w(toplevel core sys).each do |kl_filename|
         Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
       end
