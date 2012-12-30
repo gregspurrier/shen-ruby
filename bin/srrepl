@@ -2,11 +2,12 @@
 require 'shen_ruby'
 
 # Load the Shen Envinronment
-puts "Loading Shen. This takes a while...."
+print "Loading Shen..."
+STDOUT.flush
 start = Time.now.to_f
 env = ShenRuby::Environment.new
 now = Time.now.to_f
-puts "Loaded in %0.2f seconds.\n" % (now - start)
+puts ". Completed in %0.2f seconds.\n" % (now - start)
 
 # Launch the REPL
 command = :"shen-shen"
