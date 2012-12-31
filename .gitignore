@@ -1,3 +1,4 @@
 .rvmrc
 .idea
+*.gem
 *.iml
