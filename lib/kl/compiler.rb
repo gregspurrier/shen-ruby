@@ -48,6 +48,8 @@ module Kl
           compile_or(form, lexical_vars, in_tail_pos)
         when :cond
           compile_cond(form, lexical_vars, in_tail_pos)
+        when :do
+          compile_do(form, lexical_vars, in_tail_pos)
         when :"trap-error"
           compile_trap_error(form, lexical_vars, in_tail_pos)
         else
@@ -159,6 +161,14 @@ module Kl
                      lexical_vars,
                      in_tail_pos)
         end
+      end
+
+      # (do EXPR1 EXPR2)
+      def compile_do(form, lexical_vars, in_tail_pos)
+        expr1, expr2 = destructure_form(form, 2)
+        body1 = compile(expr1, lexical_vars, false)
+        body2 = compile(expr2, lexical_vars, in_tail_pos)
+        "(#{body1}; #{body2})"
       end
 
       # (trap-error EXPR ERR_HANDLER)

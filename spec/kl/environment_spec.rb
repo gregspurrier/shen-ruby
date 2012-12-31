@@ -302,5 +302,15 @@ describe Kl::Environment do
         eval_str('(boom)')
       }.to raise_error(Kl::Error, 'maximum stack depth exceeded')
     end
+
+    it 'doesn\'t overflow when do is in tail position' do
+      eval_str('(defun factorial-h (X Acc)
+                  (if (= X 0)
+                      Acc
+                      (do dummy (factorial-h (- X 1) (* X Acc)))))')
+      expect {
+        eval_str('(factorial-h 10000 1)')
+      }.to_not raise_error
+    end
   end
 end
