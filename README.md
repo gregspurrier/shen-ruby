@@ -10,7 +10,7 @@ Second, ShenRuby aims to enable hybrid applications implemented using a combinat
 ShenRuby 0.1.0 begins to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work leading to the eventual 1.0.0 release.
 
 ## Installation
-NOTE: ShenRuby currently requires Ruby 1.9.3. It does not yet support JRuby, Rubinious, or other Ruby implementations.
+NOTE: ShenRuby currently requires Ruby 1.9.3. It does not yet support JRuby, Rubinius, or other Ruby implementations.
 
 ShenRuby 0.1.0 is the current release. To install it as gem, use the following command:
 
@@ -81,6 +81,7 @@ The following features and improvements are among those planned for ShenRuby as 
 - Ability to call Shen functions directly from Ruby
 - Ability to call Ruby methods directly from Shen
 - Support for command-line Shen scripts that under ShenRuby
+- Support for JRuby and Rubinius
 - Improved performance
 
 ## Known Limitations
@@ -88,7 +89,6 @@ The following features and improvements are among those planned for ShenRuby as 
 The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
 
 ## License
-ShenRuby is released under the [Shen License](http://shenlanguage.org/license.html).
-
-Shen, Copyright (c) 2010-2012 Mark Tarver
-ShenRuby, Copyright (c) 2012 Greg Spurrier
+- [Shen License](http://shenlanguage.org/license.html)
+- Shen, Copyright (c) 2010-2012 Mark Tarver
+- ShenRuby, Copyright (c) 2012 Greg Spurrier
