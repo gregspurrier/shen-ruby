@@ -1,13 +1,17 @@
-With the exception of this file (README.txt), the files found in this
-directory tree are extracted from the Shen 7.1 release source package
-and are Copyright (c) 2010-2012 Mark Tarver. The files found here are
-the subset of the Shen release that is required for the operation of
-ShenRuby.
+The files found in this directory and its subdirectories are part of
+Shen and are subject to the Shen License. A copy of the license may be
+found in license.txt in this directory. A detailed explanation of the
+license may be found at http://shenlanguage.org/license.html.
 
-The complete Shen Source distribution for the current release of Shen
-may be downloaded from the Shen Website at
-http://shenlanguage.org/download/index.htm.
+Directory contents:
 
-
-
-
+README.txt  -- this file
+license.txt -- the Shen license
+release/    -- files extracted directly from the Shen 7.1 Source
+               release. The complete source for the most recent
+               release of Shen may be downloaded from
+               http://www.shenlanguage.org/Download/index.htm
+lib/        -- Ruby code that creates a full Shen environment running
+               under ShenRuby's implementation of K Lambda. This code
+               is considered a derivative work of the original Shen
+               Source release.
