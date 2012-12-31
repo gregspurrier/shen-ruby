@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require 'shen_ruby'
 
+Signal.trap("INT") { puts "\nLeaving..."; exit 1 }
+
 # Load the Shen Envinronment
 print "Loading..."
 STDOUT.flush
