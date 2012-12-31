@@ -89,6 +89,6 @@ The following features and improvements are among those planned for ShenRuby as 
 The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
 
 ## License
-Shen is Copyright (c) 2010-2012 Mark Tarver and released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](shen/licenese.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. The entire contents of the [shen directory](shen), including the implementation of the `ShenRuby::Shen` class, is part of Shen and is subject to the Shen license.
+Shen is Copyright (c) 2010-2012 Mark Tarver and released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](https://github.com/gregspurrier/shen-ruby/blob/master/shen/license.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. The entire contents of the [shen directory](https://github.com/gregspurrier/shen-ruby/tree/master/shen), including the implementation of the `ShenRuby::Shen` class, is part of Shen and is subject to the Shen license.
 
-The remainder of ShenRuby--i.e., everything outside of the shen directory--is Copyright (c) 2012 Greg Spurrier and released under the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](MIT_LICENSE.txt).
+The remainder of ShenRuby--i.e., everything outside of the shen directory--is Copyright (c) 2012 Greg Spurrier and released under the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).
