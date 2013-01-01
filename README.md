@@ -20,7 +20,6 @@ ShenRuby 0.1.0 is the current release. To install it as gem, use the following c
 
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
-
     % srrepl
     Loading Shen.... Completed in 18.61 seconds.
     
@@ -85,8 +84,12 @@ The following features and improvements are among those planned for ShenRuby as 
 - Improved performance
 
 ## Known Limitations
+- The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
 
-The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
+## Contributors
+The following people are gratefully acknowledged for their contributions of code to ShenRuby:
+
+- Bruno Deferrari
 
 ## License
 Shen is Copyright (c) 2010-2012 Mark Tarver and released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](https://github.com/gregspurrier/shen-ruby/blob/master/shen/license.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. The entire contents of the [shen directory](https://github.com/gregspurrier/shen-ruby/tree/master/shen), including the implementation of the `ShenRuby::Shen` class, is part of Shen and is subject to the Shen license.
