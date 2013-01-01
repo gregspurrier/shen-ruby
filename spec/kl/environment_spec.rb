@@ -313,4 +313,15 @@ describe Kl::Environment do
       }.to_not raise_error
     end
   end
+
+  describe '`do` compilation' do
+    it 'evaluates to the value of the second expression' do
+      eval_str('(do (cn "fi" "rst") (cn "sec" "ond"))').should == "second"
+    end
+
+    it 'evaluates the first expression, then the second' do
+      eval_str('(set temp-value 0)')
+      eval_str('(do (set temp-value 10) (= 10 (value temp-value)))').should == true
+    end
+  end
 end
