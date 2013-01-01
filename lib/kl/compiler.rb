@@ -164,6 +164,13 @@ module Kl
       end
 
       # (do EXPR1 EXPR2)
+      # 'do' is not a Klambda primitive, and is defined in the Shen sources as
+      # a function that receives two arguments, and returns the last one.
+      # 'do' being a function means that the compiler will not see EXPR2 as
+      # being in tail-position, inhibiting TCO.
+      # To work around this, calls to 'do' are compiled to a sequence of
+      # expressions instead of calls to a 'do' function, by doing this, EXPR2
+      # has the potential to be in tail position and optimized as such.
       def compile_do(form, lexical_vars, in_tail_pos)
         expr1, expr2 = destructure_form(form, 2)
         body1 = compile(expr1, lexical_vars, false)
