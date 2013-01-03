@@ -21,20 +21,26 @@ module Kl
 
     def read_list
       items = []
+      stack = [items]
 
-      loop do
+      until stack.empty? do
         token = @lexer.next
         raise Kl::Error, 'Unterminated list' if token.nil?
         case token
         when Kl::Lexer::OpenParen
-          items << read_list
+          items = []
+          stack.push items
         when Kl::Lexer::CloseParen
-          break
+          list = Kl::Cons.list(stack.pop)
+          unless stack.empty?
+            items = stack.last
+            items << list
+          end
         else
           items << token
         end
       end
-      Kl::Cons.list(items)
+      list
     end
   end
 end

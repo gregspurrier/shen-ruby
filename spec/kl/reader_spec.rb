@@ -22,6 +22,12 @@ describe Kl::Reader do
                                                    Kl::Cons.list([3]),
                                                    Kl::EmptyList.instance])])
     end
+
+    it 'raises an error on unterminated lists' do
+      expect {
+        reader('(1').next
+      }.to raise_error(Kl::Error, 'Unterminated list')
+    end
   end
 
   describe 'Reading booleans' do
