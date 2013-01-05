@@ -28,7 +28,9 @@ module Kl
     def initialize
       @dump_code = false
       @tramp_fn = @tramp_args  = nil
-      @variables = {}
+      @variables = Hash.new do |_, k|
+        raise Kl::Error, "variable #{k} has no value"
+      end
       @eigenklass = class << self; self; end
       @arity_cache = Hash.new { |h, k| h[k] = method(k).arity }
     end

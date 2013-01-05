@@ -242,6 +242,12 @@ describe Kl::Environment do
       eval_str('(set foo 37)')
       eval_str('(value foo)').should == 37
     end
+
+    it 'raises an error when fetching an unset value' do
+      expect {
+       eval_str('(value foo)')
+      }.to raise_error(Kl::Error, 'variable foo has no value')
+    end
   end
 
   describe "evaluation of freeze" do
