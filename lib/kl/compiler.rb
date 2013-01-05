@@ -1,5 +1,25 @@
 module Kl
   module Compiler
+    # The K Lambda primitives are all Ruby functions and never use
+    # trampolines. They are all regarded as System Functions and
+    # therefore are not allowed to be redefined by the user at
+    # run time. Therefore, if all of their arguments have been
+    # supplied, it is safe to directly invoke them rather than going
+    # incurring the overhead of using __apply. This table holds the
+    # arities of the primitives and is used to determine whether
+    # direct invocation is possible.
+    PRIMITIVE_ARITIES = {}
+    [Kl::Primitives::Arithmetic, Kl::Primitives::Assignments,
+     Kl::Primitives::Booleans, Kl::Primitives::ErrorHandling,
+     Kl::Primitives::GenericFunctions, Kl::Primitives::Lists,
+     Kl::Primitives::Streams, Kl::Primitives::Strings,
+     Kl::Primitives::Symbols, Kl::Primitives::Time,
+     Kl::Primitives::Vectors].each do |prim_mod|
+      prim_mod.instance_methods.each do |name|
+        PRIMITIVE_ARITIES[name] = prim_mod.instance_method(name).arity
+      end
+    end
+
     class << self
       def compile(form, lexical_vars, in_tail_pos)
         case form
@@ -65,6 +85,9 @@ module Kl
         end
         unless arglist.all? {|a| a.kind_of? Symbol}
           raise Kl::Error, 'function argument list may only contain symbols'
+        end
+        if PRIMITIVE_ARITIES.has_key?(name)
+          raise Kl::Error, "#{name} is primitive and may not be redefined"
         end
 
         extended_vars = add_vars(lexical_vars, arglist.to_a)
@@ -164,7 +187,7 @@ module Kl
       end
 
       # (do EXPR1 EXPR2)
-      # 'do' is not a Klambda primitive, and is defined in the Shen sources as
+      # 'do' is not a K Lambda primitive, and is defined in the Shen sources as
       # a function that receives two arguments, and returns the last one.
       # 'do' being a function means that the compiler will not see EXPR2 as
       # being in tail-position, inhibiting TCO.
@@ -199,22 +222,29 @@ module Kl
       def compile_application(form, lexical_vars, in_tail_pos)
         f = form.hd
         args = form.tl
-        
-        rator = compile(f, lexical_vars, false)
-        rands = args.map { |arg| compile(arg, lexical_vars, false) }.join(',')
 
-        tfn = gen_sym
-        targs = gen_sym
-
-        if in_tail_pos
-          "(
-             #{tfn} = #{rator};
-             #{targs} = [#{rands}];
-             @tramp_fn = #{tfn};
-             @tramp_args = #{targs}
-            )"
+        if PRIMITIVE_ARITIES[f] == args.count
+          # This is a non-partial primitive application. No need for __apply
+          # or trampolines.
+          send_args = form.map {|f| compile(f, lexical_vars, false)}.join(',')
+          "send(#{send_args})"
         else
-          "__apply(#{rator}, [#{rands}])"
+          rator = compile(f, lexical_vars, false)
+          rands = args.map { |arg| compile(arg, lexical_vars, false) }.join(',')
+
+          if in_tail_pos
+            tfn = gen_sym
+            targs = gen_sym
+
+            "(
+               #{tfn} = #{rator};
+               #{targs} = [#{rands}];
+               @tramp_fn = #{tfn};
+               @tramp_args = #{targs}
+              )"
+          else
+            "__apply(#{rator}, [#{rands}])"
+          end
         end
       end
       

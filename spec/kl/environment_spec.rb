@@ -112,6 +112,12 @@ describe Kl::Environment do
                   (defun return-X () X)) 7)').should == :"return-X"
       eval_str('(return-X)').should == 7
     end
+
+    it 'raises an error when attempting to redefine a primitive' do
+      expect {
+        eval_str('(defun + (A B) (* A B))')
+      }.to raise_error(Kl::Error, '+ is primitive and may not be redefined')
+    end
   end
 
   describe 'evaluation of boolean special forms' do

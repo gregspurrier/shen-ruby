@@ -1,4 +1,3 @@
-require 'kl/compiler'
 require 'kl/primitives/booleans'
 require 'kl/primitives/symbols'
 require 'kl/primitives/strings'
@@ -10,6 +9,7 @@ require 'kl/primitives/vectors'
 require 'kl/primitives/streams'
 require 'kl/primitives/time'
 require 'kl/primitives/arithmetic'
+require 'kl/compiler'
 
 module Kl
   class Environment
