@@ -72,6 +72,16 @@ module Kl
           compile_do(form, lexical_vars, in_tail_pos)
         when :"trap-error"
           compile_trap_error(form, lexical_vars, in_tail_pos)
+        # cons, hd, tl, and cons? are crucial to performance and are inlined
+        # when all of their arguments are available.
+        when :cons
+          compile_cons(form, lexical_vars, in_tail_pos)
+        when :hd
+          compile_hd(form, lexical_vars, in_tail_pos)
+        when :tl
+          compile_tl(form, lexical_vars, in_tail_pos)
+        when :"cons?"
+          compile_consp(form, lexical_vars, in_tail_pos)
         else
           compile_application(form, lexical_vars, in_tail_pos)
         end
@@ -218,6 +228,48 @@ module Kl
           "#{catch_clause}; end)"
       end
 
+      # Inlined version of (cons HD TL)
+      def compile_cons(form, lexical_vars, in_tail_pos)
+        if form.count == 3
+          hd, tl = destructure_form(form, 2)
+          hd_expr = compile(hd, lexical_vars, false)
+          tl_expr = compile(tl, lexical_vars, false)
+          "::Kl::Cons.new(#{hd_expr}, #{tl_expr})"
+        else
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
+      end
+
+      # Inlined version of (hd L)
+      def compile_hd(form, lexical_vars, in_tail_pos)
+        if form.count == 2
+          expr = compile(form.tl.hd, lexical_vars, false)
+          "(#{expr}).hd"
+        else
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
+      end
+
+      # Inlined version of (tl L)
+      def compile_tl(form, lexical_vars, in_tail_pos)
+        if form.count == 2
+          expr = compile(form.tl.hd, lexical_vars, false)
+          "(#{expr}).tl"
+        else
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
+      end
+
+      # Inlined version of (cons? X)
+      def compile_consp(form, lexical_vars, in_tail_pos)
+        if form.count == 2
+          expr = compile(form.tl.hd, lexical_vars, false)
+          "(#{expr}).kind_of?(::Kl::Cons)"
+        else
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
+      end
+
       # Normal function application
       def compile_application(form, lexical_vars, in_tail_pos)
         f = form.hd
@@ -247,7 +299,7 @@ module Kl
           end
         end
       end
-      
+
       # Escape single quotes and backslashes
       def escape_string(str)
         new_str = ""
