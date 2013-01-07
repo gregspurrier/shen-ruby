@@ -4,6 +4,9 @@ $LOAD_PATH << lib_path unless $LOAD_PATH.include?(lib_path)
 require 'kl'
 require 'stringio'
 
+# Load the support files
+Dir["./k_lambda_spec/support/**/*.rb"].sort.each {|f| require f}
+
 # Reset the K Lambda environment before every example
 RSpec.configure do |config|
   config.before(:each) do

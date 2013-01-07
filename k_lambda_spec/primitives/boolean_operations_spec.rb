@@ -1,18 +1,5 @@
 require 'spec_helper'
 
-shared_examples "partially-applicable function"  do |args|
-  full_expression = "(#{args.join(' ')})"
-  (0...(args.length - 1)).each do |arg_count|
-    description = "supports partial application of #{arg_count} argument"
-    description << "s" unless arg_count == 1
-    it description do
-      full_result = kl_eval(full_expression)
-      partial_expression = "((#{args[0..arg_count].join(' ')}) #{args[(arg_count + 1)..-1].join(' ')})"
-      kl_eval(partial_expression).should == full_result
-    end
-  end
-end
-
 describe 'Primitives for Generic Functions' do
   describe 'and special form' do
     it 'evaluates to true if both of its arguments evaluate to true' do
