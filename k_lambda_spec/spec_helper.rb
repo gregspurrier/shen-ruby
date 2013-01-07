@@ -17,3 +17,10 @@ def kl_eval(str)
   form = Kl::Reader.new(StringIO.new(str)).next
   @kl_env.__eval(form)
 end
+
+# Defines the 'kl-do' function in the current K Lambda environment. This is
+# used instead of 'do' because do is not an official K Lambda primitive
+# and may not be found in all K Lambda implementations.
+def define_kl_do
+  kl_eval('(defun kl-do (X Y) Y)')
+end

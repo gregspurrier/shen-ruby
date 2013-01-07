@@ -26,8 +26,9 @@ describe 'Primitives for Generic Functions' do
     end
 
     it 'does not evaluate its second argument if the first evaluates to false' do
+      define_kl_do
       kl_eval('(set flag clear)')
-      kl_eval('(and false (do (set flag set) true))').should == false
+      kl_eval('(and false (kl-do (set flag set) true))').should == false
       kl_eval('(value flag)').should == :clear
     end
 
@@ -35,8 +36,9 @@ describe 'Primitives for Generic Functions' do
       include_examples "partially-applicable function", %w(and true false)
 
       it 'results in it no longer short-circuiting argument evaluation' do
+        define_kl_do
         kl_eval('(set flag clear)')
-        kl_eval('((and false) (do (set flag set) false)))').should == false
+        kl_eval('((and false) (kl-do (set flag set) false)))').should == false
         kl_eval('(value flag)').should == :set
       end
     end
@@ -54,8 +56,9 @@ describe 'Primitives for Generic Functions' do
     end
 
     it 'does not evaluate its second argument if the first evaluates to true' do
+      define_kl_do
       kl_eval('(set flag clear)')
-      kl_eval('(or true (do (set flag set) true))').should == true
+      kl_eval('(or true (kl-do (set flag set) true))').should == true
       kl_eval('(value flag)').should == :clear
     end
 
@@ -63,8 +66,9 @@ describe 'Primitives for Generic Functions' do
       include_examples "partially-applicable function", %w(or true false)
 
       it 'results in it no longer short-circuiting argument evaluation' do
+        define_kl_do
         kl_eval('(set flag clear)')
-        kl_eval('((or true) (do (set flag set) true)))').should == true
+        kl_eval('((or true) (kl-do (set flag set) true)))').should == true
         kl_eval('(value flag)').should == :set
       end
     end
