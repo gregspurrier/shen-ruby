@@ -4,6 +4,8 @@
 ### Features
 - Graceful handling of Control-C in ShenRuby REPL [Bruno Deferrari]
 - Handle `do` in the K Lambda compiler so that it is eligible for tail call elimination [Bruno Deferrari]
+### Bug Fixes
+- `and` and `or` may now be partially applied (Issue #4)
 ### Optimizations
 - Faster application of K Lambda primitives when not partially applied
 - List primitives are inlined when not partially applied

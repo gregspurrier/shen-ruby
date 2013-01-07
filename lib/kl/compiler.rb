@@ -169,16 +169,27 @@ module Kl
 
       # (and EXPR1 EXPR2)
       def compile_and(form, lexical_vars, in_tail_pos)
-        expr1, expr2 = destructure_form(form, 2)
-        compile_if(Kl::Cons.list([:if, expr1, expr2, false]),
-                   lexical_vars, in_tail_pos)
+        if form.count == 3
+          # This is the special form case
+          expr1, expr2 = destructure_form(form, 2)
+          compile_if(Kl::Cons.list([:if, expr1, expr2, false]),
+                     lexical_vars, in_tail_pos)
+        else
+          # Partial application falls back to normal application
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
       end
 
       # (or EXPR1 EXPR2)
       def compile_or(form, lexical_vars, in_tail_pos)
-        expr1, expr2 = destructure_form(form, 2)
-        compile_if(Kl::Cons.list([:if, expr1, true, expr2]),
-                   lexical_vars, in_tail_pos)
+        if form.count == 3
+          expr1, expr2 = destructure_form(form, 2)
+          compile_if(Kl::Cons.list([:if, expr1, true, expr2]),
+                     lexical_vars, in_tail_pos)
+        else
+          # Partial application falls back to normal application
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
       end
 
       def compile_cond(form, lexical_vars, in_tail_pos)
