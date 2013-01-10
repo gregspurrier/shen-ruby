@@ -106,9 +106,24 @@ module Kl
     end
 
     def method_missing(f, *args)
-      if @functions.has_key? f
-        __apply(f, args)
+      if @functions.has_key?(f)
+        fn = @functions[f]
+      else
+        coerced_f = Kl::Environment.ruby_to_kl(f)
+        if @functions.has_key?(coerced_f)
+          fn = @functions[coerced_f]
+        else
+          super
+        end
       end
+      coerced_args = args.map { |arg| Kl::Environment.ruby_to_kl(arg)}
+      Kl::Environment.kl_to_ruby(__apply(fn, coerced_args))
+    end
+
+    def respond_to?(f)
+      @functions.has_key?(f) ||
+        @functions.has_key?(Kl::Environment.ruby_to_kl(f)) ||
+          super
     end
 
     class << self
@@ -118,6 +133,28 @@ module Kl
           while form = reader.next
             env.__eval(form)
           end
+        end
+      end
+
+      # Coerce Ruby types and conventions to K Lambda
+      def kl_to_ruby(x)
+        if x.kind_of? Kl::Cons
+          x.to_a.map { |y| kl_to_ruby(y) }
+        elsif x.kind_of? Symbol
+          x.to_s.gsub(/-/, '_').to_sym
+        else
+          x
+        end
+      end
+
+      # Coerce K Lambda types and conventions to Ruby
+      def ruby_to_kl(x)
+        if x.kind_of? Array
+          Kl::Cons.list(x.map {|x| ruby_to_kl(x)})
+        elsif x.kind_of? Symbol
+          x.to_s.gsub(/_/, '-').to_sym
+        else
+          x
         end
       end
     end
