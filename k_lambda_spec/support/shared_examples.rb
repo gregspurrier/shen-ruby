@@ -17,3 +17,17 @@ shared_examples "partially-applicable function" do |args|
     end
   end
 end
+
+shared_examples "non-partially-applicable function" do |args|
+  (0...(args.length - 1)).each do |arg_count|
+    description = "raises an error when applied to #{arg_count} argument"
+    description << "s" unless arg_count == 1
+    it description do
+      partial_expression = "(#{args[0..arg_count].join(' ')})"
+      expect {
+        kl_eval(partial_expression)
+      }.to raise_error(Kl::Error, "#{args[0]} expects #{args.length - 1} arguments but was given #{arg_count}")
+    end
+  end
+
+end
