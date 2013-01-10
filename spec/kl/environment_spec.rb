@@ -227,6 +227,12 @@ describe Kl::Environment do
       eval_str('(defun adder (X) (lambda Y (+ X Y)))')
       eval_str('(adder 1 2)').should == 3
     end
+
+    it 'raises an error of too many arguments are given' do
+      expect {
+        eval_str('((lambda X (lambda Y (* X Y))) 6 7 8)')
+      }.to raise_error(Kl::Error, 'The value 42 is neither a function nor a symbol.')
+    end
   end
 
   describe 'tail recursion' do

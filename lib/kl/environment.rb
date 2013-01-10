@@ -60,6 +60,10 @@ module Kl
           # and hope that the result is a function that can be applied
           # to the remainder.
           fn = __apply(fn, args[0, arity])
+          unless fn.kind_of?(Proc) || fn.kind_of?(Symbol)
+            raise ::Kl::Error,
+                  "The value #{str(fn)} is neither a function nor a symbol."
+          end
           args = args[arity..-1]
           next
         end
