@@ -8,6 +8,8 @@ module Kl
     # incurring the overhead of using __apply. This table holds the
     # arities of the primitives and is used to determine whether
     # direct invocation is possible.
+    # Kl::Primitives::Extensions is purposely omitted from this list
+    # so that it may be overridden by Shen.
     PRIMITIVE_ARITIES = {}
     [Kl::Primitives::Arithmetic, Kl::Primitives::Assignments,
      Kl::Primitives::Booleans, Kl::Primitives::ErrorHandling,
@@ -216,10 +218,15 @@ module Kl
       # expressions instead of calls to a 'do' function, by doing this, EXPR2
       # has the potential to be in tail position and optimized as such.
       def compile_do(form, lexical_vars, in_tail_pos)
-        expr1, expr2 = destructure_form(form, 2)
-        body1 = compile(expr1, lexical_vars, false)
-        body2 = compile(expr2, lexical_vars, in_tail_pos)
-        "(#{body1}; #{body2})"
+        if form.count == 3
+          expr1, expr2 = destructure_form(form, 2)
+          body1 = compile(expr1, lexical_vars, false)
+          body2 = compile(expr2, lexical_vars, in_tail_pos)
+          "(#{body1}; #{body2})"
+        else
+          # Partial application falls back to normal application
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
       end
 
       # (trap-error EXPR ERR_HANDLER)

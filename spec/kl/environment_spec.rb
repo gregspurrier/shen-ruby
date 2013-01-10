@@ -326,7 +326,7 @@ describe Kl::Environment do
     end
   end
 
-  describe '`do` compilation' do
+  describe 'optimized do expression' do
     it 'evaluates to the value of the second expression' do
       eval_str('(do (cn "fi" "rst") (cn "sec" "ond"))').should == "second"
     end
@@ -334,6 +334,11 @@ describe Kl::Environment do
     it 'evaluates the first expression, then the second' do
       eval_str('(set temp-value 0)')
       eval_str('(do (set temp-value 10) (= 10 (value temp-value)))').should == true
+    end
+
+    it 'supports partial application' do
+      eval_str('((do a) b)').should == :b
+      eval_str('(((do) a) b)').should == :b
     end
   end
 end

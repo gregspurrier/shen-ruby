@@ -9,6 +9,7 @@ require 'kl/primitives/vectors'
 require 'kl/primitives/streams'
 require 'kl/primitives/time'
 require 'kl/primitives/arithmetic'
+require 'kl/primitives/extensions'
 require 'kl/compiler'
 
 module Kl
@@ -24,6 +25,7 @@ module Kl
     include ::Kl::Primitives::Streams
     include ::Kl::Primitives::Time
     include ::Kl::Primitives::Arithmetic
+    include ::Kl::Primitives::Extensions
 
     def initialize
       @dump_code = false
