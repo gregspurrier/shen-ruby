@@ -33,47 +33,35 @@ module Kl
       @variables = Hash.new do |_, k|
         raise Kl::Error, "variable #{k} has no value"
       end
+      @functions = Hash.new do |h, k|
+        if respond_to? k
+          fn = method(k).to_proc
+          h[k] = fn
+        else
+          raise Kl::Error, "The function #{k} is undefined"
+        end
+      end
       @eigenklass = class << self; self; end
-      @arity_cache = Hash.new { |h, k| h[k] = method(k).arity }
     end
 
     # Trampoline-aware function application
     def __apply(fn, args)
       while fn
         @tramp_fn = nil
-        if fn.kind_of? Symbol
-          if respond_to? fn
-            arity = @arity_cache[fn]
-            if arity == args.size || arity == -1
-              result = send(fn, *args)
-            elsif arity > args.size
-              # Partial application
-              result = method(fn).to_proc.curry.call(*args)
-            else
-              # Uncurrying. Apply fn to its expected number of arguments
-              # and hope that the result is a function that can be applied
-              # to the remainder.
-              fn = __apply(fn, args[0, arity])
-              args = args[arity..-1]
-              next
-            end
-          else
-            raise Kl::Error,  "The function #{fn} is undefined"
-          end
+        fn = @functions[fn] if fn.kind_of? Symbol
+        arity = fn.arity
+        if arity == args.size || arity == -1
+          result = fn.call(*args)
+        elsif arity > args.size
+          # Partial application
+          result = fn.curry.call(*args)
         else
-          arity = fn.arity
-          if arity == args.size || arity == -1
-            result = fn.call(*args)
-          elsif arity > args.size
-            result = fn.curry.call(*args)
-          else
-            # Uncurrying. Apply fn to its expected number of arguments
-            # and hope that the result is a function that can be applied
-            # to the remainder.
-            fn = __apply(fn, args[0, arity])
-            args = args[arity..-1]
-            next
-          end
+          # Uncurrying. Apply fn to its expected number of arguments
+          # and hope that the result is a function that can be applied
+          # to the remainder.
+          fn = __apply(fn, args[0, arity])
+          args = args[arity..-1]
+          next
         end
 
         if fn = @tramp_fn
@@ -110,6 +98,12 @@ module Kl
         __apply(fn, args)
       else
         result
+      end
+    end
+
+    def method_missing(f, *args)
+      if @functions.has_key? f
+        __apply(f, args)
       end
     end
 
