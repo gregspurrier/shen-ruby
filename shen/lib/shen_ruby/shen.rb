@@ -110,6 +110,18 @@ module ShenRuby
         define_method 'set-dump-code' do |val|
           @dump_code = val
         end
+
+        # Add a way to evaluate strings, intended for use with Ruby interop.
+        # Returns the result of the last expression evaluated.
+        # Based on the implementation of read-file in reader.shen
+        def eval_string(s)
+          byte_list = Kl::Cons.list(s.bytes.to_a)
+          form = __apply(:compile, [:"shen-<st_input>", byte_list, :"read-error"])
+          result = nil
+          form.each { |f| result = __apply(:eval, [f]) }
+          result
+        end
+        alias_method :"eval-string", :eval_string
       end
 
       # Load the rest of the K Lambda files
