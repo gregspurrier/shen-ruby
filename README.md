@@ -85,6 +85,7 @@ The following features and improvements are among those planned for ShenRuby as 
 
 ## Known Limitations
 - The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
+- ShenRuby fails with a stack overflow when run under cygwin on Windows. This is tracked by [Issue #3](https://github.com/gregspurrier/shen-ruby/issues/3). The Ruby environment installed by [RubyInstaller](http://rubyinstaller.org/), however, is capable of running ShenRuby. It is the recommended environment for running ShenRuby on Windows until the stack overflow issues seen on cygwin can be addressed.
 
 ## Contributors
 The following people are gratefully acknowledged for their contributions of code to ShenRuby:
