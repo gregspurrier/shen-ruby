@@ -38,6 +38,39 @@ describe 'Atoms:' do
     end
   end
 
+  describe 'numbers' do
+    it 'parses integers as integers' do
+      result = kl_eval('123')
+      result.should == 123
+      result.should be_kind_of Fixnum
+    end
+
+    it 'parses floating point numbers as reals' do
+      result = kl_eval('12.3')
+      result.should == 12.3
+      result.should be_kind_of Float
+    end
+
+    describe 'with leading sign characters' do
+      it 'recognizes negative numbers' do
+        kl_eval('-123').should == -123
+      end
+
+      it 'treats any odd number of minuses as negative' do
+        kl_eval('---123').should == -123
+      end
+
+      it 'treats any even number of minuses as positive' do
+        kl_eval('----123').should == 123
+      end
+
+      it 'ignores leading plusses' do
+        kl_eval('+123').should == 123
+        kl_eval('--+-123').should == -123
+      end
+    end
+  end
+
   describe 'true' do
     it 'evaluates to boolean true rather than a symbol' do
       kl_eval('true').should == true
