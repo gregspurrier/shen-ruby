@@ -1,6 +1,6 @@
 # ShenRuby Release History
 
-## Not Yet Released
+## 0.2.0 - January 16, 2013
 ### Features
 - Graceful handling of Control-C in ShenRuby REPL [Bruno Deferrari]
 - Handle `do` in the K Lambda compiler so that it is eligible for tail call elimination [Bruno Deferrari]
