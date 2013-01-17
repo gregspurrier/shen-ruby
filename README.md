@@ -147,6 +147,7 @@ The following features and improvements are among those planned for ShenRuby as 
 - Ability to call Ruby methods directly from Shen
 - Support for command-line Shen scripts that under ShenRuby
 - Support for JRuby and Rubinius
+- Thread-safe `ShenRuby::Shen` instances
 - Improved performance
 
 ## Known Limitations
