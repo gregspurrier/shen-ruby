@@ -7,12 +7,12 @@ The ShenRuby project has two primary goals. The first is to be a low barrier-to-
 
 Second, ShenRuby aims to enable hybrid applications implemented using a combination of Ruby and Shen. Ruby methods should be able to invoke functions written in Shen and vice versa. Performance is a secondary part of this goal. It should be good enough that, for most tasks, the choice between Ruby and Shen is based primarily on which language is best suited for solving the problem at hand.
 
-ShenRuby 0.1.0 begins to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work leading to the eventual 1.0.0 release.
+ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work beginning with the 0.2.0 release and leading up to the eventual 1.0.0 release.
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and, to a lesser extent, Rubnius in 1.9 mode. It it not yet passing the Shen Test Suite under JRuby.
+NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3-p362. It is not yet working under JRuby or Rubinius.
 
-ShenRuby 0.1.0 is the current release. To install it as gem, use the following command:
+ShenRuby 0.2.0 is the current release. To install it as gem, use the following command:
 
     gem install shen-ruby
 
@@ -21,17 +21,17 @@ ShenRuby 0.1.0 is the current release. To install it as gem, use the following c
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading Shen.... Completed in 18.61 seconds.
+    Loading.... Completed in 9.93 seconds.
     
     Shen 2010, copyright (C) 2010 Mark Tarver
     www.shenlanguage.org, version 7.1
     running under Ruby, implementation: ruby 1.9.3
-    port 0.1.0 ported by Greg Spurrier
+    port 0.2.0 ported by Greg Spurrier
     
     
     (0-) 
     
-Please be patient: the Shen REPL takes a while to load (about 20 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
+Please be patient: the Shen REPL takes a while to load (about 10 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
 
 The `(0-)` seen above is the Shen REPL prompt. The number in the prompt increases after each expression that is entered.
 
@@ -62,6 +62,73 @@ To exit the Shen REPL, execute the `quit` function:
     (4-) (quit)
     %
 
+## Ruby<->Shen Interop
+Bidirectional interaction between Ruby and Shen is a primary goal of ShenRuby. The following sections describe the currently supported means of collaboration between Shen and Ruby.
+
+These APIs should be considered experimental and likely to evolve as ShenRuby progresses toward 1.0.
+
+### Extending the Shen Environment with Ruby Functions
+
+The Shen Environment may be extended with functions written in Ruby. Any instance method added to the ShenRuby::Shen class--whether through subclassing or adding methods to an instance's eigenclass--is available for invocation from within Shen.
+
+For example, to add a `divides?` function to an existing Shen environment object:
+
+    require 'rubygems'
+    require 'shen_ruby'
+    
+    shen = ShenRuby::Shen.new
+    class << shen
+      def divides?(a, b)
+        b % a == 0
+      end
+    end
+
+### Evaluating Shen Expressions from Ruby
+`ShenRuby::Shen#eval_string` takes a string and evaluates it as a Shen expression within the environment. For example, the `divides?` function added above may be invoked with:
+
+    shen.eval_string "(divides? 3 9)"
+    # => true
+    
+More commonly, though, `eval_string` is used with Shen `define` expressions to extend the environment with new functions that are implemented in Shen. For example, let's add a [Fizz Buzz](http://en.wikipedia.org/wiki/Fizz_buzz) function:
+
+    shen.eval_string <<-EOS
+      (define fizz-buzz
+        X -> "Fizz Buzz" where (and (divides? 3 X)
+                                   (divides? 5 X))
+        X -> "Fizz" where (divides? 3 X)
+        X -> "Buzz" where (divides? 5 X)
+        X -> (str X))
+    EOS
+    # => :"fizz-buzz"
+
+### Invoking Shen Functions from Ruby
+
+A better way to invoke most Shen functions from Ruby is to simply invoke the corresponding method on the Shen object. If the Shen function's name includes a hyphen, use an underscore instead.
+
+For example, to use the `fizz-buzz` function defined in the previous section to compute the first 20 Fizz Buzz values:
+
+    (1..20).map { |x| shen.fizz_buzz(x) }
+    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"] 
+
+The above example uses Ruby's `map` function, but could also have used Shen's version, relying on ShenRuby's interop features to coerce Ruby arrays to and from Shen lists:
+
+    shen.map(:fizz_buzz, (1..20).to_a)
+    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"]
+
+Note that the Ruby symbol `:fizz_buzz` is automatically coerced to the Shen symbol `fizz-buzz` so that refer to the function defined above.
+
+As a final example, Ruby functions may be passed as arguments to higher-order Shen functions:
+
+    shen.map(lambda {|x| x * x}, [1, 2, 3, 4, 5])
+    # => [1, 4, 9, 16, 25]
+
+#### Caveats
+Shen function invocation via methods on the Shen object only works for normal functions. It will not work for special forms like `define`.
+
+The array<->list and underscore<->hyphen automatic coercions do not take effect for Ruby functions that are added to the Shen environment or for the K Lambda [primitives](http://www.shenlanguage.org/documentation/shendoc.htm#The%20Primitive%20Functions%20of%20K%20Lambda) that form the basis of Shen. In practice, this should not be much of a limitation, but it is hoped that this restriction will be lifted in the future.
+
+Shen functions cannot be passed as arguments to functions defined in Ruby. This restriction will be removed in the future.
+
 ## Shen Resources
 
 The following resources may be helpful for those wanting to learn more about the Shen programming language:
@@ -77,15 +144,15 @@ The following resources may be helpful for those wanting to learn more about the
 
 The following features and improvements are among those planned for ShenRuby as it approaches its 1.0 release:
 
-- Ability to call Shen functions directly from Ruby
 - Ability to call Ruby methods directly from Shen
 - Support for command-line Shen scripts that under ShenRuby
-- Support for MRI, JRuby, and Rubinius
+- Support for JRuby and Rubinius
 - Improved performance
 
 ## Known Limitations
 - The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
-- ShenRuby fails with a stack overflow when run under cygwin on Windows. This is tracked by [Issue #3](https://github.com/gregspurrier/shen-ruby/issues/3). The Ruby environment installed by [RubyInstaller](http://rubyinstaller.org/), however, is capable of running ShenRuby. It is the recommended environment for running ShenRuby on Windows until the stack overflow issues seen on cygwin can be addressed.
+- ShenRuby fails with a stack overflow when run under cygwin on Windows ([Issue #3](https://github.com/gregspurrier/shen-ruby/issues/3)). The Ruby environment installed by [RubyInstaller](http://rubyinstaller.org/), however, is capable of running ShenRuby. It is the recommended environment for running ShenRuby on Windows until the stack overflow issues seen on cygwin can be addressed.
+- ShenRuby fails to load under JRuby ([Issue #6](https://github.com/gregspurrier/shen-ruby/issues/6)) and Rubinius ([Issue #])(https://github.com/gregspurrier/shen-ruby/issues/7)].
 
 ## Contributors
 The following people are gratefully acknowledged for their contributions of code to ShenRuby:
