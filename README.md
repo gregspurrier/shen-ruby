@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 7.1, which was released in December, 2012.
+ShenRuby supports Shen version 8.0, which was released in January, 2013.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
 
@@ -161,6 +161,6 @@ The following people are gratefully acknowledged for their contributions of code
 - Bruno Deferrari
 
 ## License
-Shen is Copyright (c) 2010-2012 Mark Tarver and released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](https://github.com/gregspurrier/shen-ruby/blob/master/shen/license.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. The entire contents of the [shen directory](https://github.com/gregspurrier/shen-ruby/tree/master/shen), including the implementation of the `ShenRuby::Shen` class, is part of Shen and is subject to the Shen license.
+Shen is Copyright (c) 2010-2013 Mark Tarver and released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](https://github.com/gregspurrier/shen-ruby/blob/master/shen/license.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. The entire contents of the [shen directory](https://github.com/gregspurrier/shen-ruby/tree/master/shen), including the implementation of the `ShenRuby::Shen` class, is part of Shen and is subject to the Shen license.
 
 The remainder of ShenRuby--i.e., everything outside of the shen directory--is Copyright (c) 2012-2013 Greg Spurrier and released under the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).

@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Yet to be Released
+### Features
+- Shen 8.0
+
 ## 0.2.0 - January 16, 2013
 ### Features
 - Graceful handling of Control-C in ShenRuby REPL [Bruno Deferrari]
