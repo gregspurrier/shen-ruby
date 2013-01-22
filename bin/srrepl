@@ -1,4 +1,9 @@
 #!/usr/bin/env ruby
+root = File.expand_path('../..', __FILE__)
+%w(lib shen/lib).each do |path|
+  full_path = File.join(root, path)
+  $LOAD_PATH << full_path unless $LOAD_PATH.include? full_path
+end
 require 'shen_ruby'
 
 # Leave gracefully if someone hits Control-C during loading
