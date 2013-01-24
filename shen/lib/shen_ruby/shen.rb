@@ -115,10 +115,9 @@ module ShenRuby
         # Returns the result of the last expression evaluated.
         # Based on the implementation of read-file in reader.shen
         def eval_string(s)
-          byte_list = Kl::Cons.list(s.bytes.to_a)
-          form = __apply(:compile, [:"shen-<st_input>", byte_list, :"read-error"])
+          forms = __apply(:"read-from-string", [s])
           result = nil
-          form.each { |f| result = __apply(:eval, [f]) }
+          forms.each { |f| result = __apply(:eval, [f]) }
           result
         end
         alias_method :"eval-string", :eval_string
