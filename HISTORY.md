@@ -1,5 +1,8 @@
 # ShenRuby Release History
 
+## 0.3.1 - January 24, 2013
+- No code changes. Updates Gemspec to refer to Shen 8.0.
+
 ## 0.3.0 - January 24, 2013
 ### Features
 - Upgrade to Shen 8.0
