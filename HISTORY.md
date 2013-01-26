@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Yet to be Released
+### Bug Fixes
+- `absvector`, `address->`, and `<-address` now throw errors catchable by `trap-error` for type violations of their vector and index arguments.
+
 ## 0.3.1 - January 24, 2013
 - No code changes. Updates Gemspec to refer to Shen 8.0.
 

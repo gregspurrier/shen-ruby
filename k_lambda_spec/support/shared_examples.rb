@@ -60,7 +60,8 @@ KL_TYPE_EXAMPLES = {
   list: '(cons 1 ())',
   dotted_pair: '(cons 1 2)',
   empty_list: '()',
-  function: '(lambda X X)'
+  function: '(lambda X X)',
+  vector: '(absvector 3)'
 }
 
 def type_with_article(type)
