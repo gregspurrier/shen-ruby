@@ -117,7 +117,7 @@ shared_examples 'argument types' do |expr, accepted_argument_types|
         other_expr[idx] = KL_TYPE_EXAMPLES[type]
         expect {
           kl_eval("(#{other_expr.join(' ')})")
-        }.to raise_error(Kl::Error)
+        }.to raise_error(Kl::Error, /is not a/)
       end
     end
   end
