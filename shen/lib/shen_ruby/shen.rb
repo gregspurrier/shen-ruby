@@ -130,6 +130,11 @@ module ShenRuby
         ).each do |kl_filename|
         Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
       end
+
+      # Give type signatures to the new functions added above
+      declare :quit, [:'-->', :unit]
+      declare :eval_string, [:string, :'-->', :unit]
+      declare :'eval-string', [:string, :'-->', :unit]
     end
   end
 end
