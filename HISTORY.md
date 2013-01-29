@@ -2,9 +2,11 @@
 
 ## Yet to be Released
 ### Bug Fixes
-- `absvector`, `address->`, `<-address`, `intern`, `n->string`, `pos`, `string->n`, and `tlstr` now throw errors catchable by `trap-error` when type violations occur with their arguments.
-- `tlstr` now raises an error when applied to an empty string
 - [Issue 8](https://github.com/gregspurrier/shen-ruby/issues/8) -- `quit` no longer raises a type error when invoked with type checking enabled.
+- Fixed many instances of ShenRuby's behavior not matching the Shen CLisp reference implementation:
+  - `absvector`, `address->`, `<-address`, `intern`, `n->string`, `pos`, `string->n`, and `tlstr` now throw errors catchable by `trap-error` when type violations occur with their arguments.
+  - `tlstr` now raises an error when applied to an empty string
+  - `set` and `value` now require their first arugment to be a symbol
 
 ## 0.3.1 - January 24, 2013
 - No code changes. Updates Gemspec to refer to Shen 8.0.

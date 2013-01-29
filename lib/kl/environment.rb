@@ -31,6 +31,7 @@ module Kl
       @dump_code = false
       @tramp_fn = @tramp_args  = nil
       @variables = Hash.new do |_, k|
+        raise Kl::Error, "#{k} is not a symbol" unless k.kind_of? Symbol
         raise Kl::Error, "variable #{k} has no value"
       end
       @functions = Hash.new do |h, k|
