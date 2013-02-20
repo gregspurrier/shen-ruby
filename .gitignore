@@ -2,3 +2,5 @@
 .idea
 *.gem
 *.iml
+.rbx
+Gemfile.lock
