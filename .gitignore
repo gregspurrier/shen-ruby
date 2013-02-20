@@ -3,3 +3,4 @@
 *.gem
 *.iml
 .rbx
+Gemfile.lock
