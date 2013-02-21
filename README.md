@@ -9,6 +9,8 @@ Second, ShenRuby aims to enable hybrid applications implemented using a combinat
 
 ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work beginning with the 0.2.0 release and leading up to the eventual 1.0.0 release.
 
+[![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrer/shen-ruby.png)
+
 ## Installation
 NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3-p362. It is not yet working under JRuby or Rubinius.
 
@@ -156,8 +158,9 @@ The following features and improvements are among those planned for ShenRuby as 
 - ShenRuby fails to load under JRuby ([Issue #6](https://github.com/gregspurrier/shen-ruby/issues/6)) and Rubinius ([Issue #])(https://github.com/gregspurrier/shen-ruby/issues/7)].
 
 ## Contributors
-The following people are gratefully acknowledged for their contributions of code to ShenRuby:
+The following people are gratefully acknowledged for their contributions to ShenRuby:
 
+- Brian Shirai
 - Bruno Deferrari
 
 ## License
