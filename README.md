@@ -139,7 +139,7 @@ The following resources may be helpful for those wanting to learn more about the
 - [Learn Shen](http://www.shenlanguage.org/learn-shen/index.html) -- The Shen Website's suggested resources for--and approaches to--learning Shen, including the [Shen in 15 Minutes](http://www.shenlanguage.org/learn-shen/tutorials/shen_in_15mins.html) tutorial for experienced functional programmers.
 - [The Shen Official Standard](http://www.shenlanguage.org/Documentation/shendoc.htm)
 - [System Functions and their Types in Shen](http://www.shenlanguage.org/learn-shen/system.pdf) -- A reference for all of the standard Shen functions and their types.
-- [The Book of Shen](http://www.shenlanguage.org/tbos.html) -- The official guide to the Shen programming language. The first printing quickly sold out, but another printing is expected in January, 2013. See this [discussion](https://groups.google.com/d/topic/qilang/V8so3Rirkk0/discussion) on the Shen News Group for the most up-to-date information.
+- [The Book of Shen](http://www.fast-print.net/bookshop/1278/the-book-of-shen) -- The official guide to the Shen programming language.
 - [Shen Google Group](https://groups.google.com/group/qilang?hl=en) -- This is the online forum for discussions related to Shen. Don't be confused by the group's name (Qilang). Qi was the predecessor of Shen and the group retains its name.
 
 ## Road Map to 1.0
