@@ -253,26 +253,6 @@ module Kl
         end
       end
 
-      # Inlined version of (hd L)
-      def compile_hd(form, lexical_vars, in_tail_pos)
-        if form.count == 2
-          expr = compile(form.tl.hd, lexical_vars, false)
-          "(#{expr}).hd"
-        else
-          compile_application(form, lexical_vars, in_tail_pos)
-        end
-      end
-
-      # Inlined version of (tl L)
-      def compile_tl(form, lexical_vars, in_tail_pos)
-        if form.count == 2
-          expr = compile(form.tl.hd, lexical_vars, false)
-          "(#{expr}).tl"
-        else
-          compile_application(form, lexical_vars, in_tail_pos)
-        end
-      end
-
       # Inlined version of (cons? X)
       def compile_consp(form, lexical_vars, in_tail_pos)
         if form.count == 2
