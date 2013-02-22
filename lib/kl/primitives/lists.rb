@@ -6,10 +6,12 @@ module Kl
       end
 
       def hd(a)
+        raise Kl::Error, "#{a} is not a list" unless a.kind_of? Kl::Cons
         a.hd
       end
 
       def tl(a)
+        raise Kl::Error, "#{a} is not a list" unless a.kind_of? Kl::Cons
         a.tl
       end
 

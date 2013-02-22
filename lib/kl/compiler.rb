@@ -78,10 +78,6 @@ module Kl
         # when all of their arguments are available.
         when :cons
           compile_cons(form, lexical_vars, in_tail_pos)
-        when :hd
-          compile_hd(form, lexical_vars, in_tail_pos)
-        when :tl
-          compile_tl(form, lexical_vars, in_tail_pos)
         when :"cons?"
           compile_consp(form, lexical_vars, in_tail_pos)
         else
