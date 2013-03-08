@@ -59,7 +59,7 @@ module Kl
         when :let
           compile_let(form, lexical_vars, in_tail_pos)
         when :freeze
-          compile_freeze(form, lexical_vars)
+          compile_freeze(form, lexical_vars, in_tail_pos)
         when :type
           compile_type(form, lexical_vars, in_tail_pos)
         when :if
@@ -138,12 +138,17 @@ module Kl
       end
 
       # (freeze EXPR)
-      def compile_freeze(form, lexical_vars)
-        expr = destructure_form(form, 1).first
+      def compile_freeze(form, lexical_vars, in_tail_pos)
+        if form.count == 2
+          expr = destructure_form(form, 1).first
 
-        body = compile(expr, lexical_vars, true)
+          body = compile(expr, lexical_vars, true)
 
-        "::Kernel.lambda { #{body} }"
+          "::Kernel.lambda { #{body} }"
+        else
+          # Partial application falls back to normal application
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
       end
 
       # (type EXPR T)
