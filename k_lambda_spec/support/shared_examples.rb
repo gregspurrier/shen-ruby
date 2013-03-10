@@ -20,7 +20,7 @@ end
 
 shared_examples "non-partially-applicable function" do |args|
   (0...(args.length - 1)).each do |arg_count|
-    description = "raises an error when applied to #{arg_count} argument"
+    description = "raises an error when given #{arg_count} argument"
     description << "s" unless arg_count == 1
     it description do
       partial_expression = "(#{args[0..arg_count].join(' ')})"

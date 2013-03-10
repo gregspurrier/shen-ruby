@@ -1,6 +1,57 @@
 require 'spec_helper'
 
 describe 'Primitives for Generic Functions' do
+  describe '(defun Name ArgList Expr)' do
+    it 'returns Name' do
+      kl_eval('(defun foo () true)').should == :foo
+    end
+
+    it 'does not evaulate Expr' do
+      kl_eval('(set flag clear)')
+      kl_eval('(defun foo () (set flag set))')
+      kl_eval('(value flag)').should == :clear
+    end
+
+    it 'binds Name to a function having ArgList as its formals and Expr as its body' do
+      kl_eval('(defun my-add (A B) (+ A B))')
+      kl_eval('(my-add 1 2)').should == 3
+    end
+
+    it 'allows ArgList to be the empty list' do
+      kl_eval('(defun foo () success)').should == :foo
+      kl_eval('(foo)').should == :success
+    end
+
+    it 'allows previously defined non-primitive functions to be redefined' do
+      kl_eval('(defun my-add (A B) (+ A B))')
+      kl_eval('(defun my-add (A B) surprise!)')
+      kl_eval('(my-add 1 2)').should == :surprise!
+    end
+
+    it 'raises an error when attempting to redefine a primitive' do
+      expect {
+        kl_eval('(defun + (A B) :surprise!)')
+      }.to raise_error(Kl::Error, '+ is primitive and may not be redefined')
+    end
+
+    include_examples 'argument types', %w[defun foo () success],
+                     1 => [:symbol]
+
+    it 'raises an error if ArgList is not a list' do
+      expect {
+        kl_eval('(defun foo bar baz)')
+      }.to raise_error(Kl::Error, 'bar is not a list')
+    end
+
+    it 'raises an error if ArgList contains non-symbols' do
+      expect {
+        kl_eval('(defun foo (1) baz)')
+      }.to raise_error(Kl::Error, '1 is not a symbol')
+    end
+    include_examples "non-partially-applicable function",
+      %w[defun foo () success]
+  end
+
   describe '(freeze Expr)' do
     it 'does not evaluate Expr' do
       kl_eval('(set flag clear)')

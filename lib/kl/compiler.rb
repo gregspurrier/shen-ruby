@@ -89,10 +89,15 @@ module Kl
       def compile_defun(form, lexical_vars)
         name, arglist, body = destructure_form(form, 3)
         unless name.kind_of? Symbol
-          raise Kl::Error, 'first argument to defun must be a symbol'
+          raise Kl::Error, "#{name} is not a symbol"
         end
-        unless arglist.all? {|a| a.kind_of? Symbol}
-          raise Kl::Error, 'function argument list may only contain symbols'
+        unless [Kl::Cons, Kl::EmptyList].include? arglist.class
+          raise Kl::Error, "#{arglist} is not a list"
+        end
+        arglist.each do |arg|
+          unless arg.kind_of? Symbol
+            raise Kl::Error, "#{arg} is not a symbol"
+          end
         end
         if PRIMITIVE_ARITIES.has_key?(name)
           raise Kl::Error, "#{name} is primitive and may not be redefined"
