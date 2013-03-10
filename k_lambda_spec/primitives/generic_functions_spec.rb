@@ -2,14 +2,14 @@ require 'spec_helper'
 
 describe 'Primitives for Generic Functions' do
   describe '(defun Name ArgList Expr)' do
-    it 'returns Name' do
-      kl_eval('(defun foo () true)').should == :foo
-    end
-
     it 'does not evaulate Expr' do
       kl_eval('(set flag clear)')
       kl_eval('(defun foo () (set flag set))')
       kl_eval('(value flag)').should == :clear
+    end
+
+    it 'returns Name' do
+      kl_eval('(defun foo () true)').should == :foo
     end
 
     it 'binds Name to a function having ArgList as its formals and Expr as its body' do
@@ -50,6 +50,28 @@ describe 'Primitives for Generic Functions' do
     end
     include_examples "non-partially-applicable function",
       %w[defun foo () success]
+  end
+
+  describe '(lambda X Expr)' do
+    it 'does not evaulate Expr' do
+      kl_eval('(set flag clear)')
+      kl_eval('(lambda X 37)')
+      kl_eval('(value flag)').should == :clear
+    end
+
+    it 'returns a function' do
+      kl_eval('(lambda X 37)').should be_kind_of Proc
+    end 
+
+    describe 'the returned function, when applied' do
+      it 'evaluates Expr with X bound to its argument' do
+        kl_eval('((lambda X (+ 1 X)) 2)').should == 3
+      end
+    end
+
+    include_examples 'argument types', %w(lambda X 37),
+                     1 => [:symbol]
+    include_examples "non-partially-applicable function", %w(lambda X 37)
   end
 
   describe '(freeze Expr)' do

@@ -116,7 +116,7 @@ module Kl
       def compile_lambda(form, lexical_vars)
         var, body = destructure_form(form, 2)
         unless var.kind_of? Symbol
-          raise Kl::Error, 'first argument to lambda must be a symbol'
+          raise Kl::Error, "#{var} is not a symbol"
         end
 
         extended_vars = add_var(lexical_vars, var)
