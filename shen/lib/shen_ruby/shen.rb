@@ -95,12 +95,6 @@ module ShenRuby
           v
         end
 
-        # The version of shen-explode-string from sys.kl is not tail-recursive.
-        # Replace it with a version that does not blow up the stack.
-        define_method "shen-explode-string" do |str|
-          Kl::Cons.list(str.split(//))
-        end
-
         # Give a way to bail out
         define_method 'quit' do
           ::Kernel.exit(0)

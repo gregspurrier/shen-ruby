@@ -23,7 +23,7 @@ class ReplInterrupt < StandardError; end
 Signal.trap("INT") { raise ReplInterrupt }
 
 # Launch the REPL
-command = :"shen-shen"
+command = :"shen.shen"
 begin
   shen.__eval(Kl::Cons.list([command]))
 rescue StandardError => e
@@ -35,6 +35,6 @@ rescue StandardError => e
   else
     puts "Ruby exception: #{e.message}"
   end
-  command = :"shen-loop"
+  command = :"shen.loop"
   retry
 end
