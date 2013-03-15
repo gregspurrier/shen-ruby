@@ -3,6 +3,7 @@
 ## 0.4.0 - March 15, 2013
 ### Features
 - Upgrade to Shen 9.0
+
 ### Bug Fixes
 - [Issue 8](https://github.com/gregspurrier/shen-ruby/issues/8) -- `quit` no longer raises a type error when invoked with type checking enabled.
 - Fixed many instances of ShenRuby's behavior not matching the Shen CLisp reference implementation:
