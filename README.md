@@ -12,9 +12,9 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 [![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrier/shen-ruby)
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3-p362. It is not yet working under JRuby or Rubinius.
+NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3-p392. It has been lightly tested with Rubinius 2.0.0-head running in 1.9 mode. It is not yet working under JRuby.
 
-ShenRuby 0.3.1 is the current release. To install it as gem, use the following command:
+ShenRuby 0.4.0 is the current release. To install it as gem, use the following command:
 
     gem install shen-ruby
 
@@ -26,9 +26,9 @@ Once the gem has been installed, the Shen REPL can be launched via the `srrepl` 
     Loading.... Completed in 10.29 seconds.
     
     Shen 2010, copyright (C) 2010 Mark Tarver
-    www.shenlanguage.org, version 8
+    www.shenlanguage.org, version 9
     running under Ruby, implementation: ruby 1.9.3
-    port 0.3.1 ported by Greg Spurrier
+    port 0.4.0 ported by Greg Spurrier
     
     
     (0-) 

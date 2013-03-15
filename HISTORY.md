@@ -1,6 +1,6 @@
 # ShenRuby Release History
 
-## Yet to be Released
+## 0.4.0 - March 15, 2013
 ### Features
 - Upgrade to Shen 9.0
 ### Bug Fixes
