@@ -5,7 +5,7 @@ module Kl
     attr_reader :upper_limit
 
     def initialize(n)
-      super(n, :"shen-fail!")
+      super(n, :"shen.fail!")
       @upper_limit = n
     end
   end
