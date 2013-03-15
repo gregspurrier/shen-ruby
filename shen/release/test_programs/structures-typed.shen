@@ -1,7 +1,7 @@
 (define defstruct
   Name Slots 
-  -> (let Attributes (map fst Slots)
-          Types (map snd Slots)
+  -> (let Attributes (map (function fst) Slots)
+          Types (map (function snd) Slots)
           Selectors (selectors Name Attributes)
           Constructor (constructor Name Attributes)
           Recognisor (recognisor Name)

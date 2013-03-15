@@ -42,10 +42,6 @@
 
 (benchmark "(tak 18 12 6)" (tak 18 12 6))
 
-(benchmark "compile 10 line YACC program for paren checking" (load "br.shen")) 
-
-(benchmark "paren check a 2000 line program" (compile <br> (read-file-as-bytelist "bigprog")))
-
 (tc +)
 
 (benchmark "type checking the N queens" (load "N_queens.shen"))

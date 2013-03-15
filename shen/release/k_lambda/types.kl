@@ -47,18 +47,18 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun declare (V2072 V2073) (let Record (set shen.*signedfuncs* (adjoin V2072 (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2072 V2073) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.normalise-type V2073)) (let F* (concat shen.type-signature-of- V2072) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2072)))))))))))
+"(defun declare (V2071 V2072) (let Record (set shen.*signedfuncs* (adjoin V2071 (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2071 V2072) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.normalise-type V2072)) (let F* (concat shen.type-signature-of- V2071) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2071)))))))))))
 
-(defun shen.normalise-type (V2074) (fix shen.normalise-type-help V2074))
+(defun shen.normalise-type (V2073) (fix shen.normalise-type-help V2073))
 
-(defun shen.normalise-type-help (V2075) (cond ((cons? V2075) (shen.normalise-X (map shen.normalise-type-help V2075))) (true (shen.normalise-X V2075))))
+(defun shen.normalise-type-help (V2074) (cond ((cons? V2074) (shen.normalise-X (map shen.normalise-type-help V2074))) (true (shen.normalise-X V2074))))
 
-(defun shen.normalise-X (V2076) (let Val (assoc V2076 (value shen.*synonyms*)) (if (empty? Val) V2076 (tl Val))))
+(defun shen.normalise-X (V2075) (let Val (assoc V2075 (value shen.*synonyms*)) (if (empty? Val) V2075 (tl Val))))
 
-(defun shen.variancy-test (V2077 V2078) (let TypeF (shen.typecheck V2077 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2078) shen.skip (pr (cn "warning: changing the type of " (shen.app V2077 " may create errors
+(defun shen.variancy-test (V2076 V2077) (let TypeF (shen.typecheck V2076 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2077) shen.skip (pr (cn "warning: changing the type of " (shen.app V2076 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2087 V2088) (cond ((= V2088 V2087) true) ((and (cons? V2087) (and (cons? V2088) (= (hd V2088) (hd V2087)))) (shen.variant? (tl V2087) (tl V2088))) ((and (cons? V2087) (and (cons? V2088) (and (shen.pvar? (hd V2087)) (variable? (hd V2088))))) (shen.variant? (subst shen.a (hd V2087) (tl V2087)) (subst shen.a (hd V2088) (tl V2088)))) ((and (cons? V2087) (and (cons? (hd V2087)) (and (cons? V2088) (cons? (hd V2088))))) (shen.variant? (append (hd V2087) (tl V2087)) (append (hd V2088) (tl V2088)))) (true false)))
+(defun shen.variant? (V2086 V2087) (cond ((= V2087 V2086) true) ((and (cons? V2086) (and (cons? V2087) (= (hd V2087) (hd V2086)))) (shen.variant? (tl V2086) (tl V2087))) ((and (cons? V2086) (and (cons? V2087) (and (shen.pvar? (hd V2086)) (variable? (hd V2087))))) (shen.variant? (subst shen.a (hd V2086) (tl V2086)) (subst shen.a (hd V2087) (tl V2087)))) ((and (cons? V2086) (and (cons? (hd V2086)) (and (cons? V2087) (cons? (hd V2087))))) (shen.variant? (append (hd V2086) (tl V2086)) (append (hd V2087) (tl V2087)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
@@ -198,7 +198,7 @@
 
 (declare preclude-all-but (cons (cons list (cons symbol ())) (cons --> (cons (cons list (cons symbol ())) ()))))
 
-(declare ps (cons symbol (cons --> (cons (cons list (cons shen.unit ())) ()))))
+(declare ps (cons symbol (cons --> (cons (cons list (cons unit ())) ()))))
 
 (declare read-byte (cons (cons stream (cons in ())) (cons --> (cons number ()))))
 
@@ -206,9 +206,9 @@
 
 (declare read-file-as-string (cons string (cons --> (cons string ()))))
 
-(declare read-file (cons string (cons --> (cons (cons list (cons shen.unit ())) ()))))
+(declare read-file (cons string (cons --> (cons (cons list (cons unit ())) ()))))
 
-(declare read-from-string (cons string (cons --> (cons (cons list (cons shen.unit ())) ()))))
+(declare read-from-string (cons string (cons --> (cons (cons list (cons unit ())) ()))))
 
 (declare remove (cons A (cons --> (cons (cons (cons list (cons A ())) (cons --> (cons (cons list (cons A ())) ()))) ()))))
 

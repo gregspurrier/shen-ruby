@@ -10,7 +10,7 @@
   [_ Output] -> Output)
 
 (define generate_parser
-  Grammar -> (map compile_rules (group_rules (parenthesise_rules Grammar))))
+  Grammar -> (map (/. X (compile_rules X)) (group_rules (parenthesise_rules Grammar))))
 
 (define parenthesise_rules
   [S --> | Rest] -> (parenthesise_rules1 [S -->] Rest))
@@ -76,7 +76,7 @@
 (define generate_code_for_lex
   Rules -> (eval (append [define (get_characteristic_non_terminal Rules)
                                    (protect X) -> [fail]  where [= (protect X) [fail]]
-                                   | (mapapp gcfl_help Rules)]
+                                   | (mapapp (function gcfl_help) Rules)]
                                    [(protect X) -> [fail]])))
 
 (define gcfl_help

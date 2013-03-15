@@ -101,9 +101,9 @@
 
 (define normal_form
   {l_formula --> l_formula}
-   X -> (fix ==> X))                 
+   X -> (fix (function ==>>) X))                 
     
-(define ==>
+(define ==>>
    {l_formula --> l_formula}
    [= X Y] -> (let X* (normal_form X) 
                    (let Y* (normal_form Y) 

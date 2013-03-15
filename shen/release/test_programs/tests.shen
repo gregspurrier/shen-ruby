@@ -1,84 +1,23 @@
 (maxinferences 10000000000)
 
 (report prolog-tests
-   (defprolog f
-     a <--;)   f 
+   (load "prolog.shen") loaded 
    (prolog? (f a)) true
-   (defprolog g
-     a <-- ! (f b);
-     X <-- (f a);) g
-    (prolog? (g a)) false
-    (prolog? (g b)) true
-   (defprolog mem
-      X [X | _] <--;
-      X [Y | Z] <-- (mem X Z);)  mem
-    (prolog? (mem 1 [X | 2]) (return X)) 1
-    (defprolog app 
-      [] X X <--;
-      [X | Y] W [X | Z] <-- (app Y W Z);) app
-    (defprolog rev
-      [] [] <--;
-      [X | Y] Z <-- (rev Y W) (app W [X] Z);) rev
-     (prolog? (rev [1 2] X) (return X)) [2 1]
-     (load "einstein.shen") loaded
-     (prolog? (einsteins_riddle X) (return X)) german 
-     (defprolog enjoys
-        willi X <-- (likes mark X);
-        mark chocolate <--;
-        mark tea <--;) enjoys
-     (prolog? (enjoys mark X) (return X)) chocolate  
-     (defprolog fads
-       X <-- (findall Y [enjoys X Y] Friends) (return Friends);) fads
-     (prolog? (fads mark)) [tea chocolate]
-     (defprolog prop
-        A C <-- (proph [[~  C] | A]);) prop
-     (defprolog proph
-       A <-- (mem [~ P] A) (mem P A) !;
-       A <-- (consistent A) ! (when false);
-       (mode [[P & Q] | A] -) <-- ! (proph [P Q | A]);
-       (mode [[P <=> Q] | A] -) <-- ! (proph [[P => Q] [Q => P] | A]);
-       (mode [[P => Q] | A] -) <-- ! (proph [[[~ P] v Q] | A]);
-       (mode [[~ [P v Q]] | A] -)  <-- ! (proph [[~ P] [~ Q] | A]);
-       (mode [[~ [P & Q]] | A] -) <-- ! (proph [[[~ P] v [~ Q]] | A]);
-       (mode [[~ [P => Q]] | A] -) <-- ! (proph [P [~ Q] | A]);
-       (mode [[~ [P <=> Q]] | A] -) <-- ! (proph [[~ [[P => Q] v [~ [Q => P]]]] | A]);
-       (mode [[P & Q] | A] -) <-- !  (proph [P Q | A]);
-       (mode [[P v Q] | A] -) <-- !  (proph [P | A]) ! (proph [Q | A]);
-       (mode [P | Ps] -) <-- (app Ps [P] Qs) ! (proph Qs);) proph
-      (defprolog consistent
-         [] <--;
-         [P | Ps] <-- (when (symbol? P)) ! (consistent Ps);
-         [[~ P] | Ps] <-- (when (symbol? P)) ! (consistent Ps);) consistent
-      (defprolog app
-         [] X X <--;
-         (mode [X | Y] -) W [X | Z] <-- (app Y W Z);) app
-      (defprolog mem
-         X (mode [X | _] -) <--;
-         X (mode [_ | Y] -) <-- (mem X Y);) mem 
-      (prolog? (prop [] [p <=> p]))  true 
-      (defprolog mapit
-         _  []  [] <--;
-         Pred [X | Y] [W | Z] <-- (call [Pred X W])  (mapit Pred Y Z);) mapit
-       (defprolog consit
-         X [1 X] <--;) consit
-        (prolog? (mapit consit [1 2 3] Out) (return Out)) 
-                 [[1 1] [1 2] [1 3]] 
-        (defprolog different
-          X Y <--  (~ [identical X Y]);) different
-        (defprolog ~
-          P <-- (call P) ! (when false);
-          _ <--;) ~
-        (prolog? (different a b)) true 
-        (prolog? (different a a)) false 
-        (defprolog likes
-           john  X <-- (tall X)  (pretty X);) likes
-        (defprolog tall
-           mary <--;) tall
-        (defprolog pretty
-           mary <--;) pretty
-        (prolog? (likes john Who) (return Who)) mary 
-        (load "parse.prl") loaded
-        (prolog? (pparse ["the" + ["boy" + "jumps"]] 
+   (prolog? (g a)) false
+   (prolog? (g b)) true
+   (prolog? (mem 1 [X | 2]) (return X)) 1
+   (prolog? (rev [1 2] X) (return X)) [2 1]
+   (load "einstein.shen") loaded
+   (prolog? (einsteins_riddle X) (return X)) german 
+   (prolog? (enjoys mark X) (return X)) chocolate  
+   (prolog? (fads mark)) [tea chocolate]
+   (prolog? (prop [] [p <=> p]))  true 
+   (prolog? (mapit consit [1 2 3] Out) (return Out)) [[1 1] [1 2] [1 3]] 
+   (prolog? (different a b)) true 
+   (prolog? (different a a)) false 
+   (prolog? (likes john Who) (return Who)) mary 
+   (load "parse.prl") loaded
+   (prolog? (pparse ["the" + ["boy" + "jumps"]] 
                         [[s = [np + vp]] 
                           [np = [det + n]]
                           [det = "the"]

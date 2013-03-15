@@ -1,7 +1,7 @@
 (declare defclass [symbol --> [list [symbol * symbol]] --> symbol])
 
 (define defclass
-   Class ClassDef -> (let Attributes (map fst ClassDef)
+   Class ClassDef -> (let Attributes (map (function fst) ClassDef)
                           Types (record-attribute-types Class ClassDef)
                           Assoc (map (/. Attribute [Attribute | fail]) Attributes)
                           ClassDef [[class | Class] | Assoc]
