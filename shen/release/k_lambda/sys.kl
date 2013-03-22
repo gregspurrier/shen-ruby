@@ -47,198 +47,198 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun thaw (V1753) (V1753))
+"(defun thaw (V1759) (V1759))
 
-(defun eval (V1754) (let Macroexpand (shen.walk (lambda V1751 (macroexpand V1751)) V1754) (if (shen.packaged? Macroexpand) (map shen.eval-without-macros (shen.package-contents Macroexpand)) (shen.eval-without-macros Macroexpand))))
+(defun eval (V1760) (let Macroexpand (shen.walk (lambda V1757 (macroexpand V1757)) V1760) (if (shen.packaged? Macroexpand) (map shen.eval-without-macros (shen.package-contents Macroexpand)) (shen.eval-without-macros Macroexpand))))
 
-(defun shen.eval-without-macros (V1755) (eval-kl (shen.elim-define (shen.proc-input+ V1755))))
+(defun shen.eval-without-macros (V1761) (eval-kl (shen.elim-define (shen.proc-input+ V1761))))
 
-(defun shen.proc-input+ (V1756) (cond ((and (cons? V1756) (and (= input+ (hd V1756)) (and (cons? (tl V1756)) (and (cons? (tl (tl V1756))) (= () (tl (tl (tl V1756)))))))) (cons input+ (cons (hd (tl V1756)) (cons (shen.rcons_form (hd (tl (tl V1756)))) ())))) ((cons? V1756) (map shen.proc-input+ V1756)) (true V1756)))
+(defun shen.proc-input+ (V1762) (cond ((and (cons? V1762) (and (= input+ (hd V1762)) (and (cons? (tl V1762)) (and (cons? (tl (tl V1762))) (= () (tl (tl (tl V1762)))))))) (cons input+ (cons (hd (tl V1762)) (cons (shen.rcons_form (hd (tl (tl V1762)))) ())))) ((cons? V1762) (map shen.proc-input+ V1762)) (true V1762)))
 
-(defun shen.elim-define (V1757) (cond ((and (cons? V1757) (and (= define (hd V1757)) (cons? (tl V1757)))) (shen.shen->kl (hd (tl V1757)) (tl (tl V1757)))) ((and (cons? V1757) (and (= defcc (hd V1757)) (cons? (tl V1757)))) (shen.elim-define (shen.yacc V1757))) ((cons? V1757) (map shen.elim-define V1757)) (true V1757)))
+(defun shen.elim-define (V1763) (cond ((and (cons? V1763) (and (= define (hd V1763)) (cons? (tl V1763)))) (shen.shen->kl (hd (tl V1763)) (tl (tl V1763)))) ((and (cons? V1763) (and (= defcc (hd V1763)) (cons? (tl V1763)))) (shen.elim-define (shen.yacc V1763))) ((cons? V1763) (map shen.elim-define V1763)) (true V1763)))
 
-(defun shen.packaged? (V1764) (cond ((and (cons? V1764) (and (= package (hd V1764)) (and (cons? (tl V1764)) (cons? (tl (tl V1764)))))) true) (true false)))
+(defun shen.packaged? (V1770) (cond ((and (cons? V1770) (and (= package (hd V1770)) (and (cons? (tl V1770)) (cons? (tl (tl V1770)))))) true) (true false)))
 
-(defun external (V1765) (trap-error (get V1765 shen.external-symbols (value *property-vector*)) (lambda E (simple-error (cn "package " (shen.app V1765 " has not been used.
+(defun external (V1771) (trap-error (get V1771 shen.external-symbols (value *property-vector*)) (lambda E (simple-error (cn "package " (shen.app V1771 " has not been used.
 " shen.a))))))
 
-(defun shen.package-contents (V1768) (cond ((and (cons? V1768) (and (= package (hd V1768)) (and (cons? (tl V1768)) (and (= null (hd (tl V1768))) (cons? (tl (tl V1768))))))) (tl (tl (tl V1768)))) ((and (cons? V1768) (and (= package (hd V1768)) (and (cons? (tl V1768)) (cons? (tl (tl V1768)))))) (shen.packageh (hd (tl V1768)) (hd (tl (tl V1768))) (tl (tl (tl V1768))))) (true (shen.sys-error shen.package-contents))))
+(defun shen.package-contents (V1774) (cond ((and (cons? V1774) (and (= package (hd V1774)) (and (cons? (tl V1774)) (and (= null (hd (tl V1774))) (cons? (tl (tl V1774))))))) (tl (tl (tl V1774)))) ((and (cons? V1774) (and (= package (hd V1774)) (and (cons? (tl V1774)) (cons? (tl (tl V1774)))))) (shen.packageh (hd (tl V1774)) (hd (tl (tl V1774))) (tl (tl (tl V1774))))) (true (shen.sys-error shen.package-contents))))
 
-(defun shen.walk (V1769 V1770) (cond ((cons? V1770) (V1769 (map (lambda Z (shen.walk V1769 Z)) V1770))) (true (V1769 V1770))))
+(defun shen.walk (V1775 V1776) (cond ((cons? V1776) (V1775 (map (lambda Z (shen.walk V1775 Z)) V1776))) (true (V1775 V1776))))
 
-(defun compile (V1771 V1772 V1773) (let O (V1771 (cons V1772 (cons () ()))) (if (or (= (fail) O) (not (empty? (hd O)))) (V1773 O) (shen.hdtl O))))
+(defun compile (V1777 V1778 V1779) (let O (V1777 (cons V1778 (cons () ()))) (if (or (= (fail) O) (not (empty? (hd O)))) (V1779 O) (shen.hdtl O))))
 
-(defun fail-if (V1774 V1775) (if (V1774 V1775) (fail) V1775))
+(defun fail-if (V1780 V1781) (if (V1780 V1781) (fail) V1781))
 
-(defun @s (V1776 V1777) (cn V1776 V1777))
+(defun @s (V1782 V1783) (cn V1782 V1783))
 
-(defun tc? (V1782) (value shen.*tc*))
+(defun tc? (V1788) (value shen.*tc*))
 
-(defun ps (V1783) (trap-error (get V1783 shen.source (value *property-vector*)) (lambda E (simple-error (shen.app V1783 " not found.
+(defun ps (V1789) (trap-error (get V1789 shen.source (value *property-vector*)) (lambda E (simple-error (shen.app V1789 " not found.
 " shen.a)))))
 
 (defun stinput () (value *stinput*))
 
-(defun shen.+vector? (V1784) (and (absvector? V1784) (> (<-address V1784 0) 0)))
+(defun shen.+vector? (V1790) (and (absvector? V1790) (> (<-address V1790 0) 0)))
 
-(defun vector (V1785) (let Vector (absvector (+ V1785 1)) (let ZeroStamp (address-> Vector 0 V1785) (let Standard (if (= V1785 0) ZeroStamp (shen.fillvector ZeroStamp 1 V1785 (fail))) Standard))))
+(defun vector (V1791) (let Vector (absvector (+ V1791 1)) (let ZeroStamp (address-> Vector 0 V1791) (let Standard (if (= V1791 0) ZeroStamp (shen.fillvector ZeroStamp 1 V1791 (fail))) Standard))))
 
-(defun shen.fillvector (V1786 V1787 V1788 V1789) (cond ((= V1788 V1787) (address-> V1786 V1788 V1789)) (true (shen.fillvector (address-> V1786 V1787 V1789) (+ 1 V1787) V1788 V1789))))
+(defun shen.fillvector (V1792 V1793 V1794 V1795) (cond ((= V1794 V1793) (address-> V1792 V1794 V1795)) (true (shen.fillvector (address-> V1792 V1793 V1795) (+ 1 V1793) V1794 V1795))))
 
-(defun vector? (V1791) (and (absvector? V1791) (trap-error (>= (<-address V1791 0) 0) (lambda E false))))
+(defun vector? (V1797) (and (absvector? V1797) (trap-error (>= (<-address V1797 0) 0) (lambda E false))))
 
-(defun vector-> (V1792 V1793 V1794) (if (= V1793 0) (simple-error "cannot access 0th element of a vector
-") (address-> V1792 V1793 V1794)))
+(defun vector-> (V1798 V1799 V1800) (if (= V1799 0) (simple-error "cannot access 0th element of a vector
+") (address-> V1798 V1799 V1800)))
 
-(defun <-vector (V1795 V1796) (if (= V1796 0) (simple-error "cannot access 0th element of a vector
-") (let VectorElement (<-address V1795 V1796) (if (= VectorElement (fail)) (simple-error "vector element not found
+(defun <-vector (V1801 V1802) (if (= V1802 0) (simple-error "cannot access 0th element of a vector
+") (let VectorElement (<-address V1801 V1802) (if (= VectorElement (fail)) (simple-error "vector element not found
 ") VectorElement))))
 
-(defun shen.posint? (V1797) (and (integer? V1797) (>= V1797 0)))
+(defun shen.posint? (V1803) (and (integer? V1803) (>= V1803 0)))
 
-(defun limit (V1798) (<-address V1798 0))
+(defun limit (V1804) (<-address V1804 0))
 
-(defun symbol? (V1799) (cond ((or (boolean? V1799) (or (number? V1799) (string? V1799))) false) (true (trap-error (let String (str V1799) (shen.analyse-symbol? String)) (lambda E false)))))
+(defun symbol? (V1805) (cond ((or (boolean? V1805) (or (number? V1805) (string? V1805))) false) (true (trap-error (let String (str V1805) (shen.analyse-symbol? String)) (lambda E false)))))
 
-(defun shen.analyse-symbol? (V1800) (cond ((shen.+string? V1800) (and (shen.alpha? (pos V1800 0)) (shen.alphanums? (tlstr V1800)))) (true (shen.sys-error shen.analyse-symbol?))))
+(defun shen.analyse-symbol? (V1806) (cond ((shen.+string? V1806) (and (shen.alpha? (pos V1806 0)) (shen.alphanums? (tlstr V1806)))) (true (shen.sys-error shen.analyse-symbol?))))
 
-(defun shen.alpha? (V1801) (element? V1801 (cons "A" (cons "B" (cons "C" (cons "D" (cons "E" (cons "F" (cons "G" (cons "H" (cons "I" (cons "J" (cons "K" (cons "L" (cons "M" (cons "N" (cons "O" (cons "P" (cons "Q" (cons "R" (cons "S" (cons "T" (cons "U" (cons "V" (cons "W" (cons "X" (cons "Y" (cons "Z" (cons "a" (cons "b" (cons "c" (cons "d" (cons "e" (cons "f" (cons "g" (cons "h" (cons "i" (cons "j" (cons "k" (cons "l" (cons "m" (cons "n" (cons "o" (cons "p" (cons "q" (cons "r" (cons "s" (cons "t" (cons "u" (cons "v" (cons "w" (cons "x" (cons "y" (cons "z" (cons "=" (cons "*" (cons "/" (cons "+" (cons "-" (cons "_" (cons "?" (cons "$" (cons "!" (cons "@" (cons "~" (cons ">" (cons "<" (cons "&" (cons "%" (cons "{" (cons "}" (cons ":" (cons ";" (cons "`" (cons "#" (cons "'" (cons "." ())))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+(defun shen.alpha? (V1807) (element? V1807 (cons "A" (cons "B" (cons "C" (cons "D" (cons "E" (cons "F" (cons "G" (cons "H" (cons "I" (cons "J" (cons "K" (cons "L" (cons "M" (cons "N" (cons "O" (cons "P" (cons "Q" (cons "R" (cons "S" (cons "T" (cons "U" (cons "V" (cons "W" (cons "X" (cons "Y" (cons "Z" (cons "a" (cons "b" (cons "c" (cons "d" (cons "e" (cons "f" (cons "g" (cons "h" (cons "i" (cons "j" (cons "k" (cons "l" (cons "m" (cons "n" (cons "o" (cons "p" (cons "q" (cons "r" (cons "s" (cons "t" (cons "u" (cons "v" (cons "w" (cons "x" (cons "y" (cons "z" (cons "=" (cons "*" (cons "/" (cons "+" (cons "-" (cons "_" (cons "?" (cons "$" (cons "!" (cons "@" (cons "~" (cons ">" (cons "<" (cons "&" (cons "%" (cons "{" (cons "}" (cons ":" (cons ";" (cons "`" (cons "#" (cons "'" (cons "." ())))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-(defun shen.alphanums? (V1802) (cond ((= "" V1802) true) ((shen.+string? V1802) (and (shen.alphanum? (pos V1802 0)) (shen.alphanums? (tlstr V1802)))) (true (shen.sys-error shen.alphanums?))))
+(defun shen.alphanums? (V1808) (cond ((= "" V1808) true) ((shen.+string? V1808) (and (shen.alphanum? (pos V1808 0)) (shen.alphanums? (tlstr V1808)))) (true (shen.sys-error shen.alphanums?))))
 
-(defun shen.alphanum? (V1803) (or (shen.alpha? V1803) (shen.digit? V1803)))
+(defun shen.alphanum? (V1809) (or (shen.alpha? V1809) (shen.digit? V1809)))
 
-(defun shen.digit? (V1804) (element? V1804 (cons "1" (cons "2" (cons "3" (cons "4" (cons "5" (cons "6" (cons "7" (cons "8" (cons "9" (cons "0" ()))))))))))))
+(defun shen.digit? (V1810) (element? V1810 (cons "1" (cons "2" (cons "3" (cons "4" (cons "5" (cons "6" (cons "7" (cons "8" (cons "9" (cons "0" ()))))))))))))
 
-(defun variable? (V1805) (cond ((or (boolean? V1805) (or (number? V1805) (string? V1805))) false) (true (trap-error (let String (str V1805) (shen.analyse-variable? String)) (lambda E false)))))
+(defun variable? (V1811) (cond ((or (boolean? V1811) (or (number? V1811) (string? V1811))) false) (true (trap-error (let String (str V1811) (shen.analyse-variable? String)) (lambda E false)))))
 
-(defun shen.analyse-variable? (V1806) (cond ((shen.+string? V1806) (and (shen.uppercase? (pos V1806 0)) (shen.alphanums? (tlstr V1806)))) (true (shen.sys-error shen.analyse-variable?))))
+(defun shen.analyse-variable? (V1812) (cond ((shen.+string? V1812) (and (shen.uppercase? (pos V1812 0)) (shen.alphanums? (tlstr V1812)))) (true (shen.sys-error shen.analyse-variable?))))
 
-(defun shen.uppercase? (V1807) (element? V1807 (cons "A" (cons "B" (cons "C" (cons "D" (cons "E" (cons "F" (cons "G" (cons "H" (cons "I" (cons "J" (cons "K" (cons "L" (cons "M" (cons "N" (cons "O" (cons "P" (cons "Q" (cons "R" (cons "S" (cons "T" (cons "U" (cons "V" (cons "W" (cons "X" (cons "Y" (cons "Z" ()))))))))))))))))))))))))))))
+(defun shen.uppercase? (V1813) (element? V1813 (cons "A" (cons "B" (cons "C" (cons "D" (cons "E" (cons "F" (cons "G" (cons "H" (cons "I" (cons "J" (cons "K" (cons "L" (cons "M" (cons "N" (cons "O" (cons "P" (cons "Q" (cons "R" (cons "S" (cons "T" (cons "U" (cons "V" (cons "W" (cons "X" (cons "Y" (cons "Z" ()))))))))))))))))))))))))))))
 
-(defun gensym (V1808) (concat V1808 (set shen.*gensym* (+ 1 (value shen.*gensym*)))))
+(defun gensym (V1814) (concat V1814 (set shen.*gensym* (+ 1 (value shen.*gensym*)))))
 
-(defun concat (V1809 V1810) (intern (cn (str V1809) (str V1810))))
+(defun concat (V1815 V1816) (intern (cn (str V1815) (str V1816))))
 
-(defun @p (V1811 V1812) (let Vector (absvector 3) (let Tag (address-> Vector 0 shen.tuple) (let Fst (address-> Vector 1 V1811) (let Snd (address-> Vector 2 V1812) Vector)))))
+(defun @p (V1817 V1818) (let Vector (absvector 3) (let Tag (address-> Vector 0 shen.tuple) (let Fst (address-> Vector 1 V1817) (let Snd (address-> Vector 2 V1818) Vector)))))
 
-(defun fst (V1813) (<-address V1813 1))
+(defun fst (V1819) (<-address V1819 1))
 
-(defun snd (V1814) (<-address V1814 2))
+(defun snd (V1820) (<-address V1820 2))
 
-(defun tuple? (V1815) (trap-error (and (absvector? V1815) (= shen.tuple (<-address V1815 0))) (lambda E false)))
+(defun tuple? (V1821) (trap-error (and (absvector? V1821) (= shen.tuple (<-address V1821 0))) (lambda E false)))
 
-(defun append (V1816 V1817) (cond ((= () V1816) V1817) ((cons? V1816) (cons (hd V1816) (append (tl V1816) V1817))) (true (shen.sys-error append))))
+(defun append (V1822 V1823) (cond ((= () V1822) V1823) ((cons? V1822) (cons (hd V1822) (append (tl V1822) V1823))) (true (shen.sys-error append))))
 
-(defun @v (V1818 V1819) (let Limit (limit V1819) (let NewVector (vector (+ Limit 1)) (let X+NewVector (vector-> NewVector 1 V1818) (if (= Limit 0) X+NewVector (shen.@v-help V1819 1 Limit X+NewVector))))))
+(defun @v (V1824 V1825) (let Limit (limit V1825) (let NewVector (vector (+ Limit 1)) (let X+NewVector (vector-> NewVector 1 V1824) (if (= Limit 0) X+NewVector (shen.@v-help V1825 1 Limit X+NewVector))))))
 
-(defun shen.@v-help (V1820 V1821 V1822 V1823) (cond ((= V1822 V1821) (shen.copyfromvector V1820 V1823 V1822 (+ V1822 1))) (true (shen.@v-help V1820 (+ V1821 1) V1822 (shen.copyfromvector V1820 V1823 V1821 (+ V1821 1))))))
+(defun shen.@v-help (V1826 V1827 V1828 V1829) (cond ((= V1828 V1827) (shen.copyfromvector V1826 V1829 V1828 (+ V1828 1))) (true (shen.@v-help V1826 (+ V1827 1) V1828 (shen.copyfromvector V1826 V1829 V1827 (+ V1827 1))))))
 
-(defun shen.copyfromvector (V1825 V1826 V1827 V1828) (trap-error (vector-> V1826 V1828 (<-vector V1825 V1827)) (lambda E V1826)))
+(defun shen.copyfromvector (V1831 V1832 V1833 V1834) (trap-error (vector-> V1832 V1834 (<-vector V1831 V1833)) (lambda E V1832)))
 
-(defun hdv (V1829) (trap-error (<-vector V1829 1) (lambda E (simple-error (cn "hdv needs a non-empty vector as an argument; not " (shen.app V1829 "
+(defun hdv (V1835) (trap-error (<-vector V1835 1) (lambda E (simple-error (cn "hdv needs a non-empty vector as an argument; not " (shen.app V1835 "
 " shen.s))))))
 
-(defun tlv (V1830) (let Limit (limit V1830) (if (= Limit 0) (simple-error "cannot take the tail of the empty vector
-") (if (= Limit 1) (vector 0) (let NewVector (vector (- Limit 1)) (shen.tlv-help V1830 2 Limit (vector (- Limit 1))))))))
+(defun tlv (V1836) (let Limit (limit V1836) (if (= Limit 0) (simple-error "cannot take the tail of the empty vector
+") (if (= Limit 1) (vector 0) (let NewVector (vector (- Limit 1)) (shen.tlv-help V1836 2 Limit (vector (- Limit 1))))))))
 
-(defun shen.tlv-help (V1831 V1832 V1833 V1834) (cond ((= V1833 V1832) (shen.copyfromvector V1831 V1834 V1833 (- V1833 1))) (true (shen.tlv-help V1831 (+ V1832 1) V1833 (shen.copyfromvector V1831 V1834 V1832 (- V1832 1))))))
+(defun shen.tlv-help (V1837 V1838 V1839 V1840) (cond ((= V1839 V1838) (shen.copyfromvector V1837 V1840 V1839 (- V1839 1))) (true (shen.tlv-help V1837 (+ V1838 1) V1839 (shen.copyfromvector V1837 V1840 V1838 (- V1838 1))))))
 
-(defun assoc (V1844 V1845) (cond ((= () V1845) ()) ((and (cons? V1845) (and (cons? (hd V1845)) (= (hd (hd V1845)) V1844))) (hd V1845)) ((cons? V1845) (assoc V1844 (tl V1845))) (true (shen.sys-error assoc))))
+(defun assoc (V1850 V1851) (cond ((= () V1851) ()) ((and (cons? V1851) (and (cons? (hd V1851)) (= (hd (hd V1851)) V1850))) (hd V1851)) ((cons? V1851) (assoc V1850 (tl V1851))) (true (shen.sys-error assoc))))
 
-(defun boolean? (V1851) (cond ((= true V1851) true) ((= false V1851) true) (true false)))
+(defun boolean? (V1857) (cond ((= true V1857) true) ((= false V1857) true) (true false)))
 
-(defun nl (V1852) (cond ((= 0 V1852) 0) (true (do (pr "
-" (stoutput)) (nl (- V1852 1))))))
+(defun nl (V1858) (cond ((= 0 V1858) 0) (true (do (pr "
+" (stoutput)) (nl (- V1858 1))))))
 
-(defun difference (V1855 V1856) (cond ((= () V1855) ()) ((cons? V1855) (if (element? (hd V1855) V1856) (difference (tl V1855) V1856) (cons (hd V1855) (difference (tl V1855) V1856)))) (true (shen.sys-error difference))))
+(defun difference (V1861 V1862) (cond ((= () V1861) ()) ((cons? V1861) (if (element? (hd V1861) V1862) (difference (tl V1861) V1862) (cons (hd V1861) (difference (tl V1861) V1862)))) (true (shen.sys-error difference))))
 
-(defun do (V1857 V1858) V1858)
+(defun do (V1863 V1864) V1864)
 
-(defun element? (V1867 V1868) (cond ((= () V1868) false) ((and (cons? V1868) (= (hd V1868) V1867)) true) ((cons? V1868) (element? V1867 (tl V1868))) (true (shen.sys-error element?))))
+(defun element? (V1873 V1874) (cond ((= () V1874) false) ((and (cons? V1874) (= (hd V1874) V1873)) true) ((cons? V1874) (element? V1873 (tl V1874))) (true (shen.sys-error element?))))
 
-(defun empty? (V1874) (cond ((= () V1874) true) (true false)))
+(defun empty? (V1880) (cond ((= () V1880) true) (true false)))
 
-(defun fix (V1875 V1876) (shen.fix-help V1875 V1876 (V1875 V1876)))
+(defun fix (V1881 V1882) (shen.fix-help V1881 V1882 (V1881 V1882)))
 
-(defun shen.fix-help (V1883 V1884 V1885) (cond ((= V1885 V1884) V1885) (true (shen.fix-help V1883 V1885 (V1883 V1885)))))
+(defun shen.fix-help (V1889 V1890 V1891) (cond ((= V1891 V1890) V1891) (true (shen.fix-help V1889 V1891 (V1889 V1891)))))
 
-(defun put (V1887 V1888 V1889 V1890) (let N (hash V1887 (limit V1890)) (let Entry (trap-error (<-vector V1890 N) (lambda E ())) (let Change (vector-> V1890 N (shen.change-pointer-value V1887 V1888 V1889 Entry)) V1889))))
+(defun put (V1893 V1894 V1895 V1896) (let N (hash V1893 (limit V1896)) (let Entry (trap-error (<-vector V1896 N) (lambda E ())) (let Change (vector-> V1896 N (shen.change-pointer-value V1893 V1894 V1895 Entry)) V1895))))
 
-(defun shen.change-pointer-value (V1893 V1894 V1895 V1896) (cond ((= () V1896) (cons (cons (cons V1893 (cons V1894 ())) V1895) ())) ((and (cons? V1896) (and (cons? (hd V1896)) (and (cons? (hd (hd V1896))) (and (cons? (tl (hd (hd V1896)))) (and (= () (tl (tl (hd (hd V1896))))) (and (= (hd (tl (hd (hd V1896)))) V1894) (= (hd (hd (hd V1896))) V1893))))))) (cons (cons (hd (hd V1896)) V1895) (tl V1896))) ((cons? V1896) (cons (hd V1896) (shen.change-pointer-value V1893 V1894 V1895 (tl V1896)))) (true (shen.sys-error shen.change-pointer-value))))
+(defun shen.change-pointer-value (V1899 V1900 V1901 V1902) (cond ((= () V1902) (cons (cons (cons V1899 (cons V1900 ())) V1901) ())) ((and (cons? V1902) (and (cons? (hd V1902)) (and (cons? (hd (hd V1902))) (and (cons? (tl (hd (hd V1902)))) (and (= () (tl (tl (hd (hd V1902))))) (and (= (hd (tl (hd (hd V1902)))) V1900) (= (hd (hd (hd V1902))) V1899))))))) (cons (cons (hd (hd V1902)) V1901) (tl V1902))) ((cons? V1902) (cons (hd V1902) (shen.change-pointer-value V1899 V1900 V1901 (tl V1902)))) (true (shen.sys-error shen.change-pointer-value))))
 
-(defun get (V1899 V1900 V1901) (let N (hash V1899 (limit V1901)) (let Entry (trap-error (<-vector V1901 N) (lambda E (simple-error "pointer not found
-"))) (let Result (assoc (cons V1899 (cons V1900 ())) Entry) (if (empty? Result) (simple-error "value not found
+(defun get (V1905 V1906 V1907) (let N (hash V1905 (limit V1907)) (let Entry (trap-error (<-vector V1907 N) (lambda E (simple-error "pointer not found
+"))) (let Result (assoc (cons V1905 (cons V1906 ())) Entry) (if (empty? Result) (simple-error "value not found
 ") (tl Result))))))
 
-(defun hash (V1902 V1903) (let Hash (shen.mod (shen.sum (map (lambda V1752 (string->n V1752)) (explode V1902))) V1903) (if (= 0 Hash) 1 Hash)))
+(defun hash (V1908 V1909) (let Hash (shen.mod (shen.sum (map (lambda V1758 (string->n V1758)) (explode V1908))) V1909) (if (= 0 Hash) 1 Hash)))
 
-(defun shen.mod (V1904 V1905) (shen.modh V1904 (shen.multiples V1904 (cons V1905 ()))))
+(defun shen.mod (V1910 V1911) (shen.modh V1910 (shen.multiples V1910 (cons V1911 ()))))
 
-(defun shen.multiples (V1906 V1907) (cond ((and (cons? V1907) (> (hd V1907) V1906)) (tl V1907)) ((cons? V1907) (shen.multiples V1906 (cons (* 2 (hd V1907)) V1907))) (true (shen.sys-error shen.multiples))))
+(defun shen.multiples (V1912 V1913) (cond ((and (cons? V1913) (> (hd V1913) V1912)) (tl V1913)) ((cons? V1913) (shen.multiples V1912 (cons (* 2 (hd V1913)) V1913))) (true (shen.sys-error shen.multiples))))
 
-(defun shen.modh (V1910 V1911) (cond ((= 0 V1910) 0) ((= () V1911) V1910) ((and (cons? V1911) (> (hd V1911) V1910)) (if (empty? (tl V1911)) V1910 (shen.modh V1910 (tl V1911)))) ((cons? V1911) (shen.modh (- V1910 (hd V1911)) V1911)) (true (shen.sys-error shen.modh))))
+(defun shen.modh (V1916 V1917) (cond ((= 0 V1916) 0) ((= () V1917) V1916) ((and (cons? V1917) (> (hd V1917) V1916)) (if (empty? (tl V1917)) V1916 (shen.modh V1916 (tl V1917)))) ((cons? V1917) (shen.modh (- V1916 (hd V1917)) V1917)) (true (shen.sys-error shen.modh))))
 
-(defun shen.sum (V1912) (cond ((= () V1912) 0) ((cons? V1912) (+ (hd V1912) (shen.sum (tl V1912)))) (true (shen.sys-error shen.sum))))
+(defun shen.sum (V1918) (cond ((= () V1918) 0) ((cons? V1918) (+ (hd V1918) (shen.sum (tl V1918)))) (true (shen.sys-error shen.sum))))
 
-(defun head (V1919) (cond ((cons? V1919) (hd V1919)) (true (simple-error "head expects a non-empty list"))))
+(defun head (V1925) (cond ((cons? V1925) (hd V1925)) (true (simple-error "head expects a non-empty list"))))
 
-(defun tail (V1926) (cond ((cons? V1926) (tl V1926)) (true (simple-error "tail expects a non-empty list"))))
+(defun tail (V1932) (cond ((cons? V1932) (tl V1932)) (true (simple-error "tail expects a non-empty list"))))
 
-(defun hdstr (V1927) (pos V1927 0))
+(defun hdstr (V1933) (pos V1933 0))
 
-(defun intersection (V1930 V1931) (cond ((= () V1930) ()) ((cons? V1930) (if (element? (hd V1930) V1931) (cons (hd V1930) (intersection (tl V1930) V1931)) (intersection (tl V1930) V1931))) (true (shen.sys-error intersection))))
+(defun intersection (V1936 V1937) (cond ((= () V1936) ()) ((cons? V1936) (if (element? (hd V1936) V1937) (cons (hd V1936) (intersection (tl V1936) V1937)) (intersection (tl V1936) V1937))) (true (shen.sys-error intersection))))
 
-(defun reverse (V1932) (shen.reverse_help V1932 ()))
+(defun reverse (V1938) (shen.reverse_help V1938 ()))
 
-(defun shen.reverse_help (V1933 V1934) (cond ((= () V1933) V1934) ((cons? V1933) (shen.reverse_help (tl V1933) (cons (hd V1933) V1934))) (true (shen.sys-error shen.reverse_help))))
+(defun shen.reverse_help (V1939 V1940) (cond ((= () V1939) V1940) ((cons? V1939) (shen.reverse_help (tl V1939) (cons (hd V1939) V1940))) (true (shen.sys-error shen.reverse_help))))
 
-(defun union (V1935 V1936) (cond ((= () V1935) V1936) ((cons? V1935) (if (element? (hd V1935) V1936) (union (tl V1935) V1936) (cons (hd V1935) (union (tl V1935) V1936)))) (true (shen.sys-error union))))
+(defun union (V1941 V1942) (cond ((= () V1941) V1942) ((cons? V1941) (if (element? (hd V1941) V1942) (union (tl V1941) V1942) (cons (hd V1941) (union (tl V1941) V1942)))) (true (shen.sys-error union))))
 
-(defun y-or-n? (V1937) (let Message (pr (shen.proc-nl V1937) (stoutput)) (let Y-or-N (pr " (y/n) " (stoutput)) (let Input (shen.app (input) "" shen.s) (if (= "y" Input) true (if (= "n" Input) false (do (pr "please answer y or n
-" (stoutput)) (y-or-n? V1937))))))))
+(defun y-or-n? (V1943) (let Message (pr (shen.proc-nl V1943) (stoutput)) (let Y-or-N (pr " (y/n) " (stoutput)) (let Input (shen.app (input) "" shen.s) (if (= "y" Input) true (if (= "n" Input) false (do (pr "please answer y or n
+" (stoutput)) (y-or-n? V1943))))))))
 
-(defun not (V1938) (if V1938 false true))
+(defun not (V1944) (if V1944 false true))
 
-(defun subst (V1947 V1948 V1949) (cond ((= V1949 V1948) V1947) ((cons? V1949) (cons (subst V1947 V1948 (hd V1949)) (subst V1947 V1948 (tl V1949)))) (true V1949)))
+(defun subst (V1953 V1954 V1955) (cond ((= V1955 V1954) V1953) ((cons? V1955) (cons (subst V1953 V1954 (hd V1955)) (subst V1953 V1954 (tl V1955)))) (true V1955)))
 
-(defun explode (V1951) (shen.explode-h (shen.app V1951 "" shen.a)))
+(defun explode (V1957) (shen.explode-h (shen.app V1957 "" shen.a)))
 
-(defun shen.explode-h (V1952) (cond ((= "" V1952) ()) ((shen.+string? V1952) (cons (pos V1952 0) (shen.explode-h (tlstr V1952)))) (true (shen.sys-error shen.explode-h))))
+(defun shen.explode-h (V1958) (cond ((= "" V1958) ()) ((shen.+string? V1958) (cons (pos V1958 0) (shen.explode-h (tlstr V1958)))) (true (shen.sys-error shen.explode-h))))
 
-(defun cd (V1953) (set *home-directory* (if (= V1953 "") "" (shen.app V1953 "/" shen.a))))
+(defun cd (V1959) (set *home-directory* (if (= V1959 "") "" (shen.app V1959 "/" shen.a))))
 
-(defun map (V1954 V1955) (shen.map-h V1954 V1955 ()))
+(defun map (V1960 V1961) (shen.map-h V1960 V1961 ()))
 
-(defun shen.map-h (V1958 V1959 V1960) (cond ((= () V1959) (reverse V1960)) ((cons? V1959) (shen.map-h V1958 (tl V1959) (cons (V1958 (hd V1959)) V1960))) (true (shen.sys-error shen.map-h))))
+(defun shen.map-h (V1964 V1965 V1966) (cond ((= () V1965) (reverse V1966)) ((cons? V1965) (shen.map-h V1964 (tl V1965) (cons (V1964 (hd V1965)) V1966))) (true (shen.sys-error shen.map-h))))
 
-(defun length (V1961) (shen.length-h V1961 0))
+(defun length (V1967) (shen.length-h V1967 0))
 
-(defun shen.length-h (V1962 V1963) (cond ((= () V1962) V1963) (true (shen.length-h (tl V1962) (+ V1963 1)))))
+(defun shen.length-h (V1968 V1969) (cond ((= () V1968) V1969) (true (shen.length-h (tl V1968) (+ V1969 1)))))
 
-(defun occurrences (V1972 V1973) (cond ((= V1973 V1972) 1) ((cons? V1973) (+ (occurrences V1972 (hd V1973)) (occurrences V1972 (tl V1973)))) (true 0)))
+(defun occurrences (V1978 V1979) (cond ((= V1979 V1978) 1) ((cons? V1979) (+ (occurrences V1978 (hd V1979)) (occurrences V1978 (tl V1979)))) (true 0)))
 
-(defun nth (V1981 V1982) (cond ((and (= 1 V1981) (cons? V1982)) (hd V1982)) ((cons? V1982) (nth (- V1981 1) (tl V1982))) (true (shen.sys-error nth))))
+(defun nth (V1987 V1988) (cond ((and (= 1 V1987) (cons? V1988)) (hd V1988)) ((cons? V1988) (nth (- V1987 1) (tl V1988))) (true (shen.sys-error nth))))
 
-(defun integer? (V1983) (and (number? V1983) (let Abs (shen.abs V1983) (shen.integer-test? Abs (shen.magless Abs 1)))))
+(defun integer? (V1989) (and (number? V1989) (let Abs (shen.abs V1989) (shen.integer-test? Abs (shen.magless Abs 1)))))
 
-(defun shen.abs (V1984) (if (> V1984 0) V1984 (- 0 V1984)))
+(defun shen.abs (V1990) (if (> V1990 0) V1990 (- 0 V1990)))
 
-(defun shen.magless (V1985 V1986) (let Nx2 (* V1986 2) (if (> Nx2 V1985) V1986 (shen.magless V1985 Nx2))))
+(defun shen.magless (V1991 V1992) (let Nx2 (* V1992 2) (if (> Nx2 V1991) V1992 (shen.magless V1991 Nx2))))
 
-(defun shen.integer-test? (V1990 V1991) (cond ((= 0 V1990) true) ((> 1 V1990) false) (true (let Abs-N (- V1990 V1991) (if (> 0 Abs-N) (integer? V1990) (shen.integer-test? Abs-N V1991))))))
+(defun shen.integer-test? (V1996 V1997) (cond ((= 0 V1996) true) ((> 1 V1996) false) (true (let Abs-N (- V1996 V1997) (if (> 0 Abs-N) (integer? V1996) (shen.integer-test? Abs-N V1997))))))
 
-(defun mapcan (V1994 V1995) (cond ((= () V1995) ()) ((cons? V1995) (append (V1994 (hd V1995)) (mapcan V1994 (tl V1995)))) (true (shen.sys-error mapcan))))
+(defun mapcan (V2000 V2001) (cond ((= () V2001) ()) ((cons? V2001) (append (V2000 (hd V2001)) (mapcan V2000 (tl V2001)))) (true (shen.sys-error mapcan))))
 
-(defun read-file-as-bytelist (V1996) (let Stream (open file V1996 in) (let Byte (read-byte Stream) (let Bytes (shen.read-file-as-bytelist-help Stream Byte ()) (let Close (close Stream) (reverse Bytes))))))
+(defun read-file-as-bytelist (V2002) (let Stream (open file V2002 in) (let Byte (read-byte Stream) (let Bytes (shen.read-file-as-bytelist-help Stream Byte ()) (let Close (close Stream) (reverse Bytes))))))
 
-(defun shen.read-file-as-bytelist-help (V1997 V1998 V1999) (cond ((= -1 V1998) V1999) (true (shen.read-file-as-bytelist-help V1997 (read-byte V1997) (cons V1998 V1999)))))
+(defun shen.read-file-as-bytelist-help (V2003 V2004 V2005) (cond ((= -1 V2004) V2005) (true (shen.read-file-as-bytelist-help V2003 (read-byte V2003) (cons V2004 V2005)))))
 
-(defun read-file-as-string (V2000) (let Stream (open file V2000 in) (shen.rfas-h Stream (read-byte Stream) "")))
+(defun read-file-as-string (V2006) (let Stream (open file V2006 in) (shen.rfas-h Stream (read-byte Stream) "")))
 
-(defun shen.rfas-h (V2001 V2002 V2003) (cond ((= -1 V2002) (do (close V2001) V2003)) (true (shen.rfas-h V2001 (read-byte V2001) (cn V2003 (n->string V2002))))))
+(defun shen.rfas-h (V2007 V2008 V2009) (cond ((= -1 V2008) (do (close V2007) V2009)) (true (shen.rfas-h V2007 (read-byte V2007) (cn V2009 (n->string V2008))))))
 
-(defun == (V2012 V2013) (cond ((= V2013 V2012) true) (true false)))
+(defun == (V2018 V2019) (cond ((= V2019 V2018) true) (true false)))
 
 (defun abort () (simple-error ""))
 
@@ -246,21 +246,21 @@
 
 (defun input () (eval (read)))
 
-(defun input+ (V2019 V2020) (let Input (read) (let Check (shen.typecheck Input V2020) (if (= false Check) (do (pr (cn "input is not of type " (shen.app V2020 ": please re-enter " shen.r)) (stoutput)) (input+ : V2020)) (eval Input)))))
+(defun input+ (V2025 V2026) (let Input (read) (let Check (shen.typecheck Input V2026) (if (= false Check) (do (pr (cn "input is not of type " (shen.app V2026 ": please re-enter " shen.r)) (stoutput)) (input+ : V2026)) (eval Input)))))
 
-(defun bound? (V2021) (and (symbol? V2021) (let Val (trap-error (value V2021) (lambda E shen.this-symbol-is-unbound)) (if (= Val shen.this-symbol-is-unbound) false true))))
+(defun bound? (V2027) (and (symbol? V2027) (let Val (trap-error (value V2027) (lambda E shen.this-symbol-is-unbound)) (if (= Val shen.this-symbol-is-unbound) false true))))
 
-(defun shen.string->bytes (V2022) (cond ((= "" V2022) ()) (true (cons (string->n (pos V2022 0)) (shen.string->bytes (tlstr V2022))))))
+(defun shen.string->bytes (V2028) (cond ((= "" V2028) ()) (true (cons (string->n (pos V2028 0)) (shen.string->bytes (tlstr V2028))))))
 
-(defun maxinferences (V2023) (set shen.*maxinferences* V2023))
+(defun maxinferences (V2029) (set shen.*maxinferences* V2029))
 
 (defun inferences () (value shen.*infs*))
 
-(defun protect (V2024) V2024)
+(defun protect (V2030) V2030)
 
 (defun stoutput () (value *stoutput*))
 
-(defun string->symbol (V2025) (let Symbol (intern V2025) (if (symbol? Symbol) Symbol (simple-error (cn "cannot intern " (shen.app V2025 " to a symbol" shen.s))))))
+(defun string->symbol (V2031) (let Symbol (intern V2031) (if (symbol? Symbol) Symbol (simple-error (cn "cannot intern " (shen.app V2031 " to a symbol" shen.s))))))
 
 
 
