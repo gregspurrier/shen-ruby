@@ -3,6 +3,7 @@ module Kl
     module Vectors
       def absvector(n)
         raise Kl::Error, "#{n} is not a number" unless n.kind_of? Fixnum
+        raise Kl::Error, "#{n} must be >= 0" unless n >= 0
         Kl::Absvector.new(n)
       end
 
