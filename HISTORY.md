@@ -1,6 +1,9 @@
 # ShenRuby Release History
 
-## Not Yet Released
+## 0.5.0 - May 12, 2013
+### Features
+- Upgrade to Shen 11
+
 ### Bug Fixes
 - [KLaSC](https://github.com/gregspurrier/klasc) compliance fixes:
   - absvector now raises an error when applied to a negative number
