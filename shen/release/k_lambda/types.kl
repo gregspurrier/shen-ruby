@@ -47,18 +47,18 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun declare (V2077 V2078) (let Record (set shen.*signedfuncs* (adjoin V2077 (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2077 V2078) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2078)) (let F* (concat shen.type-signature-of- V2077) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2077)))))))))))
+"(defun declare (V2131 V2132) (let Record (set shen.*signedfuncs* (cons (cons V2131 V2132) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2131 V2132) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2132)) (let F* (concat shen.type-signature-of- V2131) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2131)))))))))))
 
-(defun shen.demodulate (V2079) (fix shen.demodh V2079))
+(defun shen.demodulate (V2133) (fix shen.demodh V2133))
 
-(defun shen.demodh (V2080) (cond ((cons? V2080) (map shen.demodh V2080)) (true (shen.demod-atom V2080))))
+(defun shen.demodh (V2134) (cond ((cons? V2134) (map shen.demodh V2134)) (true (shen.demod-atom V2134))))
 
-(defun shen.demod-atom (V2081) (let Val (assoc V2081 (value shen.*synonyms*)) (if (empty? Val) V2081 (tl Val))))
+(defun shen.demod-atom (V2135) (let Val (assoc V2135 (value shen.*synonyms*)) (if (empty? Val) V2135 (tl Val))))
 
-(defun shen.variancy-test (V2082 V2083) (let TypeF (shen.typecheck V2082 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2083) shen.skip (pr (cn "warning: changing the type of " (shen.app V2082 " may create errors
+(defun shen.variancy-test (V2136 V2137) (let TypeF (shen.typecheck V2136 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2137) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2136 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2092 V2093) (cond ((= V2093 V2092) true) ((and (cons? V2092) (and (cons? V2093) (= (hd V2093) (hd V2092)))) (shen.variant? (tl V2092) (tl V2093))) ((and (cons? V2092) (and (cons? V2093) (and (shen.pvar? (hd V2092)) (variable? (hd V2093))))) (shen.variant? (subst shen.a (hd V2092) (tl V2092)) (subst shen.a (hd V2093) (tl V2093)))) ((and (cons? V2092) (and (cons? (hd V2092)) (and (cons? V2093) (cons? (hd V2093))))) (shen.variant? (append (hd V2092) (tl V2092)) (append (hd V2093) (tl V2093)))) (true false)))
+(defun shen.variant? (V2146 V2147) (cond ((= V2147 V2146) true) ((and (cons? V2146) (and (cons? V2147) (= (hd V2147) (hd V2146)))) (shen.variant? (tl V2146) (tl V2147))) ((and (cons? V2146) (and (cons? V2147) (and (shen.pvar? (hd V2146)) (variable? (hd V2147))))) (shen.variant? (subst shen.a (hd V2146) (tl V2146)) (subst shen.a (hd V2147) (tl V2147)))) ((and (cons? V2146) (and (cons? (hd V2146)) (and (cons? V2147) (cons? (hd V2147))))) (shen.variant? (append (hd V2146) (tl V2146)) (append (hd V2147) (tl V2147)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
@@ -178,6 +178,8 @@
 
 (declare occurs-check (cons symbol (cons --> (cons boolean ()))))
 
+(declare optimise (cons symbol (cons --> (cons boolean ()))))
+
 (declare or (cons boolean (cons --> (cons (cons boolean (cons --> (cons boolean ()))) ()))))
 
 (declare pos (cons string (cons --> (cons (cons number (cons --> (cons string ()))) ()))))
@@ -197,6 +199,8 @@
 (declare protect (cons symbol (cons --> (cons symbol ()))))
 
 (declare preclude-all-but (cons (cons list (cons symbol ())) (cons --> (cons (cons list (cons symbol ())) ()))))
+
+(declare shen.prhush (cons string (cons --> (cons (cons (cons stream (cons out ())) (cons --> (cons string ()))) ()))))
 
 (declare ps (cons symbol (cons --> (cons (cons list (cons unit ())) ()))))
 
