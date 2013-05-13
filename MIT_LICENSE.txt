@@ -3,7 +3,7 @@ the 'shen' directory, which is subject to its own license.
 
 -----
 
-Copyright (c) 2012 Greg Spurrier
+Copyright (c) 2012-2013 Greg Spurrier
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
