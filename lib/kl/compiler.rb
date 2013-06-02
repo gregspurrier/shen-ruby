@@ -165,13 +165,18 @@ module Kl
 
       # (if TEST_EXPR TRUE_EXPR FALSE_EXPR)
       def compile_if(form, lexical_vars, in_tail_pos)
-        test_expr, on_true_expr, on_false_expr = destructure_form(form, 3)
+        if form.count == 4
+          test_expr, on_true_expr, on_false_expr = destructure_form(form, 3)
 
-        test_clause = compile(test_expr, lexical_vars, false)
-        true_clause = compile(on_true_expr, lexical_vars, in_tail_pos)
-        false_clause = compile(on_false_expr, lexical_vars, in_tail_pos)
+          test_clause = compile(test_expr, lexical_vars, false)
+          true_clause = compile(on_true_expr, lexical_vars, in_tail_pos)
+          false_clause = compile(on_false_expr, lexical_vars, in_tail_pos)
 
-        "(#{test_clause} ? #{true_clause} : #{false_clause})"
+          "(#{test_clause} ? #{true_clause} : #{false_clause})"
+        else
+          # Partial application falls back to normal application
+          compile_application(form, lexical_vars, in_tail_pos)
+        end
       end
 
       # (and EXPR1 EXPR2)

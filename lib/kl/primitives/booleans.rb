@@ -5,6 +5,10 @@ module Kl
     # arguments to higher-order functions. They are used, e.g., in the
     # Quantifier Machine test case in the Shen Test Suite.
     module Booleans
+      define_method 'if' do |a, b, c|
+        a ? b : c
+      end
+
       def or(a, b)
         a || b
       end

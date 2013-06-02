@@ -1,5 +1,10 @@
 # ShenRuby Release History
 
+## Not Yet Released
+### Bug Fixes
+- [KLaSC](https://github.com/gregspurrier/klasc) compliance fixes:
+  - if now supports partial application
+
 ## 0.5.0 - May 12, 2013
 ### Features
 - Upgrade to Shen 11

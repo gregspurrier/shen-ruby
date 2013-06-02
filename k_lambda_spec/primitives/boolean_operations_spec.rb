@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Primitives for Boolean Operations' do
   describe 'if special form' do
-    include_examples "non-partially-applicable function", %w(if true a b)
+    include_examples "partially-applicable function", %w(if true a b)
 
     it 'evaluates its first argument' do
       define_kl_do
