@@ -1,6 +1,9 @@
 # ShenRuby Release History
 
 ## Not Yet Released
+### Features
+- Upgrade to Shen 12
+
 ### Bug Fixes
 - [KLaSC](https://github.com/gregspurrier/klasc) compliance fixes:
   - if now supports partial application

@@ -47,18 +47,18 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun declare (V2131 V2132) (let Record (set shen.*signedfuncs* (cons (cons V2131 V2132) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2131 V2132) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2132)) (let F* (concat shen.type-signature-of- V2131) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2131)))))))))))
+"(defun declare (V2107 V2108) (let Record (set shen.*signedfuncs* (cons (cons V2107 V2108) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2107 V2108) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2108)) (let F* (concat shen.type-signature-of- V2107) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2107)))))))))))
 
-(defun shen.demodulate (V2133) (fix shen.demodh V2133))
+(defun shen.demodulate (V2109) (fix shen.demodh V2109))
 
-(defun shen.demodh (V2134) (cond ((cons? V2134) (map shen.demodh V2134)) (true (shen.demod-atom V2134))))
+(defun shen.demodh (V2110) (cond ((cons? V2110) (map shen.demodh V2110)) (true (shen.demod-atom V2110))))
 
-(defun shen.demod-atom (V2135) (let Val (assoc V2135 (value shen.*synonyms*)) (if (empty? Val) V2135 (tl Val))))
+(defun shen.demod-atom (V2111) (let Val (assoc V2111 (value shen.*synonyms*)) (if (empty? Val) V2111 (tl Val))))
 
-(defun shen.variancy-test (V2136 V2137) (let TypeF (shen.typecheck V2136 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2137) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2136 " may create errors
+(defun shen.variancy-test (V2112 V2113) (let TypeF (shen.typecheck V2112 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2113) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2112 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2146 V2147) (cond ((= V2147 V2146) true) ((and (cons? V2146) (and (cons? V2147) (= (hd V2147) (hd V2146)))) (shen.variant? (tl V2146) (tl V2147))) ((and (cons? V2146) (and (cons? V2147) (and (shen.pvar? (hd V2146)) (variable? (hd V2147))))) (shen.variant? (subst shen.a (hd V2146) (tl V2146)) (subst shen.a (hd V2147) (tl V2147)))) ((and (cons? V2146) (and (cons? (hd V2146)) (and (cons? V2147) (cons? (hd V2147))))) (shen.variant? (append (hd V2146) (tl V2146)) (append (hd V2147) (tl V2147)))) (true false)))
+(defun shen.variant? (V2122 V2123) (cond ((= V2123 V2122) true) ((and (cons? V2122) (and (cons? V2123) (= (hd V2123) (hd V2122)))) (shen.variant? (tl V2122) (tl V2123))) ((and (cons? V2122) (and (cons? V2123) (and (shen.pvar? (hd V2122)) (variable? (hd V2123))))) (shen.variant? (subst shen.a (hd V2122) (tl V2122)) (subst shen.a (hd V2123) (tl V2123)))) ((and (cons? V2122) (and (cons? (hd V2122)) (and (cons? V2123) (cons? (hd V2123))))) (shen.variant? (append (hd V2122) (tl V2122)) (append (hd V2123) (tl V2123)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
@@ -151,6 +151,8 @@
 (declare integer? (cons A (cons --> (cons boolean ()))))
 
 (declare intersection (cons (cons list (cons A ())) (cons --> (cons (cons (cons list (cons A ())) (cons --> (cons (cons list (cons A ())) ()))) ()))))
+
+(declare kill (cons --> (cons A ())))
 
 (declare length (cons (cons list (cons A ())) (cons --> (cons number ()))))
 
@@ -254,7 +256,7 @@
 
 (declare tc (cons symbol (cons --> (cons boolean ()))))
 
-(declare tc? (cons A (cons --> (cons boolean ()))))
+(declare tc? (cons --> (cons boolean ())))
 
 (declare thaw (cons (cons lazy (cons A ())) (cons --> (cons A ()))))
 
