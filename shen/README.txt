@@ -7,7 +7,7 @@ Directory contents:
 
 README.txt  -- this file
 license.txt -- the Shen license
-release/    -- files extracted directly from the Shen 7.1 Source
+release/    -- files extracted directly from the Shen 12 Source
                release. The complete source for the most recent
                release of Shen may be downloaded from
                http://www.shenlanguage.org/Download/index.htm
