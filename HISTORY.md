@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Not Yet Released
+### Misc
+- Clarify license
+
 ## 0.6.0 - June 11, 2013
 ### Features
 - Upgrade to Shen 12

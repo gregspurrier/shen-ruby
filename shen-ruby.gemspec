@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name        = "shen-ruby"
   s.version     = ShenRuby::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.license     = "Shen License and MIT License. See README.md for details."
+  s.license     = "Shen License"
   s.authors     = ["Greg Spurrier", "Mark Tarver"]
   s.email       = ["greg@sourcematters.org"]
   s.homepage    = "https://github.com/gregspurrier/shen-ruby"
