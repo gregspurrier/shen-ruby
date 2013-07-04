@@ -114,8 +114,6 @@
 
 (declare fix (cons (cons A (cons --> (cons A ()))) (cons --> (cons (cons A (cons --> (cons A ()))) ()))))
 
-(declare format (cons (cons stream (cons out ())) (cons --> (cons (cons string (cons --> (cons (cons A (cons --> (cons string ()))) ()))) ()))))
-
 (declare freeze (cons A (cons --> (cons (cons lazy (cons A ())) ()))))
 
 (declare fst (cons (cons A (cons * (cons B ()))) (cons --> (cons A ()))))
@@ -285,6 +283,8 @@
 (declare version (cons string (cons --> (cons string ()))))
 
 (declare write-to-file (cons string (cons --> (cons (cons A (cons --> (cons A ()))) ()))))
+
+(declare write-byte (cons number (cons --> (cons (cons (cons stream (cons out ())) (cons --> (cons number ()))) ()))))
 
 (declare y-or-n? (cons string (cons --> (cons boolean ()))))
 

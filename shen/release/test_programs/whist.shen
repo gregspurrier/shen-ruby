@@ -34,7 +34,7 @@
      _ -> (cartprod [2 3 4 5 6 7 8 9 10 11 12 13 14]  [c d h s]))
 
 (define cartprod
-     {[A] --> [B] --> [(A * B)]}
+     {(list A) --> (list B) --> (list (A * B))}
       [] _ -> []
       [X | Y] Z -> (append (map (/. W (@p X W)) Z) (cartprod Y Z)))
 
@@ -223,7 +223,7 @@
   {(list card) --> card}
   Cards -> (do (output "~%Your hand is ~%~%")
                (show-cards 1 Cards)
-               (let N (input+ : number)
+               (let N (input+ number)
                     (if (in-range? N Cards)
                         (nth N Cards)
                         (play-player Cards)))))

@@ -47,38 +47,38 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun load (V829) (let Load (let Start (get-time run) (let Result (shen.load-help (value shen.*tc*) (read-file V829)) (let Finish (get-time run) (let Time (- Finish Start) (let Message (shen.prhush (cn "
+"(defun load (V827) (let Load (let Start (get-time run) (let Result (shen.load-help (value shen.*tc*) (read-file V827)) (let Finish (get-time run) (let Time (- Finish Start) (let Message (shen.prhush (cn "
 run time: " (cn (str Time) " secs
 ")) (stoutput)) Result))))) (let Infs (if (value shen.*tc*) (shen.prhush (cn "
 typechecked in " (shen.app (inferences) " inferences
 " shen.a)) (stoutput)) shen.skip) loaded)))
 
-(defun shen.load-help (V834 V835) (cond ((= false V834) (map (lambda X (shen.prhush (shen.app (shen.eval-without-macros X) "
-" shen.s) (stoutput))) V835)) (true (let RemoveSynonyms (mapcan shen.remove-synonyms V835) (let Table (mapcan shen.typetable RemoveSynonyms) (let Assume (map shen.assumetype Table) (trap-error (map shen.typecheck-and-load RemoveSynonyms) (lambda E (shen.unwind-types E Table)))))))))
+(defun shen.load-help (V832 V833) (cond ((= false V832) (map (lambda X (shen.prhush (shen.app (shen.eval-without-macros X) "
+" shen.s) (stoutput))) V833)) (true (let RemoveSynonyms (mapcan shen.remove-synonyms V833) (let Table (mapcan shen.typetable RemoveSynonyms) (let Assume (map shen.assumetype Table) (trap-error (map shen.typecheck-and-load RemoveSynonyms) (lambda E (shen.unwind-types E Table)))))))))
 
-(defun shen.remove-synonyms (V836) (cond ((and (cons? V836) (= shen.synonyms-help (hd V836))) (do (eval V836) ())) (true (cons V836 ()))))
+(defun shen.remove-synonyms (V834) (cond ((and (cons? V834) (= shen.synonyms-help (hd V834))) (do (eval V834) ())) (true (cons V834 ()))))
 
-(defun shen.typecheck-and-load (V837) (do (nl 1) (shen.typecheck-and-evaluate V837 (gensym A))))
+(defun shen.typecheck-and-load (V835) (do (nl 1) (shen.typecheck-and-evaluate V835 (gensym A))))
 
-(defun shen.typetable (V846) (cond ((and (cons? V846) (and (= define (hd V846)) (cons? (tl V846)))) (let Sig (compile shen.<sig+rest> (tl (tl V846)) ()) (if (= Sig (fail)) (simple-error (shen.app (hd (tl V846)) " lacks a proper signature.
-" shen.a)) (cons (cons (hd (tl V846)) Sig) ())))) ((and (cons? V846) (and (= defcc (hd V846)) (and (cons? (tl V846)) (and (cons? (tl (tl V846))) (and (= { (hd (tl (tl V846)))) (and (cons? (tl (tl (tl V846)))) (and (cons? (hd (tl (tl (tl V846))))) (and (= list (hd (hd (tl (tl (tl V846)))))) (and (cons? (tl (hd (tl (tl (tl V846)))))) (and (= () (tl (tl (hd (tl (tl (tl V846))))))) (and (cons? (tl (tl (tl (tl V846))))) (and (= ==> (hd (tl (tl (tl (tl V846)))))) (and (cons? (tl (tl (tl (tl (tl V846)))))) (and (cons? (tl (tl (tl (tl (tl (tl V846))))))) (= } (hd (tl (tl (tl (tl (tl (tl V846)))))))))))))))))))))) (cons (cons (hd (tl V846)) (cons (hd (tl (tl (tl V846)))) (cons ==> (cons (hd (tl (tl (tl (tl (tl V846)))))) ())))) ())) ((and (cons? V846) (and (= defcc (hd V846)) (cons? (tl V846)))) (simple-error (shen.app (hd (tl V846)) " lacks a proper signature.
+(defun shen.typetable (V844) (cond ((and (cons? V844) (and (= define (hd V844)) (cons? (tl V844)))) (let Sig (compile shen.<sig+rest> (tl (tl V844)) ()) (if (= Sig (fail)) (simple-error (shen.app (hd (tl V844)) " lacks a proper signature.
+" shen.a)) (cons (cons (hd (tl V844)) Sig) ())))) ((and (cons? V844) (and (= defcc (hd V844)) (and (cons? (tl V844)) (and (cons? (tl (tl V844))) (and (= { (hd (tl (tl V844)))) (and (cons? (tl (tl (tl V844)))) (and (cons? (hd (tl (tl (tl V844))))) (and (= list (hd (hd (tl (tl (tl V844)))))) (and (cons? (tl (hd (tl (tl (tl V844)))))) (and (= () (tl (tl (hd (tl (tl (tl V844))))))) (and (cons? (tl (tl (tl (tl V844))))) (and (= ==> (hd (tl (tl (tl (tl V844)))))) (and (cons? (tl (tl (tl (tl (tl V844)))))) (and (cons? (tl (tl (tl (tl (tl (tl V844))))))) (= } (hd (tl (tl (tl (tl (tl (tl V844)))))))))))))))))))))) (cons (cons (hd (tl V844)) (cons (hd (tl (tl (tl V844)))) (cons ==> (cons (hd (tl (tl (tl (tl (tl V844)))))) ())))) ())) ((and (cons? V844) (and (= defcc (hd V844)) (cons? (tl V844)))) (simple-error (shen.app (hd (tl V844)) " lacks a proper signature.
 " shen.a))) (true ())))
 
-(defun shen.assumetype (V847) (cond ((cons? V847) (declare (hd V847) (tl V847))) (true (shen.sys-error shen.assumetype))))
+(defun shen.assumetype (V845) (cond ((cons? V845) (declare (hd V845) (tl V845))) (true (shen.sys-error shen.assumetype))))
 
-(defun shen.unwind-types (V852 V853) (cond ((= () V853) (simple-error (error-to-string V852))) ((and (cons? V853) (cons? (hd V853))) (do (shen.remtype (hd (hd V853))) (shen.unwind-types V852 (tl V853)))) (true (shen.sys-error shen.unwind-types))))
+(defun shen.unwind-types (V850 V851) (cond ((= () V851) (simple-error (error-to-string V850))) ((and (cons? V851) (cons? (hd V851))) (do (shen.remtype (hd (hd V851))) (shen.unwind-types V850 (tl V851)))) (true (shen.sys-error shen.unwind-types))))
 
-(defun shen.remtype (V854) (set shen.*signedfuncs* (shen.removetype V854 (value shen.*signedfuncs*))))
+(defun shen.remtype (V852) (set shen.*signedfuncs* (shen.removetype V852 (value shen.*signedfuncs*))))
 
-(defun shen.removetype (V859 V860) (cond ((= () V860) ()) ((and (cons? V860) (and (cons? (hd V860)) (= (hd (hd V860)) V859))) (shen.removetype (hd (hd V860)) (tl V860))) ((cons? V860) (cons (hd V860) (shen.removetype V859 (tl V860)))) (true (shen.sys-error shen.removetype))))
+(defun shen.removetype (V857 V858) (cond ((= () V858) ()) ((and (cons? V858) (and (cons? (hd V858)) (= (hd (hd V858)) V857))) (shen.removetype (hd (hd V858)) (tl V858))) ((cons? V858) (cons (hd V858) (shen.removetype V857 (tl V858)))) (true (shen.sys-error shen.removetype))))
 
-(defun shen.<sig+rest> (V866) (let Result (let Parse_shen.<signature> (shen.<signature> V866) (if (not (= (fail) Parse_shen.<signature>)) (let Parse_<!> (<!> Parse_shen.<signature>) (if (not (= (fail) Parse_<!>)) (shen.pair (hd Parse_<!>) (shen.hdtl Parse_shen.<signature>)) (fail))) (fail))) (if (= Result (fail)) (fail) Result)))
+(defun shen.<sig+rest> (V864) (let Result (let Parse_shen.<signature> (shen.<signature> V864) (if (not (= (fail) Parse_shen.<signature>)) (let Parse_<!> (<!> Parse_shen.<signature>) (if (not (= (fail) Parse_<!>)) (shen.pair (hd Parse_<!>) (shen.hdtl Parse_shen.<signature>)) (fail))) (fail))) (if (= Result (fail)) (fail) Result)))
 
-(defun write-to-file (V867 V868) (let Stream (open file V867 out) (let String (if (string? V868) (shen.app V868 "
+(defun write-to-file (V865 V866) (let Stream (open file V865 out) (let String (if (string? V866) (shen.app V866 "
 
-" shen.a) (shen.app V868 "
+" shen.a) (shen.app V866 "
 
-" shen.s)) (let Write (pr String Stream) (let Close (close Stream) V868)))))
+" shen.s)) (let Write (pr String Stream) (let Close (close Stream) V866)))))
 
 
 

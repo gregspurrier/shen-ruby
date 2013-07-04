@@ -1,6 +1,12 @@
 # ShenRuby Release History
 
 ## Not Yet Released
+### Features
+- Upgrade to Shen 13
+  - `pr` is no longer a K Lambda primitive
+  - `write-byte` added as K Lambda primitive
+  - `open` no longer takes stream type as its first argument
+
 ### Misc
 - Clarify license
 

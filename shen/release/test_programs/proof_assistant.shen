@@ -23,12 +23,12 @@
      N -> (let More? (y-or-n? "~%Input assumptions? ")
                    (if More? 
                        (do (output "~%~A. " N)
-                           [(input+ : wff) | (input-assumptions (+ N 1))])
+                           [(input+ wff) | (input-assumptions (+ N 1))])
                        [ ])))
 
 (define input-conclusion
     {A --> wff}
-     _ -> (do (output "~%Enter conclusion: ") (input+ : wff)))
+     _ -> (do (output "~%Enter conclusion: ") (input+ wff)))
                                  
 (define proof-loop
     {(list sequent) --> proof --> proof}
@@ -70,7 +70,7 @@
 
 (define user-directive
     {A --> tactic}
-     _ -> (do (output "~%Tactic: ") (input+ : tactic)))
+     _ -> (do (output "~%Tactic: ") (input+ tactic)))
 
 (define back
    {(list sequent) --> (list sequent)}
