@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 12, which was released in June, 2013.
+ShenRuby supports Shen version 13, which was released in July, 2013.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
 
@@ -12,9 +12,9 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 [![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrier/shen-ruby)
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3-p392. It has been lightly tested with Rubinius 2.0.0-head running in 1.9 mode. It is not yet working under JRuby.
+NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with Rubinius 2.0.0-head running in 1.9 mode. It is not yet working under JRuby.
 
-ShenRuby 0.6.0 is the current release. To install it as gem, use the following command:
+ShenRuby 0.7.0 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -23,18 +23,18 @@ ShenRuby 0.6.0 is the current release. To install it as gem, use the following c
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading.... Completed in 8.76 seconds.
-    
+    Loading.... Completed in 6.28 seconds.
+
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
-    www.shenlanguage.org, version 12
-    running under Ruby, implementation: ruby 1.9.3
-    port 0.6.0 ported by Greg Spurrier
+    www.shenlanguage.org, version 13
+    running under Ruby, implementation: ruby 2.0.0
+    port 0.7.0 ported by Greg Spurrier
 
 
     (0-)
 
-Please be patient: the Shen REPL takes a while to load (about 9 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
+Please be patient: the Shen REPL takes a while to load (about 6 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
 
 The `(0-)` seen above is the Shen REPL prompt. The number in the prompt increases after each expression that is entered.
 
@@ -44,13 +44,13 @@ Here is an example of defining a recursive factorial function via the REPL and t
            0 -> 1
            X -> (* X (factorial (- X 1))))
     factorial
-    
+
     (1-) (factorial 5)
     120
-    
+
     (2-) (factorial 20)
     2432902008176640000
-    
+
     (3-) (factorial 100)
     93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000
 
@@ -78,7 +78,7 @@ For example, to add a `divides?` function to an existing Shen environment object
 
     require 'rubygems'
     require 'shen_ruby'
-    
+
     shen = ShenRuby::Shen.new
     class << shen
       def divides?(a, b)
@@ -91,7 +91,7 @@ For example, to add a `divides?` function to an existing Shen environment object
 
     shen.eval_string "(divides? 3 9)"
     # => true
-    
+
 More commonly, though, `eval_string` is used with Shen `define` expressions to extend the environment with new functions that are implemented in Shen. For example, let's add a [Fizz Buzz](http://en.wikipedia.org/wiki/Fizz_buzz) function:
 
     shen.eval_string <<-EOS
@@ -111,7 +111,7 @@ A better way to invoke most Shen functions from Ruby is to simply invoke the cor
 For example, to use the `fizz-buzz` function defined in the previous section to compute the first 20 Fizz Buzz values:
 
     (1..20).map { |x| shen.fizz_buzz(x) }
-    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"] 
+    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"]
 
 The above example uses Ruby's `map` function, but could also have used Shen's version, relying on ShenRuby's interop features to coerce Ruby arrays to and from Shen lists:
 

@@ -1,6 +1,6 @@
 # ShenRuby Release History
 
-## Not Yet Released
+## 0.7.0 - July 3, 2013
 ### Features
 - Upgrade to Shen 13
   - `pr` is no longer a K Lambda primitive
