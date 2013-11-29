@@ -10,8 +10,7 @@
   Rep "" Ss -> (@s Rep Ss)
   Rep (@s S Ss) (@s S Ss') -> (subst-string' Rep Ss Ss')
    _ _ _ -> "failed!")
-   
-   
+      
 (define rwilli
   {string --> string}
   "" -> ""

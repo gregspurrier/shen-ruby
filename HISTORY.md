@@ -1,5 +1,12 @@
 # ShenRuby Release History
 
+## 0.8.0 - November 29, 2013
+### Features
+- Upgrade to Shen 14
+
+### Misc
+- Removed JRuby from "known limitations". ShenRuby runs and passes the test suite under JRuby 1.7.8.
+
 ## 0.7.0 - July 3, 2013
 ### Features
 - Upgrade to Shen 13

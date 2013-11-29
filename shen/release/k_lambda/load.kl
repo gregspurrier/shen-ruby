@@ -74,7 +74,7 @@ typechecked in " (shen.app (inferences) " inferences
 
 (defun shen.<sig+rest> (V864) (let Result (let Parse_shen.<signature> (shen.<signature> V864) (if (not (= (fail) Parse_shen.<signature>)) (let Parse_<!> (<!> Parse_shen.<signature>) (if (not (= (fail) Parse_<!>)) (shen.pair (hd Parse_<!>) (shen.hdtl Parse_shen.<signature>)) (fail))) (fail))) (if (= Result (fail)) (fail) Result)))
 
-(defun write-to-file (V865 V866) (let Stream (open file V865 out) (let String (if (string? V866) (shen.app V866 "
+(defun write-to-file (V865 V866) (let Stream (open V865 out) (let String (if (string? V866) (shen.app V866 "
 
 " shen.a) (shen.app V866 "
 

@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 13, which was released in July, 2013.
+ShenRuby supports Shen version 14, which was released in November, 2013.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
 
@@ -12,7 +12,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 [![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrier/shen-ruby)
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with Rubinius 2.0.0-head running in 1.9 mode. It is not yet working under JRuby.
+NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with JRuby 1.7.8.
 
 ShenRuby 0.7.0 is the current release. To install it as a gem, use the following command:
 
@@ -27,9 +27,9 @@ Once the gem has been installed, the Shen REPL can be launched via the `srrepl` 
 
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
-    www.shenlanguage.org, version 13
+    www.shenlanguage.org, version 14
     running under Ruby, implementation: ruby 2.0.0
-    port 0.7.0 ported by Greg Spurrier
+    port 0.8.0 ported by Greg Spurrier
 
 
     (0-)
@@ -141,7 +141,7 @@ The following resources may be helpful for those wanting to learn more about the
 - [The Shen Official Standard](http://www.shenlanguage.org/Documentation/shendoc.htm)
 - [System Functions and their Types in Shen](http://www.shenlanguage.org/learn-shen/system.pdf) -- A reference for all of the standard Shen functions and their types.
 - [The Book of Shen](http://www.fast-print.net/bookshop/1278/the-book-of-shen) -- The official guide to the Shen programming language.
-- [Shen Google Group](https://groups.google.com/group/qilang?hl=en) -- This is the online forum for discussions related to Shen. Don't be confused by the group's name (Qilang). Qi was the predecessor of Shen and the group retains its name.
+- [Shen Google Group](https://groups.google.com/group/qilang?hl=en) -- This is the online forum for discussions related to Shen.
 
 ## Road Map to 1.0
 
@@ -149,14 +149,14 @@ The following features and improvements are among those planned for ShenRuby as 
 
 - Ability to call Ruby methods directly from Shen
 - Support for command-line Shen scripts that under ShenRuby
-- Support for JRuby and Rubinius
+- Support for Rubinius
 - Thread-safe `ShenRuby::Shen` instances
 - Improved performance
 
 ## Known Limitations
 - The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
 - ShenRuby fails with a stack overflow when run under cygwin on Windows ([Issue #3](https://github.com/gregspurrier/shen-ruby/issues/3)). The Ruby environment installed by [RubyInstaller](http://rubyinstaller.org/), however, is capable of running ShenRuby. It is the recommended environment for running ShenRuby on Windows until the stack overflow issues seen on cygwin can be addressed.
-- ShenRuby fails to load under JRuby ([Issue #6](https://github.com/gregspurrier/shen-ruby/issues/6)) and Rubinius ([Issue #])(https://github.com/gregspurrier/shen-ruby/issues/7)].
+- ShenRuby fails to load under Rubinius ([Issue #7])(https://github.com/gregspurrier/shen-ruby/issues/7)].
 
 ## Contributors
 The following people are gratefully acknowledged for their contributions to ShenRuby:
