@@ -152,8 +152,6 @@
 
 (declare intersection (cons (cons list (cons A ())) (cons --> (cons (cons (cons list (cons A ())) (cons --> (cons (cons list (cons A ())) ()))) ()))))
 
-(declare kill (cons --> (cons A ())))
-
 (declare language (cons --> (cons string ())))
 
 (declare length (cons (cons list (cons A ())) (cons --> (cons number ()))))
@@ -204,7 +202,7 @@
 
 (declare shen.proc-nl (cons string (cons --> (cons string ()))))
 
-(declare profile-results (cons A (cons --> (cons symbol ()))))
+(declare profile-results (cons (cons A (cons --> (cons B ()))) (cons --> (cons (cons (cons A (cons --> (cons B ()))) (cons * (cons number ()))) ()))))
 
 (declare protect (cons symbol (cons --> (cons symbol ()))))
 
@@ -273,8 +271,6 @@
 (declare track (cons symbol (cons --> (cons symbol ()))))
 
 (declare trap-error (cons A (cons --> (cons (cons (cons exception (cons --> (cons A ()))) (cons --> (cons A ()))) ()))))
-
-(declare shen.truncate (cons string (cons --> (cons string ()))))
 
 (declare tuple? (cons A (cons --> (cons boolean ()))))
 

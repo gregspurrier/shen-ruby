@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 14, which was released in November, 2013.
+ShenRuby supports Shen version 14.2, which was released in January, 2014.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
 
@@ -14,7 +14,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 ## Installation
 NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with JRuby 1.7.8.
 
-ShenRuby 0.7.0 is the current release. To install it as a gem, use the following command:
+ShenRuby 0.8.1 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -23,13 +23,13 @@ ShenRuby 0.7.0 is the current release. To install it as a gem, use the following
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading.... Completed in 6.28 seconds.
+    Loading.... Completed in 6.32 seconds.
 
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
-    www.shenlanguage.org, version 14
+    www.shenlanguage.org, version 14.2
     running under Ruby, implementation: ruby 2.0.0
-    port 0.8.0 ported by Greg Spurrier
+    port 0.8.1 ported by Greg Spurrier
 
 
     (0-)
@@ -167,6 +167,6 @@ The following people are gratefully acknowledged for their contributions to Shen
 ## License
 Shen and ShenRuby are released under the Shen License. A copy of the Shen License may be found in [shen/license.txt](https://github.com/gregspurrier/shen-ruby/blob/master/shen/license.txt). A detailed description of the license, along with questions and answers, may be found at http://shenlanguage.org/license.html. In particular, please note that any forks or derivatives of ShenRuby must maintain conformance with the Official Shen Specification.
 
-The implementation of Shen, which is found in the [shen/release](https://github.com/gregspurrier/shen-ruby/tree/master/shen) directory, is Copyright (c) 2010-2013 Mark Tarver and may only be used in accordance with the Shen License.
+The implementation of Shen, which is found in the [shen/release](https://github.com/gregspurrier/shen-ruby/tree/master/shen) directory, is Copyright (c) 2010-2014 Mark Tarver and may only be used in accordance with the Shen License.
 
-The remainder of the code for ShenRuby is Copyright(c) 2012-2013 Greg Spurrier. It may be used outside of the context of ShenRuby under the terms of the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).
+The remainder of the code for ShenRuby is Copyright(c) 2012-2014 Greg Spurrier. It may be used outside of the context of ShenRuby under the terms of the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).
