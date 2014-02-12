@@ -47,18 +47,14 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun declare (V2114 V2115) (let Record (set shen.*signedfuncs* (cons (cons V2114 V2115) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2114 V2115) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2115)) (let F* (concat shen.type-signature-of- V2114) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2114)))))))))))
+"(defun declare (V2161 V2162) (let Record (set shen.*signedfuncs* (cons (cons V2161 V2162) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2161 V2162) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2162)) (let F* (concat shen.type-signature-of- V2161) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2161)))))))))))
 
-(defun shen.demodulate (V2116) (fix shen.demodh V2116))
+(defun shen.demodulate (V2163) (trap-error (let Demod (shen.walk (lambda X2160 (shen.demod X2160)) V2163) (if (= Demod V2163) V2163 (shen.demodulate Demod))) (lambda E V2163)))
 
-(defun shen.demodh (V2117) (cond ((cons? V2117) (map shen.demodh V2117)) (true (shen.demod-atom V2117))))
-
-(defun shen.demod-atom (V2118) (let Val (assoc V2118 (value shen.*synonyms*)) (if (empty? Val) V2118 (tl Val))))
-
-(defun shen.variancy-test (V2119 V2120) (let TypeF (shen.typecheck V2119 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2120) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2119 " may create errors
+(defun shen.variancy-test (V2164 V2165) (let TypeF (shen.typecheck V2164 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2165) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2164 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2129 V2130) (cond ((= V2130 V2129) true) ((and (cons? V2129) (and (cons? V2130) (= (hd V2130) (hd V2129)))) (shen.variant? (tl V2129) (tl V2130))) ((and (cons? V2129) (and (cons? V2130) (and (shen.pvar? (hd V2129)) (variable? (hd V2130))))) (shen.variant? (subst shen.a (hd V2129) (tl V2129)) (subst shen.a (hd V2130) (tl V2130)))) ((and (cons? V2129) (and (cons? (hd V2129)) (and (cons? V2130) (cons? (hd V2130))))) (shen.variant? (append (hd V2129) (tl V2129)) (append (hd V2130) (tl V2130)))) (true false)))
+(defun shen.variant? (V2174 V2175) (cond ((= V2175 V2174) true) ((and (cons? V2174) (and (cons? V2175) (= (hd V2175) (hd V2174)))) (shen.variant? (tl V2174) (tl V2175))) ((and (cons? V2174) (and (cons? V2175) (and (shen.pvar? (hd V2174)) (variable? (hd V2175))))) (shen.variant? (subst shen.a (hd V2174) (tl V2174)) (subst shen.a (hd V2175) (tl V2175)))) ((and (cons? V2174) (and (cons? (hd V2174)) (and (cons? V2175) (cons? (hd V2175))))) (shen.variant? (append (hd V2174) (tl V2174)) (append (hd V2175) (tl V2175)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
