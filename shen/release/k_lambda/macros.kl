@@ -75,22 +75,6 @@
 
 (defun shen.intern-type (V901) (intern (cn "type#" (str V901))))
 
-"(defcc <defmacro>
- <name> <macrorules> := [define <name> | <macrorules>];)
-
-(defcc <macrorules>
-  <macrorule> <macrorules>;
-  <macrorule> := (append <macrorule> [(protect X) -> (protect X)]);)
-
-(defcc <macrorule>
-  <patterns> -> <macroaction> where <guard>;
-  <patterns> -> <macroaction>;
-  <patterns> <- <macroaction> where <guard>;
-  <patterns> <- <macroaction>;)
-
-(defcc <macroaction>
-  <action> := [[walk [function macroexpand] <action>]];)"
-
 (defun shen.@s-macro (V902) (cond ((and (cons? V902) (and (= @s (hd V902)) (and (cons? (tl V902)) (and (cons? (tl (tl V902))) (cons? (tl (tl (tl V902)))))))) (cons @s (cons (hd (tl V902)) (cons (shen.@s-macro (cons @s (tl (tl V902)))) ())))) ((and (cons? V902) (and (= @s (hd V902)) (and (cons? (tl V902)) (and (cons? (tl (tl V902))) (and (= () (tl (tl (tl V902)))) (string? (hd (tl V902)))))))) (let E (explode (hd (tl V902))) (if (> (length E) 1) (shen.@s-macro (cons @s (append E (tl (tl V902))))) V902))) (true V902)))
 
 (defun shen.synonyms-macro (V903) (cond ((and (cons? V903) (= synonyms (hd V903))) (cons shen.synonyms-help (cons (shen.rcons_form (shen.curry-synonyms (tl V903))) ()))) (true V903)))

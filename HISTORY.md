@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## 0.10.0 - September 19, 2014
+### Features
+- Upgrade to Shen 16
+
 ## 0.9.0 - February 11, 2014
 ### Features
 - Upgrade to Shen 15

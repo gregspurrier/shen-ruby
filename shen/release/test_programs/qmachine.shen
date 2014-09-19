@@ -34,15 +34,15 @@
 
 (define forall
   {(progression A) --> (A --> boolean) --> boolean}
-   Progression P -> (super Progression P and true)) 
+   Progression P -> (super Progression P (function and) true)) 
 
 (define exists
   {(progression A) --> (A --> boolean) --> boolean}
-   Progression P -> (super Progression P or false)) 
+   Progression P -> (super Progression P (function or) false)) 
 
 (define for
   {(progression A) --> (A --> B) --> number}
-   Progression P -> (super Progression P progn 0))
+   Progression P -> (super Progression P (function progn) 0))
 
 (define progn
   {A --> B --> B}

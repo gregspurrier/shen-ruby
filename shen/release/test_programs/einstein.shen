@@ -29,5 +29,6 @@
   X Y List <-- (iright Y X List);)
 
 (defprolog iright
-  L R [L | [R | _]] <--;
-  L R [_ | Rest] <-- (iright L R Rest);)
+  L R (mode [L | [R | _]] -) <--;
+  L R (mode [_ | Rest] -) <-- (iright L R Rest);)
+

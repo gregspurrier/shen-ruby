@@ -1,9 +1,9 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 15, which was released in February, 2014.
+ShenRuby supports Shen version 16, which was released in September, 2014.
 
-The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3, a Shen REPL is only a gem install away.
+The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3 or greater, a Shen REPL is only a gem install away.
 
 Second, ShenRuby aims to enable hybrid applications implemented using a combination of Ruby and Shen. Ruby methods should be able to invoke functions written in Shen and vice versa. Performance is a secondary part of this goal. It should be good enough that, for most tasks, the choice between Ruby and Shen is based primarily on which language is best suited for solving the problem at hand.
 
@@ -14,7 +14,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 ## Installation
 NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with JRuby 1.7.8.
 
-ShenRuby 0.9.0 is the current release. To install it as a gem, use the following command:
+ShenRuby 0.10.0 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -23,18 +23,18 @@ ShenRuby 0.9.0 is the current release. To install it as a gem, use the following
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading.... Completed in 6.32 seconds.
+    Loading.... Completed in 7.04 seconds.
 
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
-    www.shenlanguage.org, version 15
+    www.shenlanguage.org, version 16
     running under Ruby, implementation: ruby 2.0.0
-    port 0.9.0 ported by Greg Spurrier
+    port 0.10.0 ported by Greg Spurrier
 
 
     (0-)
 
-Please be patient: the Shen REPL takes a while to load (about 6 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
+Please be patient: the Shen REPL takes a while to load (about 7 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
 
 The `(0-)` seen above is the Shen REPL prompt. The number in the prompt increases after each expression that is entered.
 

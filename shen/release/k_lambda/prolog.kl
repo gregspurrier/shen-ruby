@@ -185,7 +185,7 @@
 
 (defun shen.mk-pvar (V1155) (address-> (address-> (absvector 2) 0 shen.pvar) 1 V1155))
 
-(defun shen.pvar? (V1156) (and (absvector? V1156) (= (<-address V1156 0) shen.pvar)))
+(defun shen.pvar? (V1156) (trap-error (and (absvector? V1156) (= (<-address V1156 0) shen.pvar)) (lambda E false)))
 
 (defun shen.bindv (V1157 V1158 V1159) (let Vector (<-address (value shen.*prologvectors*) V1159) (address-> Vector (<-address V1157 1) V1158)))
 

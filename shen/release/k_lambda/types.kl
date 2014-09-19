@@ -47,14 +47,14 @@
 * explains this license in full.                                                        *
 *				 						                                                                    *
 *****************************************************************************************
-"(defun declare (V2161 V2162) (let Record (set shen.*signedfuncs* (cons (cons V2161 V2162) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2161 V2162) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2162)) (let F* (concat shen.type-signature-of- V2161) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2161)))))))))))
+"(defun declare (V2168 V2169) (let Record (set shen.*signedfuncs* (cons (cons V2168 V2169) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2168 V2169) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2169)) (let F* (concat shen.type-signature-of- V2168) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2168)))))))))))
 
-(defun shen.demodulate (V2163) (trap-error (let Demod (shen.walk (lambda X2160 (shen.demod X2160)) V2163) (if (= Demod V2163) V2163 (shen.demodulate Demod))) (lambda E V2163)))
+(defun shen.demodulate (V2170) (trap-error (let Demod (shen.walk (lambda X2167 (shen.demod X2167)) V2170) (if (= Demod V2170) V2170 (shen.demodulate Demod))) (lambda E V2170)))
 
-(defun shen.variancy-test (V2164 V2165) (let TypeF (shen.typecheck V2164 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2165) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2164 " may create errors
+(defun shen.variancy-test (V2171 V2172) (let TypeF (shen.typecheck V2171 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2172) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2171 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2174 V2175) (cond ((= V2175 V2174) true) ((and (cons? V2174) (and (cons? V2175) (= (hd V2175) (hd V2174)))) (shen.variant? (tl V2174) (tl V2175))) ((and (cons? V2174) (and (cons? V2175) (and (shen.pvar? (hd V2174)) (variable? (hd V2175))))) (shen.variant? (subst shen.a (hd V2174) (tl V2174)) (subst shen.a (hd V2175) (tl V2175)))) ((and (cons? V2174) (and (cons? (hd V2174)) (and (cons? V2175) (cons? (hd V2175))))) (shen.variant? (append (hd V2174) (tl V2174)) (append (hd V2175) (tl V2175)))) (true false)))
+(defun shen.variant? (V2181 V2182) (cond ((= V2182 V2181) true) ((and (cons? V2181) (and (cons? V2182) (= (hd V2182) (hd V2181)))) (shen.variant? (tl V2181) (tl V2182))) ((and (cons? V2181) (and (cons? V2182) (and (shen.pvar? (hd V2181)) (variable? (hd V2182))))) (shen.variant? (subst shen.a (hd V2181) (tl V2181)) (subst shen.a (hd V2182) (tl V2182)))) ((and (cons? V2181) (and (cons? (hd V2181)) (and (cons? V2182) (cons? (hd V2182))))) (shen.variant? (append (hd V2181) (tl V2181)) (append (hd V2182) (tl V2182)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
@@ -80,7 +80,7 @@
 
 (declare cn (cons string (cons --> (cons (cons string (cons --> (cons string ()))) ()))))
 
-(declare compile (cons (cons (cons list (cons A ())) (cons ==> (cons B ()))) (cons --> (cons (cons (cons list (cons A ())) (cons --> (cons (cons (cons (cons list (cons A ())) (cons --> (cons B ()))) (cons --> (cons B ()))) ()))) ()))))
+(declare compile (cons (cons A (cons ==> (cons B ()))) (cons --> (cons (cons A (cons --> (cons (cons (cons A (cons --> (cons B ()))) (cons --> (cons B ()))) ()))) ()))))
 
 (declare cons? (cons A (cons --> (cons boolean ()))))
 
@@ -134,6 +134,8 @@
 
 (declare if (cons boolean (cons --> (cons (cons A (cons --> (cons (cons A (cons --> (cons A ()))) ()))) ()))))
 
+(declare it (cons --> (cons string ())))
+
 (declare implementation (cons --> (cons string ())))
 
 (declare include (cons (cons list (cons symbol ())) (cons --> (cons (cons list (cons symbol ())) ()))))
@@ -147,6 +149,8 @@
 (declare integer? (cons A (cons --> (cons boolean ()))))
 
 (declare intersection (cons (cons list (cons A ())) (cons --> (cons (cons (cons list (cons A ())) (cons --> (cons (cons list (cons A ())) ()))) ()))))
+
+(declare kill (cons --> (cons A ())))
 
 (declare language (cons --> (cons string ())))
 
@@ -311,6 +315,10 @@
 (declare * (cons number (cons --> (cons (cons number (cons --> (cons number ()))) ()))))
 
 (declare == (cons A (cons --> (cons (cons B (cons --> (cons boolean ()))) ()))))
+
+(declare shen.in-> (cons (cons A (cons ==> (cons B ()))) (cons --> (cons A ()))))
+
+(declare shen.<-out (cons (cons A (cons ==> (cons B ()))) (cons --> (cons B ()))))
 
 
 
