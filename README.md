@@ -169,4 +169,4 @@ Shen and ShenRuby are released under the Shen License. A copy of the Shen Licens
 
 The implementation of Shen, which is found in the [shen/release](https://github.com/gregspurrier/shen-ruby/tree/master/shen) directory, is Copyright (c) 2010-2014 Mark Tarver and may only be used in accordance with the Shen License.
 
-The remainder of the code for ShenRuby is Copyright(c) 2012-2014 Greg Spurrier. It may be used outside of the context of ShenRuby under the terms of the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).
+The remainder of the code for ShenRuby is Copyright(c) 2012-2015 Greg Spurrier. It may be used outside of the context of ShenRuby under the terms of the MIT License. A copy of the MIT License may be found in [MIT_LICENSE.txt](https://github.com/gregspurrier/shen-ruby/blob/master/MIT_LICENSE.txt).
