@@ -103,6 +103,17 @@ module ShenRuby
           result
         end
         alias_method :"eval-string", :eval_string
+
+        # The performance of `element?` is critical
+        def element?(x, l)
+          while l
+            return true if l.hd == x
+            l = l.tl
+          end
+          return false
+        rescue => e
+          __send(:"shen.sys-error", :element?)
+        end
       end
 
       # Load the rest of the K Lambda files
