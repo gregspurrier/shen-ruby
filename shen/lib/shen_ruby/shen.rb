@@ -87,17 +87,19 @@ module ShenRuby
       # Overrides
       class << self
         # Give a way to bail out
-        define_method 'quit' do
+        def quit
           ::Kernel.exit(0)
         end
 
         # Add a way to evaluate strings, intended for use with Ruby interop.
         # Returns the result of the last expression evaluated.
-        # Based on the implementation of read-file in reader.shen
         def eval_string(s)
-          forms = __send__(:"read-from-string", [s])
+          forms = __send__(:"read-from-string", s)
           result = nil
-          forms.each { |f| result = eval(f) }
+          while forms
+            result = eval(head(forms))
+            forms = tail(forms)
+          end
           result
         end
         alias_method :"eval-string", :eval_string
@@ -112,7 +114,9 @@ module ShenRuby
       end
 
       # Give type signatures to the new functions added above
-      declare :quit, [:'-->', :unit]
+      declare :quit, [:"-->", :unit]
+      declare :eval_string, [:string, :"-->", :unit]
+      declare :"eval-string", [:string, :"-->", :unit]
     end
 
     class << self
