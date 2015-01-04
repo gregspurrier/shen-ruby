@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Not Yet Released
+### Features
+- Switch KLambda implementation to [Klam](https://github.com/gregspurrier/klam)
+
 ## 0.10.0 - September 19, 2014
 ### Features
 - Upgrade to Shen 16

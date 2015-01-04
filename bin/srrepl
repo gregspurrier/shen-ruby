@@ -25,7 +25,7 @@ Signal.trap("INT") { raise ReplInterrupt }
 # Launch the REPL
 command = :"shen.shen"
 begin
-  shen.__eval(Kl::Cons.list([command]))
+  shen.__send__ command
 rescue StandardError => e
   # K Lambda simple errors are already handled by the Shen REPL. Therefore
   # this must be another type of exception. Print it as such and reenter

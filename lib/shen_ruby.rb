@@ -1,4 +1,4 @@
-require 'kl'
+require 'klam'
 require 'shen_ruby/version'
 
 # The following file is a derivative of the Shen release packages with ShenRuby

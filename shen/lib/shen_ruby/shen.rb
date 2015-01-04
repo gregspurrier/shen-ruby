@@ -5,7 +5,7 @@
 # software, to distribute these applications in source or binary form,
 # and to charge monies for them as he sees fit and in concordance with
 # the laws of the land subject to the following license.
-# 
+#
 # 1. The license applies to all the software and all derived software
 # and must appear on such.
 #
@@ -63,55 +63,41 @@
 
 module ShenRuby
   # Instances of the ShenRuby::Shen class provide a Shen environment
-  # running within ShenRuby's K Lambda implementation.
-  class Shen < Kl::Environment
+  # running within a Klam environment
+  class Shen < Klam::Environment
     def initialize
       super
 
       # Set the global variables
       set("*language*".to_sym, "Ruby")
-      set("*implementation*".to_sym, "#{RUBY_ENGINE} #{RUBY_VERSION}")
-      set("*release*".to_sym, RUBY_VERSION)
-      set("*port*".to_sym, ShenRuby::VERSION)
+      set("*implementation*".to_sym, "#{::RUBY_ENGINE} #{::RUBY_VERSION}")
+      set("*release*".to_sym, ::RUBY_VERSION)
+      set("*port*".to_sym, ::ShenRuby::VERSION)
       set("*porters*".to_sym, "Greg Spurrier")
-      set("*home-directory*".to_sym, Dir.pwd)
-      set("*stinput*".to_sym, STDIN)
-      set("*stoutput*".to_sym, STDOUT)
-
+      set("*home-directory*".to_sym, ::Dir.pwd)
+      set("*stinput*".to_sym, ::STDIN)
+      set("*stoutput*".to_sym, ::STDOUT)
 
       # Load the K Lambda files
-      kl_root = File.expand_path('../../../release/k_lambda', __FILE__)
+      kl_root = ::File.expand_path('../../../release/k_lambda', __FILE__)
       %w(toplevel core sys).each do |kl_filename|
-        Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
+        ::ShenRuby::Shen.load_file(self, ::File.join(kl_root, kl_filename + ".kl"))
       end
 
       # Overrides
       class << self
-        # Kl::Absvector.new already initializes every element, so we can
-        # use a simpler version of vector
-        def vector(n)
-          v = ::Kl::Absvector.new(n + 1) #, fail)
-          v[0] = n
-          v
-        end
-
         # Give a way to bail out
         define_method 'quit' do
           ::Kernel.exit(0)
-        end
-
-        # For debugging the compiler
-        define_method 'set-dump-code' do |val|
-          @dump_code = val
         end
 
         # Add a way to evaluate strings, intended for use with Ruby interop.
         # Returns the result of the last expression evaluated.
         # Based on the implementation of read-file in reader.shen
         def eval_string(s)
-          forms = __apply(:"read-from-string", [s])
+          forms = __send__(:"read-from-string", [s])
           result = nil
-          forms.each { |f| result = __apply(:eval, [f]) }
+          forms.each { |f| result = eval(f) }
           result
         end
         alias_method :"eval-string", :eval_string
@@ -122,13 +108,22 @@ module ShenRuby
          reader prolog track load writer
          macros declarations t-star types
         ).each do |kl_filename|
-        Kl::Environment.load_file(self, File.join(kl_root, kl_filename + ".kl"))
+        ::ShenRuby::Shen.load_file(self, ::File.join(kl_root, kl_filename + ".kl"))
       end
 
       # Give type signatures to the new functions added above
       declare :quit, [:'-->', :unit]
-      declare :eval_string, [:string, :'-->', :unit]
-      declare :'eval-string', [:string, :'-->', :unit]
+    end
+
+    class << self
+      def load_file(env, path)
+        ::File.open(path, 'r') do |file|
+          reader = ::Klam::Reader.new(file)
+          while form = reader.next
+            env.__send__(:"eval-kl", form)
+          end
+        end
+      end
     end
   end
 end
