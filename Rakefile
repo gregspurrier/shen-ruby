@@ -1,16 +1,6 @@
 require 'rubygems'
-require 'rspec/core/rake_task'
 
 SHENRUBY_ROOT = File.expand_path(File.dirname(__FILE__))
-
-# Run implementation specs
-RSpec::Core::RakeTask.new(:spec)
-
-# Run K Lambda specs
-RSpec::Core::RakeTask.new(:k_lambda_spec) do |t|
-  t.rspec_opts = '-I k_lambda_spec'
-  t.pattern = 'k_lambda_spec/**/*_spec.rb'
-end
 
 # Import Shen Release
 RELEASE_DIR = File.join(SHENRUBY_ROOT, 'shen/release')
@@ -53,7 +43,7 @@ namespace :shen do
 
       src_paths = Dir.glob(File.join(src_root, '**/*'))
       src_dirs, src_files = src_paths.partition { |p| File.directory?(p) }
-      
+
       mkdir_p dst_root
       src_dirs.each { |dir| mkdir_p dst_path(src_root, dir, dst_root) }
       src_files.each { |file| cp file, dst_path(src_root, file, dst_root) }
@@ -72,7 +62,7 @@ namespace :shen do
         end
       end
     end
-    
+
     task :k_lambda => [:unzip, RELEASE_DIR] do
       import_dir('K Lambda')
     end

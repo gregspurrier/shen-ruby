@@ -16,8 +16,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version     = ">= 1.9.3"
 
-  s.add_development_dependency "rspec", "~> 2.12"
-
   git_files            = `git ls-files`.split("\n") rescue ''
   s.files              = git_files
   s.test_files         = `git ls-files -- {test,spec,features}/*`.split("\n")
