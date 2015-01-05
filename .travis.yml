@@ -8,4 +8,4 @@ script: "ruby bin/shen_test_suite.rb"
 matrix:
   include:
     - rvm: jruby-1.7.17
-      script: "ruby -J-Xss16m bin/shen_test_suite.rb"
+      script: "ruby -J-Xss32m bin/shen_test_suite.rb"
