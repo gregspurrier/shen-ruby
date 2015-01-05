@@ -3,7 +3,10 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
-  - jruby-19mode
   - rbx-2
-env: "RUBY_THREAD_VM_STACK_SIZE=2097152 _JAVA_OPTIONS=-Xss8m"
+env: "RUBY_THREAD_VM_STACK_SIZE=2097152"
 script: "ruby bin/shen_test_suite.rb"
+matrix:
+  include:
+    - rvm: jruby-19mode
+      script: "ruby -J-Xss8m bin/shen_test_suite.rb"
