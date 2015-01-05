@@ -3,7 +3,6 @@ rvm:
   - 2.0
   - 2.1
   - 2.2
-  - rbx-2
 env: "RUBY_THREAD_VM_STACK_SIZE=2097152"
 script: "ruby bin/shen_test_suite.rb"
 matrix:
