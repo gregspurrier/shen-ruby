@@ -8,5 +8,5 @@ env: "RUBY_THREAD_VM_STACK_SIZE=2097152"
 script: "ruby bin/shen_test_suite.rb"
 matrix:
   include:
-    - rvm: jruby-19mode
+    - rvm: jruby-1.7.17
       script: "ruby -J-Xss8m bin/shen_test_suite.rb"
