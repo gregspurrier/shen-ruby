@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version     = ">= 1.9.3"
 
-  s.add_runtime_dependency 'klam', '~> 0.0', '>= 0.0.1'
+  s.add_runtime_dependency 'klam', '~> 0.0.2', '>= 0.0.2'
   s.add_development_dependency 'rake', '~> 10.4.2', '>= 10.4.2'
 
   git_files            = `git ls-files`.split("\n") rescue ''
