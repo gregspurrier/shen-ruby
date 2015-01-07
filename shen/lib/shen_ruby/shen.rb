@@ -114,6 +114,12 @@ module ShenRuby
         rescue => e
           __send(:"shen.sys-error", :element?)
         end
+
+        def vector(n)
+          v = ::Klam::Absvector.new(n + 1, :"shen.fail!")
+          v[0] = n
+          v
+        end
       end
 
       # Load the rest of the K Lambda files
