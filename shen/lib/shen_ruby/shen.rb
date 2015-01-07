@@ -131,9 +131,9 @@ module ShenRuby
       end
 
       # Give type signatures to the new functions added above
-      declare :quit, [:"-->", :unit]
-      declare :eval_string, [:string, :"-->", :unit]
-      declare :"eval-string", [:string, :"-->", :unit]
+      declare :quit, cons(:"-->", cons(:unit, nil))
+      declare :eval_string, cons(:string, cons(:"-->", cons(:unit, nil)))
+      declare :"eval-string", cons(:string, cons(:"-->", cons(:unit, nil)))
     end
 
     class << self
