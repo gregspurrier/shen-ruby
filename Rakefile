@@ -1,6 +1,10 @@
 require 'rubygems'
+require 'rspec/core/rake_task'
 
 SHENRUBY_ROOT = File.expand_path(File.dirname(__FILE__))
+
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
 
 # Import Shen Release
 RELEASE_DIR = File.join(SHENRUBY_ROOT, 'shen/release')
@@ -78,5 +82,3 @@ namespace :shen do
     end
   end
 end
-
-task :default => [:spec, :k_lambda_spec]

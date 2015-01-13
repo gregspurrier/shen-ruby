@@ -4,8 +4,8 @@ rvm:
   - 2.1
   - 2.2
 env: "RUBY_THREAD_VM_STACK_SIZE=2097152"
-script: "ruby bin/shen_test_suite.rb"
+script: "bundle exec ruby bin/shen_test_suite.rb && bundle exec rake"
 matrix:
   include:
     - rvm: jruby-1.7.17
-      script: "ruby -J-Xss32m bin/shen_test_suite.rb"
+      script: "bundle exec ruby -J-Xss32m bin/shen_test_suite.rb && bundle exec rake"
