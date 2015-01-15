@@ -1,8 +1,20 @@
 # ShenRuby Release History
 
-## Not Yet Released
+## 0.11.0 - January 15, 2014
 ### Features
-- Switch KLambda implementation to [Klam](https://github.com/gregspurrier/klam)
+- KLambda implementation switched to [Klam](https://github.com/gregspurrier/klam). This has many implications, including:
+  - Significant performance increase. E.g., the Shen Test Suite now runs 2.5 times faster than with ShenRuby 0.10.0.
+  - Tail call optimization applies only to self tail calls
+  - The environment extends BasicObject rather than Object
+  - Shen functions are directly installed as methods on the ShenRuby::Shen instance.
+  - Many primitives are inlined.
+  - Primitives are less strict with respect to type errors, relying on the Shen type checker to do this work when type checking is enabled.
+    - E.g., `(+ "a" "b") no longer throws a type error
+
+### Breaking Changes
+- Ruby->Shen interop has changed as a result of the switch to Klam and in preparation for more substantial Ruby<->Shen interop to come. Notably:
+  - Underscores in method names are no longer coerced to hyphens before invoking Shen functions. Use `__send__` to invoke Shen functions having names that are not valid Ruby method names.
+  - Ruby arrays are no longer automatically coerced to Shen lists and vice versa.
 
 ## 0.10.0 - September 19, 2014
 ### Features

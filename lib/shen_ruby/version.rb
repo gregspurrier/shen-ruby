@@ -1,3 +1,3 @@
 module ShenRuby
-  VERSION = "0.11.0-dev"
+  VERSION = "0.11.0"
 end

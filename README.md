@@ -7,14 +7,14 @@ The ShenRuby project has two primary goals. The first is to be a low barrier-to-
 
 Second, ShenRuby aims to enable hybrid applications implemented using a combination of Ruby and Shen. Ruby methods should be able to invoke functions written in Shen and vice versa. Performance is a secondary part of this goal. It should be good enough that, for most tasks, the choice between Ruby and Shen is based primarily on which language is best suited for solving the problem at hand.
 
-ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work beginning with the 0.2.0 release and leading up to the eventual 1.0.0 release.
+ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessible from the command line. The second goal is more ambitious and is the subject of ongoing work leading up to the eventual 1.0.0 release.
 
 [![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrier/shen-ruby)
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It has been tested with Ruby 1.9.3 and Ruby 2.0.0. It has been lightly tested with JRuby 1.7.8.
+NOTE: ShenRuby requires Ruby 1.9 language features. It is tested with Ruby 2.0.0, 2.1.5, and 2.2.0. It has been lightly tested with JRuby 1.7.17. It is functional with Ruby 1.9.3, however its fixed stack size prevents it from passing the Shen Test Suite (see [Setting Stack Size](setting-stack-size) below).
 
-ShenRuby 0.10.0 is the current release. To install it as a gem, use the following command:
+ShenRuby 0.11.0 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -23,18 +23,16 @@ ShenRuby 0.10.0 is the current release. To install it as a gem, use the followin
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading.... Completed in 7.04 seconds.
+    Loading.... Completed in 2.18 seconds.
 
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
     www.shenlanguage.org, version 16
-    running under Ruby, implementation: ruby 2.0.0
-    port 0.10.0 ported by Greg Spurrier
+    running under Ruby, implementation: ruby 2.2.0
+    port 0.11.0 ported by Greg Spurrier
 
 
     (0-)
-
-Please be patient: the Shen REPL takes a while to load (about 7 seconds on a 2.66 GHz MacBook Pro). This will be addressed in future releases.
 
 The `(0-)` seen above is the Shen REPL prompt. The number in the prompt increases after each expression that is entered.
 
@@ -106,31 +104,34 @@ More commonly, though, `eval_string` is used with Shen `define` expressions to e
 
 ### Invoking Shen Functions from Ruby
 
-A better way to invoke most Shen functions from Ruby is to simply invoke the corresponding method on the Shen object. If the Shen function's name includes a hyphen, use an underscore instead.
+Shen functions are instance methods of the ShenRuby::Shen environment object. Functions having names that are valid Ruby method names may be invoked directly:
 
-For example, to use the `fizz-buzz` function defined in the previous section to compute the first 20 Fizz Buzz values:
+    shen.cn("Hello, ", "Shen!")
+    # => "Hello, Shen!"
 
-    (1..20).map { |x| shen.fizz_buzz(x) }
-    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"]
+If the Shen function's name is not a valid Ruby method name--e.g. it includes a hyphen--it can be invoked via `__send__`:
 
-The above example uses Ruby's `map` function, but could also have used Shen's version, relying on ShenRuby's interop features to coerce Ruby arrays to and from Shen lists:
+    shen.__send__('fizz-buzz', 15)
+    # => "Fizz Buzz"
 
-    shen.map(:fizz_buzz, (1..20).to_a)
-    # => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"]
+Ruby arrays must be converted to Shen lists or vectors before passing to Shen. Here is an example of converting an array to a list, invoking Shen's `map` function, and converting the resulting list back to a Ruby array:
 
-Note that the Ruby symbol `:fizz_buzz` is automatically coerced to the Shen symbol `fizz-buzz` so that refer to the function defined above.
+    ShenRuby.list_to_array(shen.map(:'fizz-buzz', ShenRuby.array_to_list((1..20).to_a)))
+    => ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "Fizz Buzz", "16", "17", "Fizz", "19", "Buzz"]
 
-As a final example, Ruby functions may be passed as arguments to higher-order Shen functions:
-
-    shen.map(lambda {|x| x * x}, [1, 2, 3, 4, 5])
-    # => [1, 4, 9, 16, 25]
+The equivalent conversion functions for vectors are `ShenRuby.vector_to_list` and `ShenRuby.list_to_vector`.
 
 #### Caveats
-Shen function invocation via methods on the Shen object only works for normal functions. It will not work for special forms like `define`.
+Shen function invocation via methods on the Shen object only works for normal functions. It will not work for special forms like `define` or macros.
 
-The array<->list and underscore<->hyphen automatic coercions do not take effect for Ruby functions that are added to the Shen environment or for the K Lambda [primitives](http://www.shenlanguage.org/documentation/shendoc.htm#The%20Primitive%20Functions%20of%20K%20Lambda) that form the basis of Shen. In practice, this should not be much of a limitation, but it is hoped that this restriction will be lifted in the future.
+## Setting Stack Size
+Some operations in Shen, notably type checking of complicated types, require more stack space than is available by default in Ruby. If your program encounters a stack overflow, you can increase Ruby's stack size through the following methods.
 
-Shen functions cannot be passed as arguments to functions defined in Ruby. This restriction will be removed in the future.
+### Ruby
+Beginning in Ruby 2.0.0, the MRI stack size can be overridden via the `RUBY_THREAD_VM_STACK_SIZE` environment variable. A value of 2097152 is sufficient for the Shen Test Suite to pass under both OS X and Linux.
+
+### JRuby
+JRuby uses the JVM's stack. It can be increased via the `-J-Xss` command line argument. A value of 32m (i.e., `-J-Xss32m`) is sufficient for the Shen Test Suite to pass under both OS X and Linux.
 
 ## Shen Resources
 
@@ -151,10 +152,8 @@ The following features and improvements are among those planned for ShenRuby as 
 - Support for command-line Shen scripts that under ShenRuby
 - Support for Rubinius
 - Thread-safe `ShenRuby::Shen` instances
-- Improved performance
 
 ## Known Limitations
-- The "Qi interpreter - chapter 13" test case in the Shen Test Suite and some of the benchmarks are currently failing with stack overflow errors.
 - ShenRuby fails with a stack overflow when run under cygwin on Windows ([Issue #3](https://github.com/gregspurrier/shen-ruby/issues/3)). The Ruby environment installed by [RubyInstaller](http://rubyinstaller.org/), however, is capable of running ShenRuby. It is the recommended environment for running ShenRuby on Windows until the stack overflow issues seen on cygwin can be addressed.
 - ShenRuby fails to load under Rubinius ([Issue #7])(https://github.com/gregspurrier/shen-ruby/issues/7)].
 
