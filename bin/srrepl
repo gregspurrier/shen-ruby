@@ -18,22 +18,20 @@ now = Time.now.to_f
 puts ". Completed in %0.2f seconds.\n" % (now - start)
 
 # Now that the Shen environment is loaded, repurpose the SIGINT
-# handler to interrupt the current execution.
-class ReplInterrupt < StandardError; end
+# handler to interrupt the current execution. Subclass Interrupt
+# so that the exception is not caught by trap-error.
+class ReplInterrupt < Interrupt; end
 Signal.trap("INT") { raise ReplInterrupt }
 
 # Launch the REPL
 command = :"shen.shen"
 begin
   shen.__send__ command
-rescue StandardError => e
-  # K Lambda simple errors are already handled by the Shen REPL. Therefore
-  # this must be another type of exception. Print it as such and reenter
-  # the REPL without re-display the initial credits.
+rescue ReplInterrupt, SystemStackError => e
   if e.kind_of? ReplInterrupt
     puts "Execution interrupted. If you are trying to exit the REPL, use (quit)."
   else
-    puts "Ruby exception: #{e.message}"
+    puts "Stack overflow"
   end
   command = :"shen.loop"
   retry
