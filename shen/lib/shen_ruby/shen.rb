@@ -125,7 +125,7 @@ module ShenRuby
       # Load the rest of the K Lambda files
       %w(sequent yacc
          reader prolog track load writer
-         macros declarations t-star types
+         macros declarations types t-star
         ).each do |kl_filename|
         ::ShenRuby::Shen.load_file(self, ::File.join(kl_root, kl_filename + ".kl"))
       end
