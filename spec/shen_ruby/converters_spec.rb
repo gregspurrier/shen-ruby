@@ -1,18 +1,6 @@
 require 'spec_helper'
 
-describe 'Ruby <-> Shen type converters' do
-  before :all do
-    @shen = ShenRuby::Shen.new
-  end
-
-  def eval_shen(str)
-    @shen.eval_string(str)
-  end
-
-  def expect_shen(str)
-    expect(eval_shen(str))
-  end
-
+describe 'Ruby <-> Shen type converters', :type => :functional do
   describe 'ShenRuby.array_to_list' do
     it 'returns a Shen list containing the elements of the array' do
       @shen.set(:"test-list", ShenRuby.array_to_list([1, 2, 3]))

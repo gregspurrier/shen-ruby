@@ -134,6 +134,14 @@ module ShenRuby
       declare :quit, cons(:"-->", cons(:unit, nil))
       declare :eval_string, cons(:string, cons(:"-->", cons(:unit, nil)))
       declare :"eval-string", cons(:string, cons(:"-->", cons(:unit, nil)))
+
+      systemf :"rb-const"
+      systemf :"rb-send"
+
+      old_hush = value(:"*hush*")
+      set :"*hush*", true
+      load ::File.expand_path('../../../../lib/shen_ruby/rb.shen', __FILE__)
+      set :"*hush*", old_hush
     end
 
     class << self
