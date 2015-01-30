@@ -137,6 +137,7 @@ module ShenRuby
 
       systemf :"rb-const"
       systemf :"rb-send"
+      systemf :"rb-send-block"
 
       old_hush = value(:"*hush*")
       set :"*hush*", true
