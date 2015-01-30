@@ -56,5 +56,25 @@ describe 'Shen -> Ruby interop', :type => :functional do
         expect_shen('(rb.#sprintf "%0.3f" 0.1)').to eq('0.100')
       end
     end
+
+    describe 'the optional block argument' do
+      it 'accepts abstractions' do
+        expect_shen('(rb.find [1 2 3] & (/. X (> X 1)))').to eq(2)
+      end
+
+      it 'accepts naked function names' do
+        expect_shen('(rb.find [1 "abc" foo] & string?)').to eq("abc")
+      end
+
+      it 'accepts wrapped function names' do
+        expect_shen('(rb.find [1 "abc" foo] & (function string?))').to eq("abc")
+      end
+
+      it 'supports arities other than 1' do
+        expect_shen('(rb.reduce [1 2 3] &2 (/. A X (+ A X)))').to eq(6)
+        expect_shen('(rb.reduce [1 2 3] &2 +)').to eq(6)
+        expect_shen('(rb.reduce [1 2 3] &2 (function +))').to eq(6)
+      end
+    end
   end
 end

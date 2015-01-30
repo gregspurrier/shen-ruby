@@ -43,9 +43,25 @@
 \\\\ Parsing of method argument lists
 
 (defcc <method-args>
+  <normal-args> <block-args> := [<normal-args> <block-args>];)
+
+(defcc <normal-args>
   <kv-pairs> := [(make-hash-constructor <kv-pairs>)];
-  <arg> <method-args> := [<arg> | <method-args>];
+  <arg> <normal-args> := [<arg> | <normal-args>];
   <e> := [];)
+
+(defcc <block-args>
+  <arity-marker> Expr := [<arity-marker> Expr];
+  <e> := none)
+
+(defcc <arity-marker>
+  X := 1 where (= X (intern "&"));
+  X := 0 where (= X (intern "&0"));
+  X := 1 where (= X (intern "&1"));
+  X := 2 where (= X (intern "&2"));
+  X := 3 where (= X (intern "&3"));
+  X := 4 where (= X (intern "&4"));
+  X := 5 where (= X (intern "&5"));)
 
 (defcc <kv-pairs>
   <key> <arrow> <val> <kv-pairs> := [[<key> <val>] | <kv-pairs>];
@@ -94,9 +110,16 @@
     (error (make-string "Instance method '~A' has no receiver"
                         Method))
   [instance-method Method] [Receiver | Args] ->
-    [rb-send Receiver Method | (compile-args Args)]
+    (expand-method-invocation-help Receiver Method (compile-args Args))
   [class-method ClassName Method] Args ->
-    [rb-send [rb-const ClassName] Method | (compile-args Args)])
+    (expand-method-invocation-help [rb-const ClassName] Method
+                                   (compile-args Args)))
+
+(define expand-method-invocation-help
+  Receiver Method [NormalArgs [Arity Block]] ->
+    [rb-send-block Receiver Method Arity Block | NormalArgs]
+  Receiver Method [NormalArgs none]  ->
+    [rb-send Receiver Method | NormalArgs])
 
 (define expand-constant-reference
   [constant Const] -> [rb-const Const]
@@ -114,6 +137,4 @@
                                                Args)
                      where (ruby-extension? Method)
   Const <- (expand-constant-reference (parse-ruby-extension Const))
-           where (ruby-extension? Const))
-
-)
+           where (ruby-extension? Const)))
