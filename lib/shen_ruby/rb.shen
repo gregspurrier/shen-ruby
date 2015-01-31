@@ -42,26 +42,16 @@
 
 \\\\ Parsing of method argument lists
 
-(defcc <method-args>
-  <normal-args> <block-args> := [<normal-args> <block-args>];)
+(defcc <method-invocation>
+  Receiver Method <normal-args> <block-args> :=
+    [rb-send-block Receiver Method | (append <block-args> <normal-args>)];
+  Receiver Method <normal-args> :=
+    [rb-send Receiver Method | <normal-args>];)
 
 (defcc <normal-args>
   <kv-pairs> := [(make-hash-constructor <kv-pairs>)];
   <arg> <normal-args> := [<arg> | <normal-args>];
   <e> := [];)
-
-(defcc <block-args>
-  <arity-marker> Expr := [<arity-marker> Expr];
-  <e> := none)
-
-(defcc <arity-marker>
-  X := 1 where (= X (intern "&"));
-  X := 0 where (= X (intern "&0"));
-  X := 1 where (= X (intern "&1"));
-  X := 2 where (= X (intern "&2"));
-  X := 3 where (= X (intern "&3"));
-  X := 4 where (= X (intern "&4"));
-  X := 5 where (= X (intern "&5"));)
 
 (defcc <kv-pairs>
   <key> <arrow> <val> <kv-pairs> := [[<key> <val>] | <kv-pairs>];
@@ -81,6 +71,18 @@
                             (and (symbol? Sym)
                                  (= (hdstr (str Sym)) "&"))));)
 
+(defcc <block-args>
+  <arity-marker> Expr := [<arity-marker> Expr];)
+
+(defcc <arity-marker>
+  X := 1 where (= X (intern "&"));
+  X := 0 where (= X (intern "&0"));
+  X := 1 where (= X (intern "&1"));
+  X := 2 where (= X (intern "&2"));
+  X := 3 where (= X (intern "&3"));
+  X := 4 where (= X (intern "&4"));
+  X := 5 where (= X (intern "&5"));)
+
 (define make-hash-constructor
   Pairs -> (let Temp (gensym (protect Hash))
              [let Temp [rb-send [rb-const "Hash"] "new"]
@@ -99,27 +101,22 @@
                               (make-string "Invalid Ruby reference: ~A"
                                            RbExt)))))
 
-(define compile-args
-  Args -> (trap-error (compile <method-args> Args)
-                      (/. _ (error
-                             (make-string "Invalid method arguments: ~R"
-                                          Args)))))
+(define compile-method-invocation
+  Receiver Method Args ->
+    (trap-error (compile <method-invocation> [Receiver Method | Args])
+                (/. _ (error
+                       (make-string
+                        "Invalid argument syntax for Ruby method '~A': ~A"
+                        Method Args)))))
 
 (define expand-method-invocation
   [instance-method Method] [] ->
-    (error (make-string "Instance method '~A' has no receiver"
+    (error (make-string "Ruby instance method '~A' has no receiver"
                         Method))
   [instance-method Method] [Receiver | Args] ->
-    (expand-method-invocation-help Receiver Method (compile-args Args))
-  [class-method ClassName Method] Args ->
-    (expand-method-invocation-help [rb-const ClassName] Method
-                                   (compile-args Args)))
-
-(define expand-method-invocation-help
-  Receiver Method [NormalArgs [Arity Block]] ->
-    [rb-send-block Receiver Method Arity Block | NormalArgs]
-  Receiver Method [NormalArgs none]  ->
-    [rb-send Receiver Method | NormalArgs])
+    (compile-method-invocation Receiver Method Args)
+  [class-method Class Method] Args ->
+    (compile-method-invocation [rb-const Class] Method Args))
 
 (define expand-constant-reference
   [constant Const] -> [rb-const Const]
@@ -137,4 +134,6 @@
                                                Args)
                      where (ruby-extension? Method)
   Const <- (expand-constant-reference (parse-ruby-extension Const))
-           where (ruby-extension? Const)))
+           where (ruby-extension? Const))
+
+)
