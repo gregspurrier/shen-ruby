@@ -89,4 +89,18 @@ describe 'Shen -> Ruby interop', :type => :functional do
       expect_shen('(rb.reduce (@v 1 2 3 <>) &2 +)').to eq(6)
     end
   end
+
+  describe "Ruby Enumerable coercion" do
+    describe 'rb-to-l' do
+      it 'coerces Enumerable instances to lists' do
+        expect_shen('(= (rb-to-l (rb.to_a [1 2 3])) [1 2 3])').to be(true)
+      end
+    end
+
+    describe 'rb-to-v' do
+      it 'coerces Enumerable instances to vectors' do
+        expect_shen('(= (rb-to-v (rb.to_a [1 2 3])) (@v 1 2 3 <>))').to be(true)
+      end
+    end
+  end
 end
