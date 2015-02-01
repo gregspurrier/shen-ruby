@@ -1,5 +1,10 @@
 # ShenRuby Release History
 
+## 0.12.0 - Not Yet Released
+### Features
+- Ruby interop from Shen
+  - See README.md for details
+
 ## 0.11.0 - January 15, 2014
 ### Features
 - KLambda implementation switched to [Klam](https://github.com/gregspurrier/klam). This has many implications, including:

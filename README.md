@@ -124,6 +124,56 @@ The equivalent conversion functions for vectors are `ShenRuby.vector_to_list` an
 #### Caveats
 Shen function invocation via methods on the Shen object only works for normal functions. It will not work for special forms like `define` or macros.
 
+### Invoking Ruby from Shen
+By convention, functionality for interacting with Shen's host platform is placed within a package named with the host language's file extension. Therefore the Ruby interop forms begin with `rb.`.
+
+#### Constant References
+Ruby constants, including classes and modules, are referenced by prefixing them with `rb.#` and replacing `::` with `#`. For example:
+
+    rb.#Hash
+    rb.#Math#PI
+    rb.#RUBY_VERSION
+
+### Method Invocation
+Ruby method invocation uses a syntax inspired by Clojure and looks similar to normal function application. The method name, prefixed with `rb.`, is used as the operator and the receiver is the first operand. Any additional operands are passed to the method as its arguments. For example:
+
+    (rb.reverse "hello")
+    (rb.prepend "bye" "good")
+    (rb.sqrt rb.#Math 4)
+
+#### Invoking Class Methods
+The last example above invokes the `Math` module's `sqrt` class method. A shorter form is provided as a convenience:
+
+    (rb.#Math.sqrt 4)
+
+Invocations of `Kernel` class methods can be further shortened by prefixing the method's name with `rb.#`. The following are all equivalent:
+
+    (rb.require rb.#Kernel "digest/md5")
+    (rb.#Kernel.require "digest/md5")
+    (rb.#require "digest/md5")
+
+#### Hash Parameters
+Many Ruby methods take a `Hash` object as their final parameter. Ruby provides a special syntax for this which is echoed by ShenRuby. Argument triples of the form 'key `=>` value' are poured into `Hash` and passed as the method's final argument. For example:
+
+    (rb.#puts a => "hello" b => 37)
+
+As in Ruby, the key-arrow-value triples must be the final normal arguments to the method.
+
+#### Block Parameters
+In addition to normal arguments, Ruby methods may also accept blocks. A block argument in ShenRuby is denoted by `&n`--where `n` is the arity of the block expected by the method--followed by a function. Arities from 0 to 5 are supported. If the arity is one, `&` may be used instead of `&1`. The arity marker and the block function must be the last two elements of the argument list.
+
+For example, to print each character of a string on a separate line using Shen's `pr` and `nl` system functions:
+
+    (rb.each_char "hello" &1 (/. X (do (pr X) (nl))))
+
+Or, to sum the elements of a list using Ruby's `Enumerable#reduce`:
+
+    (rb.reduce [1 2 3] &2 +)
+
+This use of `reduce` is possible because Shen's list and vector types are enumerable in ShenRuby.
+
+Please note that these two examples can--and, in practice, should--be easily implemented in Shen without resorting to Ruby methods. They are here simply to demonstrate ShenRuby's syntax for block arguments.
+
 ## Setting Stack Size
 Some operations in Shen, notably type checking of complicated types, require more stack space than is available by default in Ruby. If your program encounters a stack overflow, you can increase Ruby's stack size through the following methods.
 
@@ -148,7 +198,6 @@ The following resources may be helpful for those wanting to learn more about the
 
 The following features and improvements are among those planned for ShenRuby as it approaches its 1.0 release:
 
-- Ability to call Ruby methods directly from Shen
 - Support for command-line Shen scripts that under ShenRuby
 - Support for Rubinius
 - Thread-safe `ShenRuby::Shen` instances
