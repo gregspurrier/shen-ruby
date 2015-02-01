@@ -71,22 +71,22 @@ describe 'Shen -> Ruby interop', :type => :functional do
       end
 
       it 'supports arities other than 1' do
-        expect_shen('(rb.reduce [1 2 3] &2 (/. A X (+ A X)))').to eq(6)
-        expect_shen('(rb.reduce [1 2 3] &2 +)').to eq(6)
-        expect_shen('(rb.reduce [1 2 3] &2 (function +))').to eq(6)
+        expect_shen('(rb.reduce [1 2 3] & (/. A X (+ A X)))').to eq(6)
+        expect_shen('(rb.reduce [1 2 3] & +)').to eq(6)
+        expect_shen('(rb.reduce [1 2 3] & (function +))').to eq(6)
       end
     end
   end
 
   describe "Shen's list type" do
     it 'implements Enumerable' do
-      expect_shen('(rb.reduce [1 2 3] &2 +)').to eq(6)
+      expect_shen('(rb.reduce [1 2 3] & +)').to eq(6)
     end
   end
 
   describe "Shen's vector type" do
     it 'implements Enumerable' do
-      expect_shen('(rb.reduce (@v 1 2 3 <>) &2 +)').to eq(6)
+      expect_shen('(rb.reduce (@v 1 2 3 <>) & +)').to eq(6)
     end
   end
 

@@ -2,7 +2,7 @@
 
 \\ Convert a Ruby Enumerable to a Shen vector
 (define rb-to-l
-  Enum -> (reverse (rb.reduce Enum [] &2 (/. L X (cons X L))))
+  Enum -> (reverse (rb.reduce Enum [] & (/. L X (cons X L))))
           where (rb.kind_of? Enum rb.#Enumerable)
   X -> (error (make-string "'~A' is not a Ruby Enumerable" X)))
 

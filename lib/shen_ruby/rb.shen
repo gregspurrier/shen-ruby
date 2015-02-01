@@ -43,8 +43,8 @@
 \\\\ Parsing of method argument lists
 
 (defcc <method-invocation>
-  Receiver Method <normal-args> <block-args> :=
-    [rb-send-block Receiver Method | (append <block-args> <normal-args>)];
+  Receiver Method <normal-args> <block-arg> :=
+    [rb-send-block Receiver Method <block-arg> | <normal-args>];
   Receiver Method <normal-args> :=
     [rb-send Receiver Method | <normal-args>];)
 
@@ -71,17 +71,11 @@
                             (and (symbol? Sym)
                                  (= (hdstr (str Sym)) "&"))));)
 
-(defcc <block-args>
-  <arity-marker> Expr := [<arity-marker> Expr];)
+(defcc <block-arg>
+  <block-marker> Expr := Expr;)
 
-(defcc <arity-marker>
-  X := 1 where (= X (intern "&"));
-  X := 0 where (= X (intern "&0"));
-  X := 1 where (= X (intern "&1"));
-  X := 2 where (= X (intern "&2"));
-  X := 3 where (= X (intern "&3"));
-  X := 4 where (= X (intern "&4"));
-  X := 5 where (= X (intern "&5"));)
+(defcc <block-marker>
+  X := X where (= X (intern "&"));)
 
 (define make-hash-constructor
   Pairs -> (let Temp (gensym (protect Hash))
