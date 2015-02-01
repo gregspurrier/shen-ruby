@@ -14,7 +14,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 ## Installation
 NOTE: ShenRuby requires Ruby 1.9 language features. It is tested with Ruby 2.0.0, 2.1.5, and 2.2.0. It has been lightly tested with JRuby 1.7.17. It is functional with Ruby 1.9.3, however its fixed stack size prevents it from passing the Shen Test Suite (see [Setting Stack Size](setting-stack-size) below).
 
-ShenRuby 0.12.0 is the current release. To install it as a gem, use the following command:
+ShenRuby 0.12.1 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -29,7 +29,7 @@ Once the gem has been installed, the Shen REPL can be launched via the `srrepl` 
     released under the Shen license
     www.shenlanguage.org, version 16
     running under Ruby, implementation: ruby 2.2.0
-    port 0.12.0 ported by Greg Spurrier
+    port 0.12.1 ported by Greg Spurrier
 
 
     (0-)
@@ -162,7 +162,7 @@ Many Ruby methods take a `Hash` object as their final parameter. Ruby provides a
 As in Ruby, the key-arrow-value triples must be the final normal arguments to the method.
 
 #### Block Parameters
-In addition to normal arguments, Ruby methods may also accept blocks. A block argument in ShenRuby is denoted by `&n`--where `n` is the arity of the block expected by the method--followed by a function. Arities from 0 to 5 are supported. If the arity is one, `&` may be used instead of `&1`. The arity marker and the block function must be the last two elements of the argument list.
+In addition to normal arguments, Ruby methods may also accept blocks. A block argument in ShenRuby is denoted by the symbol `&` followed by a function. These must be the final two elements in the method's argument list.
 
 For example, to print each character of a string on a separate line using Shen's `pr` and `nl` system functions:
 
@@ -170,7 +170,7 @@ For example, to print each character of a string on a separate line using Shen's
 
 Or, to sum the elements of a list using Ruby's `Enumerable#reduce`:
 
-    (rb.reduce [1 2 3] &2 +)
+    (rb.reduce [1 2 3] & +)
 
 This use of `reduce` is possible because Shen's list and vector types are enumerable in ShenRuby.
 

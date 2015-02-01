@@ -1,11 +1,15 @@
 # ShenRuby Release History
 
-## 0.12.0 - January 31, 2014
+## 0.12.1 - February 1, 2015
+### Breaking Changes
+- The arity of block arguments to Ruby methods no longer needs to be specified. Now all block arguments are denoted by a `&` followed by the function to pass as the block. Any usages of the old syntax, e.g. `&2`, must be updated to `&`.
+
+## 0.12.0 - January 31, 2015
 ### Features
 - Shen -> Ruby interop
   - See README.md for details
 
-## 0.11.0 - January 15, 2014
+## 0.11.0 - January 15, 2015
 ### Features
 - KLambda implementation switched to [Klam](https://github.com/gregspurrier/klam). This has many implications, including:
   - Significant performance increase. E.g., the Shen Test Suite now runs 2.5 times faster than with ShenRuby 0.10.0.
