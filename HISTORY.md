@@ -1,8 +1,8 @@
 # ShenRuby Release History
 
-## 0.12.0 - Not Yet Released
+## 0.12.0 - January 31, 2014
 ### Features
-- Ruby interop from Shen
+- Shen -> Ruby interop
   - See README.md for details
 
 ## 0.11.0 - January 15, 2014
