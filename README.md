@@ -14,7 +14,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 ## Installation
 NOTE: ShenRuby requires Ruby 1.9 language features. It is tested with Ruby 2.0.0, 2.1.5, and 2.2.0. It has been lightly tested with JRuby 1.7.17. It is functional with Ruby 1.9.3, however its fixed stack size prevents it from passing the Shen Test Suite (see [Setting Stack Size](setting-stack-size) below).
 
-ShenRuby 0.11.0 is the current release. To install it as a gem, use the following command:
+ShenRuby 0.12.0 is the current release. To install it as a gem, use the following command:
 
     gem install shen-ruby
 
@@ -23,13 +23,13 @@ ShenRuby 0.11.0 is the current release. To install it as a gem, use the followin
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
     % srrepl
-    Loading.... Completed in 2.18 seconds.
+    Loading.... Completed in 2.62 seconds.
 
     Shen 2010, copyright (C) 2010 Mark Tarver
     released under the Shen license
     www.shenlanguage.org, version 16
     running under Ruby, implementation: ruby 2.2.0
-    port 0.11.0 ported by Greg Spurrier
+    port 0.12.0 ported by Greg Spurrier
 
 
     (0-)
@@ -141,6 +141,8 @@ Ruby method invocation uses a syntax inspired by Clojure and looks similar to no
     (rb.prepend "bye" "good")
     (rb.sqrt rb.#Math 4)
 
+The `[]` and `[]=` method names used for accessing and manipulating Ruby arrays and hashes cannot be used directly because the Shen reader interprets `[]` as an empty list. Use `rb.<-` and `rb.->` instead. These mimic Shen's `<-vector` and `vector->` operations on vectors.
+
 #### Invoking Class Methods
 The last example above invokes the `Math` module's `sqrt` class method. A shorter form is provided as a convenience:
 
@@ -173,6 +175,13 @@ Or, to sum the elements of a list using Ruby's `Enumerable#reduce`:
 This use of `reduce` is possible because Shen's list and vector types are enumerable in ShenRuby.
 
 Please note that these two examples can--and, in practice, should--be easily implemented in Shen without resorting to Ruby methods. They are here simply to demonstrate ShenRuby's syntax for block arguments.
+
+#### Type Coercion
+Shen booleans, numbers, strings, and symbols are implemented using the corresponding Ruby classes and no coercion is required.
+
+Shen's list and vector types both implement the Ruby `Enumerable` interface and may be passed directly as arguments to methods expecting instances of `Enumerable`. When an `Array` is required, they can be coerced using `rb.to_a`.
+
+ShenRuby provides two system functions for coercing Ruby `Enumerable` instances to Shen lists and vectors. These are `rb-to-l` and `rb-to-v`, respectively.
 
 ## Setting Stack Size
 Some operations in Shen, notably type checking of complicated types, require more stack space than is available by default in Ruby. If your program encounters a stack overflow, you can increase Ruby's stack size through the following methods.
