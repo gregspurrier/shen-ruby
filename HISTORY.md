@@ -1,5 +1,10 @@
 # ShenRuby Release History
 
+## 0.13.0 - February 3, 2013
+### Features
+- Upgrade to Shen 17
+  - Shen is now BSD-licenesed, making ShenRuby BSD/MIT licenesed
+
 ## 0.12.1 - February 1, 2015
 ### Breaking Changes
 - The arity of block arguments to Ruby methods no longer needs to be specified. Now all block arguments are denoted by a `&` followed by the function to pass as the block. Any usages of the old syntax, e.g. `&2`, must be updated to `&`.

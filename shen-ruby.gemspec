@@ -7,12 +7,12 @@ Gem::Specification.new do |s|
   s.name        = "shen-ruby"
   s.version     = ShenRuby::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.license     = "Shen License"
+  s.license     = "BSD/MIT"
   s.authors     = ["Greg Spurrier", "Mark Tarver"]
   s.email       = ["greg@sourcematters.org"]
   s.homepage    = "https://github.com/gregspurrier/shen-ruby"
   s.summary     = %q{ShenRuby is a Ruby port of the Shen programming language}
-  s.description = %q{ShenRuby is a port of the Shen programming language to Ruby. It currently supports Shen version 16.}
+  s.description = %q{ShenRuby is a port of the Shen programming language to Ruby. It currently supports Shen version 17.}
 
   s.required_ruby_version     = ">= 1.9.3"
 
@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.files              = git_files
   s.test_files         = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables        = %w(srrepl)
-  s.require_paths      = ["lib", "shen/lib"]
+  s.require_paths      = ["lib"]
 end

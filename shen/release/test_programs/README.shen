@@ -1,4 +1,4 @@
-\* 
+\*     					Standard Test Suite 1.0
 
 This is the test harness for Shen.  Assuming your port to Blub is in the directory Platforms/Blub; do the
 following.

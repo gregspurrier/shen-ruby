@@ -1,0 +1,91 @@
+"Copyright (c) 2015, Mark Tarver
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of Mark Tarver may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY Mark Tarver ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Mark Tarver BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+
+(defun macroexpand (V757) (let Y (shen.compose (value *macros*) V757) (if (= V757 Y) V757 (shen.walk (lambda V756 (macroexpand V756)) Y))))
+
+(defun shen.error-macro (V758) (cond ((and (cons? V758) (and (= error (hd V758)) (cons? (tl V758)))) (cons simple-error (cons (shen.mkstr (hd (tl V758)) (tl (tl V758))) ()))) (true V758)))
+
+(defun shen.output-macro (V759) (cond ((and (cons? V759) (and (= output (hd V759)) (cons? (tl V759)))) (cons shen.prhush (cons (shen.mkstr (hd (tl V759)) (tl (tl V759))) (cons (cons stoutput ()) ())))) ((and (cons? V759) (and (= pr (hd V759)) (and (cons? (tl V759)) (= () (tl (tl V759)))))) (cons pr (cons (hd (tl V759)) (cons (cons stoutput ()) ())))) (true V759)))
+
+(defun shen.make-string-macro (V760) (cond ((and (cons? V760) (and (= make-string (hd V760)) (cons? (tl V760)))) (shen.mkstr (hd (tl V760)) (tl (tl V760)))) (true V760)))
+
+(defun shen.input-macro (V761) (cond ((and (cons? V761) (and (= lineread (hd V761)) (= () (tl V761)))) (cons lineread (cons (cons stinput ()) ()))) ((and (cons? V761) (and (= input (hd V761)) (= () (tl V761)))) (cons input (cons (cons stinput ()) ()))) ((and (cons? V761) (and (= read (hd V761)) (= () (tl V761)))) (cons read (cons (cons stinput ()) ()))) ((and (cons? V761) (and (= input+ (hd V761)) (and (cons? (tl V761)) (= () (tl (tl V761)))))) (cons input+ (cons (hd (tl V761)) (cons (cons stinput ()) ())))) ((and (cons? V761) (and (= read-byte (hd V761)) (= () (tl V761)))) (cons read-byte (cons (cons stinput ()) ()))) (true V761)))
+
+(defun shen.compose (V762 V763) (cond ((= () V762) V763) ((cons? V762) (shen.compose (tl V762) ((hd V762) V763))) (true (shen.f_error shen.compose))))
+
+(defun shen.compile-macro (V764) (cond ((and (cons? V764) (and (= compile (hd V764)) (and (cons? (tl V764)) (and (cons? (tl (tl V764))) (= () (tl (tl (tl V764)))))))) (cons compile (cons (hd (tl V764)) (cons (hd (tl (tl V764))) (cons (cons lambda (cons E (cons (cons if (cons (cons cons? (cons E ())) (cons (cons error (cons "parse error here: ~S~%" (cons E ()))) (cons (cons error (cons "parse error~%" ())) ())))) ()))) ()))))) (true V764)))
+
+(defun shen.prolog-macro (V765) (cond ((and (cons? V765) (= prolog? (hd V765))) (let F (gensym shen.f) (let Receive (shen.receive-terms (tl V765)) (let PrologDef (eval (append (cons defprolog (cons F ())) (append Receive (append (cons <-- ()) (append (shen.pass-literals (tl V765)) (cons ; ())))))) (let Query (cons F (append Receive (cons (cons shen.start-new-prolog-process ()) (cons (cons freeze (cons true ())) ())))) Query))))) (true V765)))
+
+(defun shen.receive-terms (V770) (cond ((= () V770) ()) ((and (cons? V770) (and (cons? (hd V770)) (and (= shen.receive (hd (hd V770))) (and (cons? (tl (hd V770))) (= () (tl (tl (hd V770)))))))) (cons (hd (tl (hd V770))) (shen.receive-terms (tl V770)))) ((cons? V770) (shen.receive-terms (tl V770))) (true (shen.f_error shen.receive-terms))))
+
+(defun shen.pass-literals (V773) (cond ((= () V773) ()) ((and (cons? V773) (and (cons? (hd V773)) (and (= shen.receive (hd (hd V773))) (and (cons? (tl (hd V773))) (= () (tl (tl (hd V773)))))))) (shen.pass-literals (tl V773))) ((cons? V773) (cons (hd V773) (shen.pass-literals (tl V773)))) (true (shen.f_error shen.pass-literals))))
+
+(defun shen.defprolog-macro (V774) (cond ((and (cons? V774) (and (= defprolog (hd V774)) (cons? (tl V774)))) (compile shen.<defprolog> (tl V774) (lambda Y (shen.prolog-error (hd (tl V774)) Y)))) (true V774)))
+
+(defun shen.datatype-macro (V775) (cond ((and (cons? V775) (and (= datatype (hd V775)) (cons? (tl V775)))) (cons shen.process-datatype (cons (shen.intern-type (hd (tl V775))) (cons (cons compile (cons (cons function (cons shen.<datatype-rules> ())) (cons (shen.rcons_form (tl (tl V775))) (cons (cons function (cons shen.datatype-error ())) ())))) ())))) (true V775)))
+
+(defun shen.intern-type (V776) (intern (cn "type#" (str V776))))
+
+(defun shen.@s-macro (V777) (cond ((and (cons? V777) (and (= @s (hd V777)) (and (cons? (tl V777)) (and (cons? (tl (tl V777))) (cons? (tl (tl (tl V777)))))))) (cons @s (cons (hd (tl V777)) (cons (shen.@s-macro (cons @s (tl (tl V777)))) ())))) ((and (cons? V777) (and (= @s (hd V777)) (and (cons? (tl V777)) (and (cons? (tl (tl V777))) (and (= () (tl (tl (tl V777)))) (string? (hd (tl V777)))))))) (let E (explode (hd (tl V777))) (if (> (length E) 1) (shen.@s-macro (cons @s (append E (tl (tl V777))))) V777))) (true V777)))
+
+(defun shen.synonyms-macro (V778) (cond ((and (cons? V778) (= synonyms (hd V778))) (cons shen.synonyms-help (cons (shen.rcons_form (shen.curry-synonyms (tl V778))) ()))) (true V778)))
+
+(defun shen.curry-synonyms (V779) (map shen.curry-type V779))
+
+(defun shen.nl-macro (V780) (cond ((and (cons? V780) (and (= nl (hd V780)) (= () (tl V780)))) (cons nl (cons 1 ()))) (true V780)))
+
+(defun shen.assoc-macro (V781) (cond ((and (cons? V781) (and (cons? (tl V781)) (and (cons? (tl (tl V781))) (and (cons? (tl (tl (tl V781)))) (element? (hd V781) (cons @p (cons @v (cons append (cons and (cons or (cons + (cons * (cons do ()))))))))))))) (cons (hd V781) (cons (hd (tl V781)) (cons (shen.assoc-macro (cons (hd V781) (tl (tl V781)))) ())))) (true V781)))
+
+(defun shen.let-macro (V782) (cond ((and (cons? V782) (and (= let (hd V782)) (and (cons? (tl V782)) (and (cons? (tl (tl V782))) (and (cons? (tl (tl (tl V782)))) (cons? (tl (tl (tl (tl V782)))))))))) (cons let (cons (hd (tl V782)) (cons (hd (tl (tl V782))) (cons (shen.let-macro (cons let (tl (tl (tl V782))))) ()))))) (true V782)))
+
+(defun shen.abs-macro (V783) (cond ((and (cons? V783) (and (= /. (hd V783)) (and (cons? (tl V783)) (and (cons? (tl (tl V783))) (cons? (tl (tl (tl V783)))))))) (cons lambda (cons (hd (tl V783)) (cons (shen.abs-macro (cons /. (tl (tl V783)))) ())))) ((and (cons? V783) (and (= /. (hd V783)) (and (cons? (tl V783)) (and (cons? (tl (tl V783))) (= () (tl (tl (tl V783)))))))) (cons lambda (tl V783))) (true V783)))
+
+(defun shen.cases-macro (V786) (cond ((and (cons? V786) (and (= cases (hd V786)) (and (cons? (tl V786)) (and (= true (hd (tl V786))) (cons? (tl (tl V786))))))) (hd (tl (tl V786)))) ((and (cons? V786) (and (= cases (hd V786)) (and (cons? (tl V786)) (and (cons? (tl (tl V786))) (= () (tl (tl (tl V786)))))))) (cons if (cons (hd (tl V786)) (cons (hd (tl (tl V786))) (cons (cons simple-error (cons "error: cases exhausted" ())) ()))))) ((and (cons? V786) (and (= cases (hd V786)) (and (cons? (tl V786)) (cons? (tl (tl V786)))))) (cons if (cons (hd (tl V786)) (cons (hd (tl (tl V786))) (cons (shen.cases-macro (cons cases (tl (tl (tl V786))))) ()))))) ((and (cons? V786) (and (= cases (hd V786)) (and (cons? (tl V786)) (= () (tl (tl V786)))))) (simple-error "error: odd number of case elements
+")) (true V786)))
+
+(defun shen.timer-macro (V787) (cond ((and (cons? V787) (and (= time (hd V787)) (and (cons? (tl V787)) (= () (tl (tl V787)))))) (shen.let-macro (cons let (cons Start (cons (cons get-time (cons run ())) (cons Result (cons (hd (tl V787)) (cons Finish (cons (cons get-time (cons run ())) (cons Time (cons (cons - (cons Finish (cons Start ()))) (cons Message (cons (cons shen.prhush (cons (cons cn (cons "
+run time: " (cons (cons cn (cons (cons str (cons Time ())) (cons " secs
+" ()))) ()))) (cons (cons stoutput ()) ()))) (cons Result ())))))))))))))) (true V787)))
+
+(defun shen.tuple-up (V788) (cond ((cons? V788) (cons @p (cons (hd V788) (cons (shen.tuple-up (tl V788)) ())))) (true V788)))
+
+(defun shen.put/get-macro (V789) (cond ((and (cons? V789) (and (= put (hd V789)) (and (cons? (tl V789)) (and (cons? (tl (tl V789))) (and (cons? (tl (tl (tl V789)))) (= () (tl (tl (tl (tl V789)))))))))) (cons put (cons (hd (tl V789)) (cons (hd (tl (tl V789))) (cons (hd (tl (tl (tl V789)))) (cons (cons value (cons *property-vector* ())) ())))))) ((and (cons? V789) (and (= get (hd V789)) (and (cons? (tl V789)) (and (cons? (tl (tl V789))) (= () (tl (tl (tl V789)))))))) (cons get (cons (hd (tl V789)) (cons (hd (tl (tl V789))) (cons (cons value (cons *property-vector* ())) ()))))) ((and (cons? V789) (and (= unput (hd V789)) (and (cons? (tl V789)) (and (cons? (tl (tl V789))) (= () (tl (tl (tl V789)))))))) (cons unput (cons (hd (tl V789)) (cons (hd (tl (tl V789))) (cons (cons value (cons *property-vector* ())) ()))))) (true V789)))
+
+(defun shen.function-macro (V790) (cond ((and (cons? V790) (and (= function (hd V790)) (and (cons? (tl V790)) (= () (tl (tl V790)))))) (shen.function-abstraction (hd (tl V790)) (arity (hd (tl V790))))) (true V790)))
+
+(defun shen.function-abstraction (V791 V792) (cond ((= 0 V792) (cons freeze (cons V791 ()))) ((= -1 V792) V791) (true (shen.function-abstraction-help V791 V792 ()))))
+
+(defun shen.function-abstraction-help (V793 V794 V795) (cond ((= 0 V794) (cons V793 V795)) (true (let X (gensym V) (cons /. (cons X (cons (shen.function-abstraction-help V793 (- V794 1) (append V795 (cons X ()))) ())))))))
+
+(defun undefmacro (V796) (let MacroReg (value shen.*macroreg*) (let Pos (shen.findpos V796 MacroReg) (let Remove1 (set shen.*macroreg* (remove V796 MacroReg)) (let Remove2 (set *macros* (shen.remove-nth Pos (value *macros*))) V796)))))
+
+(defun shen.findpos (V804 V805) (cond ((= () V805) (simple-error (shen.app V804 " is not a macro
+" shen.a))) ((and (cons? V805) (= (hd V805) V804)) 1) ((cons? V805) (+ 1 (shen.findpos V804 (tl V805)))) (true (shen.f_error shen.findpos))))
+
+(defun shen.remove-nth (V808 V809) (cond ((and (= 1 V808) (cons? V809)) (tl V809)) ((cons? V809) (cons (hd V809) (shen.remove-nth (- V808 1) (tl V809)))) (true (shen.f_error shen.remove-nth))))
+
+
+
