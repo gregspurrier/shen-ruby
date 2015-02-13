@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Not Yet Released
+### Features
+- Upgrade to Shen 17.1
+
 ## 0.13.0 - February 3, 2013
 ### Features
 - Upgrade to Shen 17
