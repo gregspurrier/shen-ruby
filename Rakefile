@@ -14,10 +14,10 @@ SHEN_ZIP = File.join(IMPORT_DIR, 'Shen.zip')
 namespace :shen do
   namespace :import do
     task :release => [:remove_old_release, :import_dirs, :cleanup]
-    task :import_dirs => [:k_lambda, :test_programs]
+    task :import_dirs => [:k_lambda, :license, :test_programs]
 
     task :remove_old_release do
-      #rm_rf IMPORT_DIR
+      rm_rf IMPORT_DIR
       rm_rf RELEASE_DIR
     end
 
@@ -33,7 +33,7 @@ namespace :shen do
     end
 
     task :unzip => SHEN_ZIP do
-      #sh "(cd #{IMPORT_DIR}; unzip Shen.zip)"
+      sh "(cd #{IMPORT_DIR}; unzip Shen.zip)"
     end
 
     def dst_path(src_root, src_path, dst_root)
@@ -69,6 +69,13 @@ namespace :shen do
 
     task :k_lambda => [:unzip, RELEASE_DIR] do
       import_dir('KLambda')
+    end
+
+    task :license => [:unzip, RELEASE_DIR] do
+      src_root = Dir.glob(File.join('import/Shen *')).first
+      %w(BSD license.pdf).each do |file|
+        cp File.join(src_root, file), RELEASE_DIR
+      end
     end
 
     task :test_programs => [:unzip, RELEASE_DIR] do
