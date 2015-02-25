@@ -164,7 +164,7 @@ In addition to normal arguments, Ruby methods may also accept blocks. A block ar
 
 For example, to print each character of a string on a separate line using Shen's `pr` and `nl` system functions:
 
-    (rb.each_char "hello" &1 (/. X (do (pr X) (nl))))
+    (rb.each_char "hello" & (/. X (do (pr X) (nl))))
 
 Or, to sum the elements of a list using Ruby's `Enumerable#reduce`:
 
