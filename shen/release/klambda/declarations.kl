@@ -87,7 +87,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 
 (set shen.*optimise* false)
 
-(set *version* "Shen 17.1")
+(set *version* "Shen 17.2")
 
 (defun shen.initialise_arity_table (V726) (cond ((= () V726) ()) ((and (cons? V726) (cons? (tl V726))) (let DecArity (put (hd V726) arity (hd (tl V726)) (value *property-vector*)) (shen.initialise_arity_table (tl (tl V726))))) (true (shen.f_error shen.initialise_arity_table))))
 

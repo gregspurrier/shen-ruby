@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = ["greg@sourcematters.org"]
   s.homepage    = "https://github.com/gregspurrier/shen-ruby"
   s.summary     = %q{ShenRuby is a Ruby port of the Shen programming language}
-  s.description = %q{ShenRuby is a port of the Shen programming language to Ruby. It currently supports Shen version 17.1.}
+  s.description = %q{ShenRuby is a port of the Shen programming language to Ruby. It currently supports Shen version 17.2.}
 
   s.required_ruby_version     = ">= 1.9.3"
 
