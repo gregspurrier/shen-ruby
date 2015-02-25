@@ -4,6 +4,9 @@
 ### Features
 - Upgrade to Shen 17.1
 
+### Bug Fixes
+- Evaluating "c#13;" no longer triggers the message "warning: encountered \r in middle of line, treated as a mere space."
+
 ## 0.13.0 - February 3, 2013
 ### Features
 - Upgrade to Shen 17
