@@ -55,7 +55,7 @@ module ShenRuby
 
         def vector(n)
           v = ::Klam::Absvector.new(n + 1, :"shen.fail!")
-          v[0] = n
+          v.store(0, n)
           v
         end
       end

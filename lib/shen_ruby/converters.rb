@@ -11,13 +11,11 @@ module ShenRuby
     end
 
     def array_to_vector(a)
-      v = Klam::Absvector.new(a)
-      v.unshift(a.size)
-      v
+      Klam::Absvector.new(a)
     end
 
     def vector_to_array(v)
-      Array.new(v.slice(1,v[0]))
+      v.to_a
     end
   end
 end
