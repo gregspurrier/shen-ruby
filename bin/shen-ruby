@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'shen_ruby'
+
+if ARGV.size > 0
+  infile = File.open(ARGV[0])
+else
+  infile = STDIN
+end
+
+first_two = infile.read(2)
+if first_two == '#!'
+  # Discard shebang line
+  infile.readline
+else
+  infile.ungetc(first_two[1])
+  infile.ungetc(first_two[0])
+end
+
+shen = ShenRuby::Shen.new
+shen.eval_string(infile.read)

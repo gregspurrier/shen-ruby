@@ -24,6 +24,6 @@ Gem::Specification.new do |s|
   git_files            = `git ls-files`.split("\n") rescue ''
   s.files              = git_files
   s.test_files         = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables        = %w(srrepl)
+  s.executables        = %w(shen_ruby shen-ruby srrepl)
   s.require_paths      = ["lib"]
 end
