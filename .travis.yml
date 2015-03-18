@@ -7,5 +7,7 @@ env: "RUBY_THREAD_VM_STACK_SIZE=2097152"
 script: "ruby bin/shen_test_suite.rb && rake"
 matrix:
   include:
-    - rvm: jruby-1.7.17
+    - rvm: jruby-19mode
+      script: "ruby -J-Xss32m bin/shen_test_suite.rb && rake"
+    - rvm: jruby-head
       script: "ruby -J-Xss32m bin/shen_test_suite.rb && rake"
