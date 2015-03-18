@@ -9,5 +9,3 @@ matrix:
   include:
     - rvm: jruby-19mode
       script: "ruby -J-Xss32m bin/shen_test_suite.rb && rake"
-    - rvm: jruby-head
-      script: "ruby -J-Xss32m bin/shen_test_suite.rb && rake"
