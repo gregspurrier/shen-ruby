@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## 0.15.1 - March 31, 2014
+### Bug Fix
+- Fixed Shen version in Gem description
+
 ## 0.15.0 - March 31, 2015
 ### Features
 - Added `shen-ruby` executable for running ShenRuby programs outside of REPL
