@@ -2,7 +2,7 @@
 
 ## Not Yet Released
 ### Features
-- Upgrade to Shen 17.2
+- Upgrade to Shen 18.1
 - Upgrade to Klam 0.0.9 for performance improvements
 
 ### Bug Fixes

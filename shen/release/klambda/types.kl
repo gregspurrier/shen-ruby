@@ -23,14 +23,14 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 
-(defun declare (V2373 V2374) (let Record (set shen.*signedfuncs* (cons (cons V2373 V2374) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V2373 V2374) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V2374)) (let F* (concat shen.type-signature-of- V2373) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V2373)))))))))))
+(defun declare (V18597 V18598) (let Record (set shen.*signedfuncs* (cons (cons V18597 V18598) (value shen.*signedfuncs*))) (let Variancy (trap-error (shen.variancy-test V18597 V18598) (lambda E shen.skip)) (let Type (shen.rcons_form (shen.demodulate V18598)) (let F* (concat shen.type-signature-of- V18597) (let Parameters (shen.parameters 1) (let Clause (cons (cons F* (cons X ())) (cons :- (cons (cons (cons unify! (cons X (cons Type ()))) ()) ()))) (let AUM_instruction (shen.aum Clause Parameters) (let Code (shen.aum_to_shen AUM_instruction) (let ShenDef (cons define (cons F* (append Parameters (append (cons ProcessN (cons Continuation ())) (cons -> (cons Code ())))))) (let Eval (shen.eval-without-macros ShenDef) V18597)))))))))))
 
-(defun shen.demodulate (V2375) (trap-error (let Demod (shen.walk (lambda V2372 (shen.demod V2372)) V2375) (if (= Demod V2375) V2375 (shen.demodulate Demod))) (lambda E V2375)))
+(defun shen.demodulate (V18600) (trap-error (let Demod (shen.walk (lambda Y (shen.demod Y)) V18600) (if (= Demod V18600) V18600 (shen.demodulate Demod))) (lambda E V18600)))
 
-(defun shen.variancy-test (V2376 V2377) (let TypeF (shen.typecheck V2376 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V2377) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V2376 " may create errors
+(defun shen.variancy-test (V18603 V18604) (let TypeF (shen.typecheck V18603 B) (let Check (if (= symbol TypeF) shen.skip (if (shen.variant? TypeF V18604) shen.skip (shen.prhush (cn "warning: changing the type of " (shen.app V18603 " may create errors
 " shen.a)) (stoutput)))) shen.skip)))
 
-(defun shen.variant? (V2388 V2389) (cond ((= V2389 V2388) true) ((and (cons? V2388) (and (cons? V2389) (= (hd V2389) (hd V2388)))) (shen.variant? (tl V2388) (tl V2389))) ((and (cons? V2388) (and (cons? V2389) (and (shen.pvar? (hd V2388)) (variable? (hd V2389))))) (shen.variant? (subst shen.a (hd V2388) (tl V2388)) (subst shen.a (hd V2389) (tl V2389)))) ((and (cons? V2388) (and (cons? (hd V2388)) (and (cons? V2389) (cons? (hd V2389))))) (shen.variant? (append (hd V2388) (tl V2388)) (append (hd V2389) (tl V2389)))) (true false)))
+(defun shen.variant? (V18617 V18618) (cond ((= V18618 V18617) true) ((and (cons? V18617) (and (cons? V18618) (= (hd V18618) (hd V18617)))) (shen.variant? (tl V18617) (tl V18618))) ((and (cons? V18617) (and (cons? V18618) (and (shen.pvar? (hd V18617)) (variable? (hd V18618))))) (shen.variant? (subst shen.a (hd V18617) (tl V18617)) (subst shen.a (hd V18618) (tl V18618)))) ((and (cons? V18617) (and (cons? (hd V18617)) (and (cons? V18618) (cons? (hd V18618))))) (shen.variant? (append (hd V18617) (tl V18617)) (append (hd V18618) (tl V18618)))) (true false)))
 
 (declare absvector? (cons A (cons --> (cons boolean ()))))
 
@@ -91,6 +91,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
 (declare freeze (cons A (cons --> (cons (cons lazy (cons A ())) ()))))
 
 (declare fst (cons (cons A (cons * (cons B ()))) (cons --> (cons A ()))))
+
+(declare function (cons (cons A (cons --> (cons B ()))) (cons --> (cons (cons A (cons --> (cons B ()))) ()))))
 
 (declare gensym (cons symbol (cons --> (cons symbol ()))))
 
