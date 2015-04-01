@@ -1,14 +1,16 @@
 # ShenRuby Release History
 
-## Not Yet Released
+## 0.15.0 - March 31, 2015
 ### Features
+- Added `shen-ruby` executable for running ShenRuby programs outside of REPL
+  - Including support for shebang scripts
 - Upgrade to Shen 18.1
 - Upgrade to Klam 0.0.9 for performance improvements
 
 ### Bug Fixes
 - Evaluating "c#13;" no longer triggers the message "warning: encountered \r in middle of line, treated as a mere space."
 
-## 0.13.0 - February 3, 2013
+## 0.13.0 - February 3, 2015
 ### Features
 - Upgrade to Shen 17
   - Shen is now BSD-licenesed, making ShenRuby BSD/MIT licenesed

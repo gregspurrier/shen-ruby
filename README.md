@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 17.2, which was released in February, 2015.
+ShenRuby supports Shen version 18.1, which was released in March, 2015.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3 or greater, a Shen REPL is only a gem install away.
 
@@ -22,12 +22,13 @@ ShenRuby 0.14.0 is the current release. To install it as a gem, use the followin
 
 Once the gem has been installed, the Shen REPL can be launched via the `srrepl` (short for ShenRuby REPL) command. For example:
 
-    Loading.... Completed in 2.01 seconds.
+    % srrepl
+    Loading.... Completed in 1.51 seconds.
 
     Shen, copyright (C) 2010-2015 Mark Tarver
-    www.shenlanguage.org, Shen 17.2
-    running under Ruby, implementation: ruby 2.2.0
-    port 0.14.0 ported by Greg Spurrier
+    www.shenlanguage.org, Shen 18.1
+    running under Ruby, implementation: ruby 2.2.1
+    port 0.15.0 ported by Greg Spurrier
 
 
     (0-)
@@ -60,6 +61,9 @@ To exit the Shen REPL, execute the `quit` function:
 
     (4-) (quit)
     %
+
+## Running ShenRuby Programs Without a REPL
+Then `shen-ruby` command (or `shen_ruby`, if you prefer) can be used to run ShenRuby programs without starting a REPL.
 
 ## Ruby<->Shen Interop
 Bidirectional interaction between Ruby and Shen is a primary goal of ShenRuby. The following sections describe the currently supported means of collaboration between Shen and Ruby.
@@ -205,7 +209,6 @@ The following resources may be helpful for those wanting to learn more about the
 
 The following features and improvements are among those planned for ShenRuby as it approaches its 1.0 release:
 
-- Support for command-line Shen scripts that under ShenRuby
 - Support for Rubinius
 - Thread-safe `ShenRuby::Shen` instances
 
