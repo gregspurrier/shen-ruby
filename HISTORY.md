@@ -3,6 +3,7 @@
 ## Not Yet Released
 ### Features
 - Upgrade to Shen 19.1
+- STDERR is now available via *sterror*
 
 ## 0.15.1 - March 31, 2014
 ### Bug Fix

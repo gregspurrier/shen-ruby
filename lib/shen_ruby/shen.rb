@@ -15,6 +15,7 @@ module ShenRuby
       set("*home-directory*".to_sym, ::Dir.pwd)
       set("*stinput*".to_sym, ::STDIN)
       set("*stoutput*".to_sym, ::STDOUT)
+      set("*sterror*".to_sym, ::STDERR)
 
       # Load the K Lambda files
       kl_root = ::File.expand_path('../../../shen/release/klambda', __FILE__)
