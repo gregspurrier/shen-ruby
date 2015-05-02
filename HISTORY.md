@@ -1,5 +1,9 @@
 # ShenRuby Release History
 
+## Not Yet Released
+### Features
+- Upgrade to Shen 19.1
+
 ## 0.15.1 - March 31, 2014
 ### Bug Fix
 - Fixed Shen version in Gem description

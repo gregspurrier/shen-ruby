@@ -1,7 +1,7 @@
 # ShenRuby
 ShenRuby is a Ruby port of the [Shen](http://shenlanguage.org/) programming language. Shen is a modern, functional Lisp that supports pattern matching, currying, and optional static type checking.
 
-ShenRuby supports Shen version 18.1, which was released in March, 2015.
+ShenRuby supports Shen version 19.1, which was released in April, 2015.
 
 The ShenRuby project has two primary goals. The first is to be a low barrier-to-entry means for Rubyists to explore Shen. To someone with a working installation of Ruby 1.9.3 or greater, a Shen REPL is only a gem install away.
 
