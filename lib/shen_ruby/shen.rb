@@ -82,6 +82,7 @@ module ShenRuby
       set :"*hush*", true
       load ::File.expand_path('../rb.shen', __FILE__)
       load ::File.expand_path('../shen_ruby.shen', __FILE__)
+      load ::File.expand_path('../extensions.shen', __FILE__)
       set :"*hush*", old_hush
     end
 

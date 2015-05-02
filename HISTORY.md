@@ -4,6 +4,7 @@
 ### Features
 - Upgrade to Shen 19.1
 - STDERR is now available via *sterror*
+- Added `(exit N)` to exit the process with a given return code
 
 ## 0.15.1 - March 31, 2014
 ### Bug Fix
