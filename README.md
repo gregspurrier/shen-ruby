@@ -12,7 +12,7 @@ ShenRuby 0.1.0 began to satisfy the first goal by providing a Shen REPL accessib
 [![Build Status](https://travis-ci.org/gregspurrier/shen-ruby.png)](https://travis-ci.org/gregspurrier/shen-ruby)
 
 ## Installation
-NOTE: ShenRuby requires Ruby 1.9 language features. It is tested with Ruby 2.0.0, 2.1.5, and 2.2.0. It has been lightly tested with JRuby 1.7.17. It is functional with Ruby 1.9.3, however its fixed stack size prevents it from passing the Shen Test Suite (see [Setting Stack Size](setting-stack-size) below).
+NOTE: ShenRuby requires Ruby 1.9 language features. It is tested with Ruby 2.0.0, 2.1.5, and 2.2.0. It has been lightly tested with JRuby 1.7.17. It is functional with Ruby 1.9.3, however its fixed stack size prevents it from passing the Shen Test Suite (see [Setting Stack Size](#setting-stack-size) below).
 
 ShenRuby 0.15.1 is the current release. To install it as a gem, use the following command:
 
@@ -55,7 +55,7 @@ Shen functions are defined in terms of pattern matching rules. Above we say that
 
 As can be seen with `(factorial 100)`, ShenRuby uses Ruby's underlying number system and supports arbitrarily large integers.
 
-For a quick tour of Shen via the REPL, please see the [Shen in 15 Minutes](http://www.shenlanguage.org/learn-shen/tutorials/shen_in_15mins.html) tutorial on the Shen Website. To learn more about using the Shen REPL itself, please see the [REPL](http://www.shenlanguage.org/learn-shen/repl.html) documentation, also on the Shen Website. Additional resources for learning about Shen are listed in the Shen Resources section below.
+For a quick tour of Shen via the REPL, please see the [Shen in 15 Minutes](http://shenlanguage.org/shenin15min.htm) tutorial on the Shen Website. To learn more about using the Shen REPL itself, please see the [REPL](http://gravicappa.github.io/shen-js/shen.html#/.doc/welcome.html) documentation, also on the Shen Website. Additional resources for learning about Shen are listed in the Shen Resources section below.
 
 To exit the Shen REPL, execute the `quit` function:
 
@@ -199,10 +199,10 @@ JRuby uses the JVM's stack. It can be increased via the `-J-Xss` command line ar
 The following resources may be helpful for those wanting to learn more about the Shen programming language:
 
 - [The Shen Website](http://shenlanguage.org/)
-- [Learn Shen](http://www.shenlanguage.org/learn-shen/index.html) -- The Shen Website's suggested resources for--and approaches to--learning Shen, including the [Shen in 15 Minutes](http://www.shenlanguage.org/learn-shen/tutorials/shen_in_15mins.html) tutorial for experienced functional programmers.
-- [The Shen Official Standard](http://www.shenlanguage.org/Documentation/shendoc.htm)
-- [System Functions and their Types in Shen](http://www.shenlanguage.org/learn-shen/system.pdf) -- A reference for all of the standard Shen functions and their types.
-- [The Book of Shen (Second Edition)](http://www.fast-print.net/bookshop/1506/the-book-of-shen-second-edition) -- The official guide to the Shen programming language.
+- [Learn Shen](http://shenlanguage.org/learn.htm) -- The Shen Website's suggested resources for--and approaches to--learning Shen, including the [Shen in 15 Minutes](http://shenlanguage.org/shenin15min.htm) tutorial for experienced functional programmers.
+- [The Shen Official Standard](http://www.shenlanguage.org/shendoc.htm)
+- [The Shen OS Kernel Manual](http://www.shenlanguage.org/OSmanual.htm) -- A manual for the open source version of Shen.
+- [The Book of Shen (Third Edition)](https://www.amazon.com/Book-Shen-third-Mark-Tarver/dp/1784562130) -- The official guide to the Shen programming language.
 - [Shen Google Group](https://groups.google.com/group/qilang?hl=en) -- This is the online forum for discussions related to Shen.
 
 ## Road Map to 1.0
